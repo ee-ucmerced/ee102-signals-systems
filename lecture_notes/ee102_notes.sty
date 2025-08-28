@@ -1,0 +1,52 @@
+%% ee102_notes.sty  v1.0  (2025/08/27)
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ee102_notes}[2025/08/27 EE102 Lecture Notes macros]
+
+\RequirePackage{latexsym,amssymb,amsmath,amsfonts,verbatim}
+\renewcommand{\ttdefault}{cmtt}
+\RequirePackage{array,multirow,color,multicol,graphicx,fancyhdr,tabularx}
+
+% geometry
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.5in}
+\setlength{\parskip}{1pc}
+\setlength{\parindent}{0pt}
+\setlength{\headheight}{15pt}
+\addtolength{\topmargin}{-2.49998pt}
+
+% meta info (set in macros.tex or at top of notes)
+\providecommand{\course}{EE 102}
+\providecommand{\coursetitle}{Signal Processing and Linear Systems}
+\providecommand{\instructor}{Ayush Pandey}
+\providecommand{\semester}{Fall}
+\providecommand{\year}{2025}
+\providecommand{\shorttitle}{Lecture Notes}
+
+\makeatletter
+
+% header for lecture notes
+\newcommand{\notesheader}{%
+  \pagestyle{fancy}%
+  \fancyhf{}%
+  \lhead{\semester \ \year \ \course}
+  \chead{\shorttitle}
+  \rhead{Instructor: \instructor}
+  \cfoot{\thepage}%
+  \noindent\vspace{0.5em}
+  \centerline{\bfseries \course: \coursetitle}
+  \vspace{0.5em}
+}
+
+\makeatother
+
+% tolerances / floats
+\hfuzz=1pt
+\setcounter{topnumber}{3}\renewcommand\topfraction{.7}
+\setcounter{bottomnumber}{1}\renewcommand\bottomfraction{.3}
+\setcounter{totalnumber}{5}\renewcommand\textfraction{.1}
+\renewcommand\floatpagefraction{.7}
+\setcounter{dbltopnumber}{2}
+\renewcommand\dbltopfraction{.7}
+\renewcommand\dblfloatpagefraction{.7}

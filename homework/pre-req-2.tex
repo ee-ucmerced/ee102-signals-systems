@@ -1,0 +1,113 @@
+
+\documentclass{ee102_pset}
+\input{../macros.tex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+
+% Assignment info
+\author{\rule{3cm}{0.4pt}} % Name placeholder
+\submitdate{\rule{3cm}{0.4pt}} % Submission date placeholder
+\problemset{Pre-requisite \#2: Complex numbers}
+\renewcommand{\duedate}{August 31, 2025}
+\shorttitle{Pre-requisite \#2}
+
+\begin{document}
+\header
+\section*{Introduction}
+In EE 102, we will use complex numbers commonly (this pre-requisite assignment will help you understand why and how). Note that we denote the ``imaginary'' unit as $\mathrm{j}=\sqrt{-1}$ (not $\mathrm{i}$, as is common in the sciences; for electrical engineers $\mathrm{i}$ is reserved notation for current in circuits). Similar to the $\mathbb{R}^n$ notation for real-valued vectors, we denote $\mathbb{C}^n$ as the space of $n$-dimensional vectors with complex-valued entries.
+
+\textbf{Why complex numbers? What's with the imaginary?}
+
+You should think of complex numbers as a 2D extension of real numbers --- so it's just a trick. Complex numbers allow us to analyze 2D vectors just like we would work with scalars. Consider for example, a 2D real vector $\textbf{p} = \begin{bmatrix}x\\y\end{bmatrix}\in\mathbb{R}^2$. Even though it has two components, we can treat it as a single entity: the complex number $z = x+\mathrm{j}y$. The ``$\mathrm{j}$'' is just a label for the second dimension. Then, vector operations become scalar with simple additions and multiplications. The dot product between two vectors
+\[
+\mathbf{p}=\begin{bmatrix}x_1\\y_1\end{bmatrix} and \qquad
+\mathbf{q}=\begin{bmatrix}x_2\\y_2\end{bmatrix},
+\]
+is
+\[
+\mathbf{p}\cdot \mathbf{q} = x_1x_2 + y_1y_2.
+\]
+You can redefine the problem using complex numbers: \(z_{\mathbf{p}}=x_1+\mathrm{j}y_1\) and \(z_{\mathbf{q}}=x_2+\mathrm{j}y_2\).
+Then, write
+\[
+z_{\mathbf{p}}\;\overline{z_{\mathbf{q}}}
+= (x_1+\mathrm{j}y_1)(x_2-\mathrm{j}y_2)
+= (x_1x_2+y_1y_2)\;+\;\mathrm{j}\,(y_1x_2 - x_1y_2).
+\]
+Remember that $\bar{z}$ denotes the complex conjugate (replace \( \mathrm{j} \) with \( -\mathrm{j} \)). Therefore,
+\[
+\boxed{\;\langle \mathbf{p},\mathbf{q}\rangle = \operatorname{Re}\!\big(z_{\mathbf{p}}\overline{z_{\mathbf{q}}}\big)\;}
+\]
+and \(\operatorname{Im}\!\big(z_{\mathbf{p}}\overline{z_{\mathbf{q}}}\big)=y_1x_2 - x_1y_2
+= -\det\!\begin{bmatrix}x_1&y_1\\ x_2&y_2\end{bmatrix}\),
+the (signed) 2D area form. This is the determinant that gives the oriented area of the parallelogram spanned by two 2D vectors. So, with complex numbers we recovered the inner product and additionally, we are able to obtain information about the area spanned by the vectors in 2D. 
+
+% ============================
+% Problem 1
+% ============================
+% \section*{Problems}
+\newpage
+\problem{1} Recall Problem 1 in the first pre-requisite assignment where you worked on unit vectors, orthogonality, independence in 2D. In that problem, you used $\mathbf{a}=[2,-1]$, $\mathbf{b}=[1,3]$, and $\mathbf{c}=[4,0]$. 
+\problempart \textbf{[10 pts]} Write the three vectors as complex numbers $z_{\mathbf{a}}$, $z_{\mathbf{b}}$, and $z_{\mathbf{c}}$ in $\mathbb{C}$.
+\problempart \textbf{[10 pts]} \emph{(This is similar to problem 1(a) in pre-requisite \#1).} Find the unit complex number in the direction of $z_{\mathbf{a}}$, i.e., $u_{\mathbf{a}}=z_{\mathbf{a}}/|z_{\mathbf{a}}|$. Explain why this is exactly the same object as the unit vector you computed before.
+\problempart \textbf{[15 pts]} \emph{(This is similar to problem 1(b) in pre-requisite \#1).} In $\mathbb{R}^2$, $\mathbf{u}\perp\mathbf{v}$ iff $\mathbf{u}\cdot\mathbf{v}=0$. Are $z_{\mathbf{a}}$ and $z_{\mathbf{b}}$ orthogonal? Verify that 
+
+\[
+\mathbf{a}\cdot\mathbf{b} \;=\; \mathrm{Re}\!\left(z_{\mathbf{a}}\,\overline{z_{\mathbf{b}}}\right).
+\]
+
+% Then answer: in the complex plane (dimension $2$ over $\mathbb{R}$), what \emph{nonzero} complex numbers (if any) can be orthogonal to \emph{both} $z_{\mathbf{a}}$ and $z_{\mathbf{b}}$? Contrast this with Problem 1(b), where you moved to $\mathbb{R}^3$ to find a nontrivial vector orthogonal to \emph{both}.
+
+\problempart \textbf{[15 pts]} Write the polar form of $z_{\mathbf{a}}$. Explain your intuition about the relationship between the polar form and the original vector $\mathbf{a}$.
+% \problempart \textbf{[7 pts]} \emph{(This is similar to problem 1(c) in pre-requisite \#1).} Interpreting $\{z_{\mathbf{a}},z_{\mathbf{b}}\}\subset\mathbb{C}\cong\mathbb{R}^2$ as vectors over \emph{real} scalars, prove they are linearly independent. Then explain why, if you instead view $\mathbb{C}$ as a 1D vector space over \emph{complex} scalars, any two nonzero complex numbers are linearly dependent. State clearly which scalar field you are using in each claim.
+
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+
+% ============================
+% Problem 2
+% ============================
+\problem{2} Recall problem \#4 in pre-req \#1 on projections and basis changes in $\mathbb{R}^2$. You used $\mathbf{x}=[3,4]^T$ and the basis $\mathcal{B}=\{[1,1]^T,[1,-1]^T\}$. Map these to complex numbers:
+\[
+z_{\mathbf{x}}=3+4\mathrm{j},\quad b_1=1+\mathrm{j},\quad b_2=1-\mathrm{j}.
+\]
+\problempart \textbf{[15 pts]} \emph{(Same basis, complexified, like problem 4(b) in pre-req \#1).} Express $z_{\mathbf{x}}$ as a linear combination of $b_1$ and $b_2$ with \emph{real} coefficients: find $\alpha,\beta\in\mathbb{R}$ such that $z_{\mathbf{x}}=\alpha b_1+\beta b_2$. Verify that $(\alpha,\beta)$ are exactly the coordinates you found for $\mathbf{x}$ in the basis $\mathcal{B}$.
+\problempart \textbf{[15 pts]} \emph{(Basis property like problem 4(c) in pre-req \#1).} Prove that $\{b_1,b_2\}$ is a basis for $\mathbb{C}$. Relate your steps to your real-vector proof for $\mathcal{B}$.
+
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+% ============================
+% Problem 3
+% ============================
+\problem{3} Computational check with Python or MATLAB mirroring Problem 5 in pre-req \#1. Create a notebook (.ipynb or MATLAB Live Script) that verifies your complex number claims by reusing the same data from pre-req \#1. Print as PDF and attach.
+\problempart \textbf{[10 pts]} Implement complex inner products correctly and verify
+$\mathbf{a}\cdot\mathbf{b}=\mathrm{Re}\!\left(z_{\mathbf{a}}\overline{z_{\mathbf{b}}}\right)$.
+\problempart \textbf{[10 pts]} Express $z_{\mathbf{x}}$ in the complex basis $\{b_1,b_2\}$ and confirm the coordinates match your real-basis coordinates from Pre-req \#1.
+
+\begin{lstlisting}[language=Python, caption=Starter code for Problem 3]
+import numpy as np
+
+# Problem 1 vectors and complex numbers
+a = np.array([2.0, -1.0])
+b = np.array([1.0,  3.0])
+za = a[0] + 1j*a[1]
+zb = b[0] + 1j*b[1]
+# complete the rest for (a)
+
+# Problem 2: complex basis
+x = np.array([3.0, 4.0])
+zx = x[0] + 1j*x[1]
+
+# Express zx in basis {1+j, 1-j} with real coeffs
+
+\end{lstlisting}
+
+\end{document}

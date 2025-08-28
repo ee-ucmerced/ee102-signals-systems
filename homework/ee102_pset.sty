@@ -1,0 +1,105 @@
+%% ee102.sty  v1.6  (2025/08/20)
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ee102_pset}[2025/08/20 EE102 macros]
+
+\RequirePackage{latexsym,amssymb,amsmath,amsfonts,verbatim}
+\renewcommand{\ttdefault}{cmtt}
+\RequirePackage{array,multirow,color,multicol,graphicx,fancyhdr,tabularx}
+
+% geometry
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.5in}
+\setlength{\parskip}{1pc}
+\setlength{\parindent}{0pt}
+\setlength{\headheight}{15pt}
+\addtolength{\topmargin}{-2.49998pt}
+% public config (overridable in macros.tex)
+\providecommand{\course}{EE 102}
+\providecommand{\coursetitle}{Signal Processing and Linear Systems}
+\providecommand{\instructor}{}
+\providecommand{\releasedate}{}
+\providecommand{\duedate}{}
+\providecommand{\student}{}     % so \renewcommand in macros.tex is safe
+\providecommand{\semester}{}    % "
+\providecommand{\psetnum}{1}    % default
+\newcommand{\coursefull}{\course: \coursetitle}
+
+\makeatletter
+
+% state & setters
+\let\@problemset\@empty
+\let\@problem\@empty
+\newcommand{\problemset}[1]{\def\@problemset{#1}}
+
+% counters (avoid clash with LaTeX \part)
+\newcounter{problem}
+\newcounter{pspart}[problem]
+\renewcommand{\thepspart}{\alph{pspart}}
+\newcommand{\problempart}{%
+  \stepcounter{pspart}\par\medskip\noindent\textbf{(\thepspart)}\quad
+}
+
+% Add \shorttitle command and \@shorttitle macro for header
+\newcommand{\shorttitle}[1]{\def\@shorttitle{#1}}
+\providecommand{\@shorttitle}{Homework \@problemset}
+
+
+\newif\if@firstbox
+\@firstboxtrue
+
+\newcommand{\header}{%
+  \pagestyle{fancy}%
+  \fancyhf{}%
+  \lhead{\semester \: \course}
+  \chead{\@shorttitle}
+  \rhead{Due: \duedate}
+  \cfoot{\thepage}%
+  \if@firstbox
+    \noindent\framebox[\linewidth]{%
+      \parbox{\linewidth}{%
+        \vspace{0.25em}
+        \centerline{\coursefull}
+        \vspace{0.4em}%
+        \centerline{Instructor: \instructor}
+        \vspace{0.4em}
+        \centerline{\bfseries \@problemset}
+        \vspace{0.4em}%
+        \begin{tabularx}{\linewidth}{@{} l >{\centering\arraybackslash}X r @{} }
+          \textbf{Name: } \@author & & \textbf{Submission Date:} \@submitdate \\
+        \end{tabularx}
+      }%
+    }\par\vspace{.75\baselineskip}%
+    \global\@firstboxfalse
+  \fi
+}
+\AtBeginDocument{\header}
+
+% Add \providecommand{\@submitdate}{} and \newcommand{\submitdate}[1]{\def\@submitdate{#1}} to ensure \@submitdate is defined
+\providecommand{\@submitdate}{}
+\newcommand{\submitdate}[1]{\def\@submitdate{#1}}
+
+% start a problem
+\newcommand{\problem}[1]{%
+  \ifnum\value{problem}>0 \clearpage\fi
+  \setcounter{problem}{#1}%
+  \setcounter{pspart}{0}%
+  \def\@problem{#1}%
+  \ifnum\value{problem}=1
+    \header
+  \fi
+  \par\medskip\noindent\textbf{Problem #1}
+}
+
+\makeatother
+
+% tolerances / floats
+\hfuzz=1pt
+\setcounter{topnumber}{3}\renewcommand\topfraction{.7}
+\setcounter{bottomnumber}{1}\renewcommand\bottomfraction{.3}
+\setcounter{totalnumber}{5}\renewcommand\textfraction{.1}
+\renewcommand\floatpagefraction{.7}
+\setcounter{dbltopnumber}{2}
+\renewcommand\dbltopfraction{.7}
+\renewcommand\dblfloatpagefraction{.7}

@@ -1,0 +1,164 @@
+\documentclass{ee102_notes}
+\input{macros.tex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+
+\begin{document}
+
+\section*{EE102 Week 1, Lecture 1 (Fall 2025)}
+\subsection*{Instructor: Ayush Pandey}
+\subsection*{Date: Aug 27, 2025}
+\section{Goals}
+\begin{itemize}
+  \item Logistics, grading, extensions, expectations
+  \item Motivation to study signal processing
+\end{itemize}
+
+\section{Pre-requisite \#1: Vectors}
+When studying problems with many entities/observations, we structure our variables into vectors.
+
+An $n$-dimensional vector $\mathbf{x}$ can be written as
+\[
+\mathbf{x}=[\,x_1,\;x_2,\;\ldots,\;x_n\,], \qquad \mathbf{x}\in\mathbb{R}^n .
+\]
+
+\subsection*{Matrices are transformations}
+If you transform a vector $\mathbf{x}$ to a new vector $\mathbf{y}$ such that all elements in $\mathbf{y}$ are linear combinations of elements in $\mathbf{x}$, then the transformation is called a matrix.
+
+\[
+\mathbf{x}=
+\begin{bmatrix}
+x_1\\ x_2\\ \vdots\\ x_n
+\end{bmatrix}
+\;\longmapsto\;
+\mathbf{y}=
+\begin{bmatrix}
+y_1\\ y_2\\ \vdots\\ y_m
+\end{bmatrix}
+\]
+such that
+\[
+y_1=\sum_{i=1}^{n}\alpha_{1i}x_i,\qquad
+y_2=\sum_{i=1}^{n}\alpha_{2i}x_i,\quad \ldots,\quad
+y_m=\sum_{i=1}^{n}\alpha_{mi}x_i .
+\]
+Then $A\mathbf{x}=\mathbf{y}$, where
+\[
+A\in\mathbb{R}^{m\times n}, \qquad
+A=
+\begin{bmatrix}
+\alpha_{11} & \alpha_{12} & \cdots & \alpha_{1n}\\
+\alpha_{21} & \alpha_{22} & \cdots & \alpha_{2n}\\
+\vdots      & \vdots      & \ddots & \vdots\\
+\alpha_{m1} & \alpha_{m2} & \cdots & \alpha_{mn}
+\end{bmatrix}.
+\]
+
+We write
+\[
+A:\; X \to Y,
+\]
+where $X$ is the vector space in $\mathbb{R}^n$ where $\mathbf{x}$ lies and $Y$ is the vector space in $\mathbb{R}^m$ where $\mathbf{y}$ lies.
+
+\paragraph{Recall}
+\begin{itemize}
+  \item Diagonal matrix
+  \item Identity matrix
+  \item Symmetric matrix
+  \item Zero matrix
+  \item Matrix transpose
+  \item Matrix algebra ($+$, $-$, $\times$, inverse)
+\end{itemize}
+\section{Pre-requisite \#2: Complex numbers}
+
+Although the usual way we learn about the complex unit ``$\mathrm{j}$'' is as
+a convenient notation for a solution of
+\[
+x^{2}+1=0 \;\;\Rightarrow\;\; x=\sqrt{-1}:=\mathrm{j},
+\]
+it is useful to recognize other places where this convenience is beneficial.
+In signal processing we are often looking for easy ways to analyze physical
+signals, not only to solve algebraic equations.
+
+\paragraph{From vectors to a complex scalar.}
+Given a vector
+\[
+\mathbf{x}=\begin{bmatrix}x_1\\ x_2\end{bmatrix},
+\]
+define the (complex) scalar
+\[
+z_{\mathbf{x}}=x_1+\mathrm{j}x_2.
+\]
+The entries $x_1$ and $x_2$ are not ``added'' in $\mathbb{R}$; they are bound
+only because they are components of the same vector. Writing $z_{\mathbf{x}}$
+lets us treat the vector like a single scalar living in $\mathbb{C}$.
+
+\paragraph{Inner product via complex numbers.}
+For $\mathbf{x}=[x_1,x_2]^{\top}$ and $\mathbf{y}=[y_1,y_2]^{\top}$,
+\begin{align*}
+\langle \mathbf{x},\mathbf{y}\rangle
+&= \mathbf{x}^{\top}\mathbf{y}
+= x_1y_1+x_2y_2 .
+\end{align*}
+With the complex representations
+\[
+z_{\mathbf{x}}=x_1+\mathrm{j}x_2,\qquad
+z_{\mathbf{y}}=y_1+\mathrm{j}y_2,
+\]
+their product with conjugation is
+\begin{align*}
+z_{\mathbf{x}}\;\overline{z_{\mathbf{y}}}
+&=(x_1+\mathrm{j}x_2)(y_1-\mathrm{j}y_2) \\
+&=(x_1y_1+x_2y_2)\;+\;\mathrm{j}\,(-x_1y_2+x_2y_1).
+\end{align*}
+Taking the real part gives the vector inner product:
+\[
+\Re\!\left(z_{\mathbf{x}}\;\overline{z_{\mathbf{y}}}\right)=x_1y_1+x_2y_2
+=\langle \mathbf{x},\mathbf{y}\rangle .
+\]
+
+\paragraph{Polar form viewpoint.}
+Write $\mathbf{x}$ in polar coordinates with $r_x=\|\mathbf{x}\|$ and angle
+$\theta_x$:
+\[
+x_1=r_x\cos\theta_x,\qquad x_2=r_x\sin\theta_x,
+\]
+so
+\[
+z_{\mathbf{x}}=r_x(\cos\theta_x+\mathrm{j}\sin\theta_x)=r_x e^{\mathrm{j}\theta_x}.
+\]
+Similarly $z_{\mathbf{y}}=r_y e^{\mathrm{j}\theta_y}$. Then
+\begin{align*}
+z_{\mathbf{x}}\;\overline{z_{\mathbf{y}}}
+&= r_x e^{\mathrm{j}\theta_x}\; r_y e^{-\mathrm{j}\theta_y}
+= r_x r_y e^{\mathrm{j}(\theta_x-\theta_y)} \\
+&= r_x r_y\Big[\cos(\theta_x-\theta_y)
+  + \mathrm{j}\sin(\theta_x-\theta_y)\Big],
+\end{align*}
+hence
+\[
+\Re\!\left(z_{\mathbf{x}}\;\overline{z_{\mathbf{y}}}\right)
+= r_x r_y \cos(\theta_x-\theta_y)
+= \langle \mathbf{x},\mathbf{y}\rangle .
+\]
+
+You can make intuitive sense of the  inner product in polar form by understanding that the angle between the two vectors is $\theta_x - \theta_y$ (plot the two vectors in a 2D plane). Therefore, the scalar projection (see notes below) of $\textbf{x}$ onto $\textbf{y}$ is $r_x \cos(\theta_x - \theta_y)$, which when multiplied by the absolute value of $y$ gives the inner product (that is, $r_xr_y\cos(\theta_x - \theta_y)$ in complex polar form). 
+\paragraph{Scalar projection.}
+Let $\hat{\mathbf{y}}=\mathbf{y}/\|\mathbf{y}\|$ and let $\phi$ be the angle
+between $\mathbf{x}$ and $\mathbf{y}$. Then
+\[
+\text{proj}_{\mathbf{y}}(\mathbf{x})=(\mathbf{x}\cdot\hat{\mathbf{y}})\,\hat{\mathbf{y}},
+\qquad
+\|\text{proj}_{\mathbf{y}}(\mathbf{x})\|
+=\mathbf{x}\cdot\hat{\mathbf{y}}=\|\mathbf{x}\|\cos\phi,
+\]
+and
+\[
+\mathbf{x}\cdot\mathbf{y}
+=\mathbf{x}\cdot\big(\|\mathbf{y}\|\hat{\mathbf{y}}\big)
+=\|\mathbf{y}\|\;(\mathbf{x}\cdot\hat{\mathbf{y}}).
+\]
+
+% \section{}
+\end{document}
