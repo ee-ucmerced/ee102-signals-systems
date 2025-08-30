@@ -1,6 +1,9 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
 
 \documentclass{ee102_pset}
-\input{../macros.tex}
+\input{macros.tex}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
@@ -22,26 +25,25 @@ In EE 102, we will use complex numbers commonly (this pre-requisite assignment w
 
 You should think of complex numbers as a 2D extension of real numbers --- so it's just a trick. Complex numbers allow us to analyze 2D vectors just like we would work with scalars. Consider for example, a 2D real vector $\textbf{p} = \begin{bmatrix}x\\y\end{bmatrix}\in\mathbb{R}^2$. Even though it has two components, we can treat it as a single entity: the complex number $z = x+\mathrm{j}y$. The ``$\mathrm{j}$'' is just a label for the second dimension. Then, vector operations become scalar with simple additions and multiplications. The dot product between two vectors
 \[
-\mathbf{p}=\begin{bmatrix}x_1\\y_1\end{bmatrix} and \qquad
-\mathbf{q}=\begin{bmatrix}x_2\\y_2\end{bmatrix},
+\mathbf{p}=\begin{bmatrix}x_1\\y_1\end{bmatrix}\quad \text{and} \qquad
+\mathbf{q}=\begin{bmatrix}x_2\\y_2\end{bmatrix} \text{is}
 \]
-is
 \[
 \mathbf{p}\cdot \mathbf{q} = x_1x_2 + y_1y_2.
 \]
 You can redefine the problem using complex numbers: \(z_{\mathbf{p}}=x_1+\mathrm{j}y_1\) and \(z_{\mathbf{q}}=x_2+\mathrm{j}y_2\).
 Then, write
 \[
-z_{\mathbf{p}}\;\overline{z_{\mathbf{q}}}
-= (x_1+\mathrm{j}y_1)(x_2-\mathrm{j}y_2)
-= (x_1x_2+y_1y_2)\;+\;\mathrm{j}\,(y_1x_2 - x_1y_2).
+\bar{z}_{\mathbf{p}}\;z_{\mathbf{q}}
+= (x_1-\mathrm{j}y_1)(x_2+\mathrm{j}y_2)
+= (x_1x_2+y_1y_2)\;+\;\mathrm{j}\,(x_1y_2 - y_1x_2).
 \]
 Remember that $\bar{z}$ denotes the complex conjugate (replace \( \mathrm{j} \) with \( -\mathrm{j} \)). Therefore,
 \[
-\boxed{\;\langle \mathbf{p},\mathbf{q}\rangle = \operatorname{Re}\!\big(z_{\mathbf{p}}\overline{z_{\mathbf{q}}}\big)\;}
+\boxed{\;\langle \mathbf{p},\mathbf{q}\rangle = \operatorname{Re}\!\big(\bar{z}_{\mathbf{p}}z_{\mathbf{q}}\big)\;}
 \]
-and \(\operatorname{Im}\!\big(z_{\mathbf{p}}\overline{z_{\mathbf{q}}}\big)=y_1x_2 - x_1y_2
-= -\det\!\begin{bmatrix}x_1&y_1\\ x_2&y_2\end{bmatrix}\),
+and \(\operatorname{Im}\!\big(\bar{z}_{\mathbf{p}}z_{\mathbf{q}}\big)=x_1y_2 - y_1x_2
+= \det\!\begin{bmatrix}x_1&y_1\\ x_2&y_2\end{bmatrix}\),
 the (signed) 2D area form. This is the determinant that gives the oriented area of the parallelogram spanned by two 2D vectors. So, with complex numbers we recovered the inner product and additionally, we are able to obtain information about the area spanned by the vectors in 2D. 
 
 % ============================

@@ -1,0 +1,290 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{tikz}
+\usetikzlibrary{calc,angles,quotes,arrows.meta}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+    pdftitle={week0_notes},
+    pdfpagemode=FullScreen,
+}
+
+\renewcommand{\releasedate}{August 29, 2025}
+\begin{document}
+
+\section*{EE102 Week 0, Lecture 1 (Fall 2025)}
+\subsection*{Instructor: \instructor}
+\subsection*{Date: \releasedate}
+\section{Goals}
+\begin{itemize}
+  \item Logistics, grading, extensions, expectations
+  \item Motivation to study signal processing
+  \item Pre-requisites to signal processing: vectors and complex numbers
+\end{itemize}
+
+\section{Pre-requisite \#1: Vectors}
+When studying problems with many entities/observations, we structure our variables into vectors.
+
+An $n$-dimensional vector $\mathbf{x}$ can be written as
+\[
+\mathbf{x}=[\,x_1,\;x_2,\;\ldots,\;x_n\,], \qquad \mathbf{x}\in\mathbb{R}^n .
+\]
+
+\subsection{Matrices are transformations}
+If you transform a vector $\mathbf{x}$ to a new vector $\mathbf{y}$ such that all elements in $\mathbf{y}$ are linear combinations of elements in $\mathbf{x}$, then the transformation is called a matrix.
+
+\[
+\mathbf{x}=
+\begin{bmatrix}
+x_1\\ x_2\\ \vdots\\ x_n
+\end{bmatrix}
+\;\longmapsto\;
+\mathbf{y}=
+\begin{bmatrix}
+y_1\\ y_2\\ \vdots\\ y_m
+\end{bmatrix}
+\]
+such that
+\[
+y_1=\sum_{i=1}^{n}\alpha_{1i}x_i,\qquad
+y_2=\sum_{i=1}^{n}\alpha_{2i}x_i,\quad \ldots,\quad
+y_m=\sum_{i=1}^{n}\alpha_{mi}x_i .
+\]
+Then $A\mathbf{x}=\mathbf{y}$, where
+\[
+A\in\mathbb{R}^{m\times n}, \qquad
+A=
+\begin{bmatrix}
+\alpha_{11} & \alpha_{12} & \cdots & \alpha_{1n}\\
+\alpha_{21} & \alpha_{22} & \cdots & \alpha_{2n}\\
+\vdots      & \vdots      & \ddots & \vdots\\
+\alpha_{m1} & \alpha_{m2} & \cdots & \alpha_{mn}
+\end{bmatrix}.
+\]
+
+We write
+\[
+A:\; X \to Y,
+\]
+where $X$ is the vector space in $\mathbb{R}^n$ where $\mathbf{x}$ lies and $Y$ is the vector space in $\mathbb{R}^m$ where $\mathbf{y}$ lies.
+
+\paragraph{Recall}
+\begin{itemize}
+  \item Diagonal matrix
+  \item Identity matrix
+  \item Symmetric matrix
+  \item Zero matrix
+  \item Matrix transpose
+  \item Matrix algebra ($+$, $-$, $\times$, inverse)
+\end{itemize}
+\subsection{Real-world significance}
+Note that a transformation is called an ``affine'' transformation if it is linear
+\[
+\mathbf{y} = A\mathbf{x} + \mathbf{b},
+\]
+where $A$ is a linear transformation (matrix) and $\mathbf{b}$ is a translation vector. Affine transformations are common in many practical applications such as image processing, computer-aided design in engineering, medical imaging, graphic design, and many more. On a lighter note, check this fun meme template out which uses matrix transformations at its core --- the \href{https://www.youtube.com/watch?v=hYdmPw-SrMQ}{content aware scale gif} and some \href{https://www.reddit.com/r/davinciresolve/comments/1780z24/how\_to\_do\_content\_aware\_scale\_meme\_effect\_for/}{related Reddit discussion} on it. Creating memes often requires very specific image transforms (such as the Wide Keanu or the general Stretched Resolution meme)! On a more technical note, you can check out the Adobe Photoshop tool called ``Transform'' (or the equivalent rotate, scale, and skew tools in Microsoft Paint) --- these tools allow users to manipulate images using affine transformations. The same concepts are at the core of many research-grade affine transform tools. Some examples are \href{https://affine.readthedocs.io/en/latest/index.html#}{rasterio} for geographical applications, \href{https://open.win.ox.ac.uk/pages/fsl/fslpy/_modules/fsl/transform/flirt.html}{flirt} for affine transformations of MRI images and the \href{https://pytorch.org/vision/stable/transforms.html#torchvision.transforms.RandomAffine}{RandomAffine} tool for affine transformations in image augmentation used in machine learning applications.
+
+In summary, vector and matrix algebra is the centerpiece in signal processing and you will see the mathematical preliminaries being used throughout the course.
+\section{Pre-requisite \#2: Complex numbers}
+
+Although the usual way we learn about the complex unit ``$\mathrm{j}$'' is as
+a convenient notation for a solution of
+\[
+x^{2}+1=0 \;\;\Rightarrow\;\; x=\sqrt{-1}:=\mathrm{j},
+\]
+it is useful to recognize other places where this convenience is beneficial.
+In signal processing we are often looking for easy ways to analyze physical
+signals, not only to solve algebraic equations.
+
+\subsection{From vectors to a complex scalar.}
+Given a vector
+\[
+\mathbf{x}=\begin{bmatrix}x_1\\ x_2\end{bmatrix},
+\]
+define the (complex) scalar
+\[
+z_{\mathbf{x}}=x_1+\mathrm{j}x_2.
+\]
+The entries $x_1$ and $x_2$ are not ``added'' in $\mathbb{R}$; they are bound
+only because they are components of the same vector. Writing $z_{\mathbf{x}}$
+lets us treat the vector like a single scalar living in $\mathbb{C}$.
+
+\subsection{Inner products and linear dependence}
+In simple terms, the inner product between two vectors is a scalar quantity that quantifies a relationship between two vectors: how much they align with each other. In quantifying this, the inner product takes into account the lengths of the two vectors and the angle between them. The inner product can be used to define orthogonality (perpendicularity) --- which is one the most fundamental concepts in signal processing.
+
+\textbf{Why?} The \ul{key idea in EE 102} is that a linear combination of a set of orthogonal signals can be used to represent \textit{any} signal (no matter how complicated), under some conditions, of course. So, understanding orthogonality, linear independence, and linear combinations is key to this course. Consequently, inner product is an important concept for this course.
+
+If two vectors are orthogonal (that is, their inner product is zero), then these vectors are linearly independent. Indeed, we can prove that a set of non-zero mutually orthogonal vectors (say, $v_1, v_2, \ldots, v_n$) are linearly independent. You can show this by writing the linear combination of the vectors: $
+S = \alpha_1 v_1 + \alpha_2 v_2 + \ldots + \alpha_n v_n$ and showing that it is zero only if all constants $\alpha_i, \: i = \{1, \ldots, n\}$ are equal to zero. To prove this linear independence, you can take the inner product of the above with any vector in the set (or any linear combination, thereof) say $v_k$:
+\begin{align*}
+S = v_k \cdot (c_1v_1 + c_2v_2 + ... + c_nv_n)\\
+S = v_k \cdot c_1v_1 + v_k \cdot c_2v_2 + ... + v_k \cdot c_nv_n = 0
+\end{align*}
+since the pairwise dot products (the inner product between each pair of vectors) are zero, we are only left with
+\[
+c_k (v_k \cdot v_k) = 0
+\]
+which is only possible if $c_k = 0$ since $v_k \cdot v_k$ is non-zero. Since this is true for any $k$, we have that all coefficients are zero. So, inner products play an important role in proving orthogonality (and thus, linear independence of vectors). 
+\subsection{Inner product via complex numbers.}
+All the vector algebra can be tedious work! Complex numbers come to our rescue as we can represent a 2D vector as a complex number. For $\mathbf{x}=[x_1,x_2]^{\top}$ and $\mathbf{y}=[y_1,y_2]^{\top}$,
+\begin{align*}
+\langle \mathbf{x},\mathbf{y}\rangle
+&= \mathbf{x}^{\top}\mathbf{y}
+= x_1y_1+x_2y_2 .
+\end{align*}
+With the complex representations
+\[
+z_{\mathbf{x}}=x_1+\mathrm{j}x_2,\qquad
+z_{\mathbf{y}}=y_1+\mathrm{j}y_2,
+\]
+their product with conjugation is
+\begin{align*}
+\overline{z}_{\mathbf{x}}\;z_{\mathbf{y}}
+&=(x_1-\mathrm{j}x_2)(y_1+\mathrm{j}y_2) \\
+&=(x_1y_1+x_2y_2)\;+\;\mathrm{j}\,(x_1y_2 - x_2y_1).
+\end{align*}
+Taking the real part gives the vector inner product:
+\[
+\Re\!\left(\overline{z}_{\mathbf{x}}\;z_{\mathbf{y}}\right)=x_1y_1+x_2y_2
+=\langle \mathbf{x},\mathbf{y}\rangle .
+\]
+
+\paragraph{Polar form viewpoint.}
+Write $\mathbf{x}$ in polar coordinates with $r_x=\|\mathbf{x}\|$ and angle
+$\theta_x$:
+\[
+x_1=r_x\cos\theta_x,\qquad x_2=r_x\sin\theta_x,
+\]
+so
+\[
+z_{\mathbf{x}}=r_x(\cos\theta_x+\mathrm{j}\sin\theta_x)=r_x e^{\mathrm{j}\theta_x}.
+\]
+Similarly $z_{\mathbf{y}}=r_y e^{\mathrm{j}\theta_y}$ from Euler's identity\footnote{You can practice proving Euler's identity that $e^{\mathrm{j}\theta}=\cos\theta+\mathrm{j}\sin\theta$ by expanding the left-hand side using the exponential series and collecting the real and imaginary parts together (the real part will be the cosine series and the imaginary part will be the sine series).}. Then
+\begin{align*}
+\overline{z}_{\mathbf{x}}\;z_{\mathbf{y}}
+&= r_x e^{-\mathrm{j}\theta_x}\; r_y e^{\mathrm{j}\theta_y}
+= r_x r_y e^{\mathrm{j}(-\theta_x+\theta_y)} \\
+&= r_x r_y\Big[\cos(-\theta_x+\theta_y)
+  + \mathrm{j}\sin(-\theta_x+\theta_y)\Big],
+\end{align*}
+hence
+\[
+\Re\!\left(\overline{z}_{\mathbf{x}}\;z_{\mathbf{y}}\right)
+= r_x r_y \cos(-\theta_x+\theta_y) = r_x r_y \cos(\theta_x - \theta_y)
+= \langle \mathbf{x},\mathbf{y}\rangle .
+\]
+Note that cosine is an even function, which allowed us to write the last equality above. 
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[>=Stealth,scale=1]
+% axes
+\draw[->] (-0.2,0) -- (5.2,0) node[below right]{Re};
+\draw[->] (0,-0.2) -- (0,4.2) node[left]{Im};
+
+% parameters (easy to tweak)
+\def\thx{55}   % angle of x
+\def\thy{20}   % angle of y
+\def\rx{3.3}   % length of x
+\def\ry{2.8}   % length of y
+
+% points
+\coordinate (O) at (0,0);
+\coordinate (E) at (1,0);          % +x axis ref
+\coordinate (X) at (\thx:\rx);
+\coordinate (Y) at (\thy:\ry);
+
+% vectors
+\draw[thick] (O)--(X) node[above]{$\mathbf{x}$};
+\draw[thick] (O)--(Y) node[below right]{$\mathbf{y}$};
+
+% label r_x along x
+\node[shift={(-0.2,0.2)}] at ($(O)!0.55!(X)$) {$r_x$};
+
+\node[shift={(0.2,-0.2)}] at ($(O)!0.55!(Y)$) {$r_y$};
+% orthogonal projection of x onto span{y}
+\path
+  let \p1=(X), \p2=(Y),
+      \n1={(\x1*\x2+\y1*\y2)/(\x2*\x2+\y2*\y2)} % (x·y)/||y||^2
+  in coordinate (P) at (\n1*\x2,\n1*\y2);
+
+\draw[densely dashed] (X)--(P);
+\fill (P) circle (1pt);
+% right-angle marker at the foot of the projection
+\begin{scope}[shift={(P)},rotate=\thy]
+  \draw (0,0) -- (0.18,0) -- (0.18,0.18) -- (0,0.18) -- cycle;
+\end{scope}
+
+% --- define a named x-axis point (already in your file) ---
+\coordinate (E) at (1,0);
+
+% --- small, clean angle arcs---
+\draw[very thin] (0:0.38)   arc[start angle=0,    end angle=\thy, radius=0.38];  % θ_y arc
+\draw[very thin] (0:0.52)   arc[start angle=0,    end angle=\thx, radius=0.52];  % θ_x arc
+\draw[very thin] (\thy:0.98) arc[start angle=\thy,end angle=\thx, radius=0.98];  % φ arc
+
+% --- tiny labels placed off the arcs a bit ---
+\node[font=\scriptsize] at ($(0,0)+(0.50,-0.18)$) {$\theta_y$};
+\node[font=\scriptsize] at ($(0,0)+(0.58,0.38)$) {$\theta_x$};
+\node[font=\scriptsize] at ($(0,0)+({1.10*cos((\thx+\thy)/2)},{1.10*sin((\thx+\thy)/2)})$) {$\varphi$};
+
+
+\end{tikzpicture}
+\caption{Geometric view of the inner product using polar form} 
+\label{fig:vectors-complex}
+\end{figure}
+
+In Figure~\ref{fig:vectors-complex}, observe that vectors $\mathbf{x}$ and $\mathbf{y}$ make angles $\theta_x$ and $\theta_y$ with the real axis and the angle between them is $\varphi=\theta_x-\theta_y$. You can make intuitive sense of the inner product in polar form by understanding its geometric interpretation (see Figure~\ref{fig:vectors-complex}). Specifically, recall how we defined inner products in the previous section --- a quantification of the alignment between two vectors. For our example in Figure~\ref{fig:vectors-complex}, decompose $\mathbf{x}$ relative to $\mathbf{y}$: drop a perpendicular from the tip of $\mathbf{x}$ to the line $\mathrm{span}\{\mathbf{y}\}$ (the direction spanned by $\mathbf{y}$). This splits $\mathbf{x}$ into a part \emph{parallel} to $\mathbf{y}$ and a part \emph{perpendicular} to $\mathbf{y}$:
+   
+\[
+\mathbf{x}
+=\underbrace{(\mathbf{x}\cdot\hat{\mathbf{y}})\,\hat{\mathbf{y}}}_{\text{projection onto }\mathrm{span}\{\mathbf y\}, \: \text{parallel to} \: \mathbf y}
+\;+\;
+\underbrace{\Big(\mathbf{x}-(\mathbf{x}\cdot\hat{\mathbf{y}})\,\hat{\mathbf{y}}\Big)}_{\text{perpendicular (rejection) to }\mathbf y}.
+\]
+The second part that is perpendicular to $\mathbf y$ is called the rejection because that's the part that is remaining (you can see that it is quite literally the remaining part as it is obtained by subtracting the projection from $\mathbf{x}$). Note that the inner product of $\mathbf{x}$ with the unit vector $\hat{\mathbf{y}}$ gives us the projection of x onto $\mathrm{span}\{\mathbf{y}\}$. By computing the inner product, you can also check that the remaining (perpendicular part) of $\mathbf{x}$ is orthogonal to $\mathbf{y}$:
+\[
+\operatorname{rej}_{\mathbf y}(\mathbf x)\cdot \hat{\mathbf y}
+=\mathbf x\!\cdot\!\hat{\mathbf y}-(\mathbf x\!\cdot\!\hat{\mathbf y})(\hat{\mathbf y}\!\cdot\!\hat{\mathbf y})
+=\mathbf x\!\cdot\!\hat{\mathbf y}-\mathbf x\!\cdot\!\hat{\mathbf{y}}=0.
+\]
+Thus
+\[
+\mathbf x=\operatorname{proj}_{\mathbf y}(\mathbf x)+\operatorname{rej}_{\mathbf y}(\mathbf x),
+\qquad
+\|\mathbf x\|^2=\|\operatorname{proj}_{\mathbf y}(\mathbf x)\|^2+\|\operatorname{rej}_{\mathbf y}(\mathbf x)\|^2.
+\]
+
+In summary, the inner product measures how much of $\mathbf{x}$ points along $\mathbf{y}$, scaled by the length of $\mathbf{y}$. This is given by
+    \[
+      \mathbf{x}\cdot\mathbf{y}
+      = \|\mathbf{y}\|\,(\mathbf{x}\cdot\hat{\mathbf{y}})
+      = \|\mathbf{x}\|\,\|\mathbf{y}\|\cos\varphi.
+    \]
+The sign of $\cos\varphi$ carries the orientation: it is positive when the angle is acute and negative when obtuse. Complex numbers in their polar form express the same geometric intuition:
+\[
+      \overline{z_{\mathbf{x}}}\,z_{\mathbf{y}}
+      = r_x r_y e^{\mathrm{j}(\theta_x-\theta_y)}
+\]
+so the real part matches the dot product:
+\[
+  \Re\!\big(\overline{z_{\mathbf{x}}}\,z_{\mathbf{y}}\big)
+  = r_x r_y \cos\varphi
+  = \mathbf{x}\cdot\mathbf{y}.
+\]
+Therefore, the scalar projection of $\textbf{x}$ onto $\textbf{y}$ is $r_x \cos(\theta_x - \theta_y)$, which when multiplied by the absolute value of $y$ gives the inner product (that is, $r_xr_y\cos(\theta_x - \theta_y)$ in complex polar form). 
+\subsection{Real-world significance}
+We discussed three main topics in this section --- vectors, complex numbers, and their products.
+Representing quantities as vectors has many advantages, which mirrors the advantage of using lists and arrays in computer programming. Inner products are useful in quantifying the alignment between vectors. A simple example is in machine learning, where the similarity between data points can be measured using inner products, which has applications in face detection, recommendation systems, and more. Finally, as discussed, complex numbers help us analyze vectors in a more nuanced way by providing a framework for understanding their magnitude and direction. You will see many more real-world application examples of complex numbers in signal processing. In Fourier analysis, complex exponentials are used as the orthogonal basis functions for representing signals in the frequency domain.
+\end{document}

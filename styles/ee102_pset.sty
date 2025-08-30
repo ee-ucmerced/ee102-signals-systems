@@ -103,3 +103,8 @@
 \setcounter{dbltopnumber}{2}
 \renewcommand\dbltopfraction{.7}
 \renewcommand\dblfloatpagefraction{.7}
+
+\usepackage{xcolor}
+\newenvironment{solution}[1][]{%
+  \par\medskip\noindent\textbf{Solution #1:}\ \color{blue}%
+}{\par\color{black}}
