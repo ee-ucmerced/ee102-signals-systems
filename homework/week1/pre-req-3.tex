@@ -1,0 +1,73 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+
+
+\documentclass{ee102_pset}
+\input{macros.tex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[american]{circuitikz}
+
+% Assignment info
+\author{\rule{3cm}{0.4pt}} % Name placeholder
+\submitdate{\rule{3cm}{0.4pt}} % Submission date placeholder
+\problemset{Pre-requisite \#3: Circuit theory}
+\renewcommand{\duedate}{September 7, 2025}
+\shorttitle{Pre-requisite \#3}
+
+\begin{document}
+
+% Problem 1
+\problem{1} For the circuit below (see Figure~\ref{fig:rc-circuit}), answer the following questions. You may assume zero initial conditions for the capacitor voltage.
+\begin{figure}[h]
+\centering
+\begin{circuitikz}
+    % flip the sign of voltage source
+  \draw (0,0) {} 
+        to[V, l_={$x(t)$}] (0,3)
+        to[R, l={$R=330\,\Omega$}, i>^={$i(t)$}] (4,3)
+        -- (6,3)
+        to[C, l_={$C=1000\,\mathrm{\mu F}$}, v^>={$y(t)$}] (6,0)
+        -- (0,0);
+\end{circuitikz}
+\caption{A series RC with input \(x(t)\), current \(i(t)\), and output \(y(t)\) across the capacitor.}
+\label{fig:rc-circuit}
+\end{figure}
+
+\problempart \textbf{[25 pts]}  
+Using your knowledge from circuit theory, derive a relationship between the input and the output of the circuit. Note that you can leave your final answer as a differential equation.  
+(\emph{Answer form:} \(RC\,\dot y(t)+y(t)=x(t)\). With \(R=15\,\Omega\), \(C=\tfrac15\) F, this is \(3\,\dot y(t)+y(t)=x(t)\).)
+
+\problempart \textbf{[25 pts]}  
+Assume that you are able to provide a sinusoidal input by connecting the circuit above to a signal generator that gives \(x(t)=A\sin(\omega t)\). Solve for \(y(t)\) using your answer from part (a). 
+(\emph{Show:} the steady-state is \(y_{\mathrm{ss}}(t)=A|H(\mathrm{j}\omega)|\cos\!\big(\omega t+\phi+\angle H(\mathrm{j}\omega)\big)\) with \(H(s)=\dfrac{1}{1+RC\,s}\). Include any transient from your chosen initial condition.)
+
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+\problem{2}
+Apply your knowledge of computer programming to solve the circuit equation you derived in the previous problem. You may use Python jupyter notebooks or MATLAB Live Scripting to complete the problem. Make sure to attach your code notebook as a PDF to your final submission. 
+
+\problempart \textbf{[25 pts]}  
+Using {\tt scipy.integrate.odeint} or MATLAB's {\tt ode45} (or a different ode solver in MATLAB), simulate the ODE  for \(t\in[0,T]\) with \(x(t)=A\sin(\omega t)\). Plot the input \(x(t)\) with time and the output \(y(t)\) with respect to time on two different axes side-by-side. Make sure to clearly label the axes and include a legend. You are allowed to choose \(A,\omega,T\) but make sure to describe your choices clearly. Report the gain (the output magnitude divided by the input magnitude) at time 0 and at your last time point.
+
+\problempart \textbf{[25 pts]}  
+Solve the circuit for two additional inputs below and similarly plot the results as above:
+\begin{enumerate}\itemsep2pt
+  \item \textbf{A step input:} \(x(t)=A\,u(t)\), where $u(t)$ is the unit magnitude step function.
+  \item \textbf{A pulse input:} \(x(t)=A\,[u(t-t_0)-u(t-t_0-\tau)]\) for some fixed positive values of \(t_0,\tau\).
+\end{enumerate}
+Remember to plot both inputs and outputs, and label your graphs clearly.
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+\end{document}
+
+
+
