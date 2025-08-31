@@ -1,0 +1,52 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{tikz}
+\usetikzlibrary{calc,angles,quotes,arrows.meta}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+    pdftitle={week1_notes},
+    pdfpagemode=FullScreen,
+}
+
+\renewcommand{\releasedate}{September 3, 2025}
+\begin{document}
+
+\section*{EE 102 Week 1, Lecture 1 (Fall 2025)}
+\subsection*{Instructor: \instructor}
+\subsection*{Date: \releasedate}
+\section{Goals}
+\begin{itemize}
+  \item Introduction to signals
+  \item TBD
+\end{itemize}
+
+\section{Energy and power of signals}
+
+\[
+E_{\infty} \;\triangleq\; \lim_{T\to\infty}\int_{-T}^{T}\! |x(t)|^{2}\,dt 
+\;=\; \int_{-\infty}^{+\infty}\! |x(t)|^{2}\,dt,
+\]
+\[
+E_{\infty} \;\triangleq\; \lim_{N\to\infty}\sum_{n=-N}^{+N} |x[n]|^{2}
+\;=\; \sum_{n=-\infty}^{+\infty} |x[n]|^{2},
+\]
+\[
+P_{\infty} \;\triangleq\; \lim_{T\to\infty} \frac{1}{2T}\int_{-T}^{T}\! |x(t)|^{2}\,dt,
+\qquad
+P_{\infty} \;\triangleq\; \lim_{N\to\infty} \frac{1}{2N+1}\sum_{n=-N}^{+N} |x[n]|^{2}.
+\]
+
+\end{document}
