@@ -1,30 +1,71 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+
+
 \documentclass{ee102_pset}
-\input{../macros.tex}
+\input{macros.tex}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{listings}
+\usepackage[american]{circuitikz}
 
-\author{\rule{3cm}{0.4pt}} % Remove the \rule, and add your name
-\submitdate{\rule{3cm}{0.4pt}} % Remove the \rule, and add the submission date
-\problemset{\psetnum}
+% Assignment info
+\author{\rule{3cm}{0.4pt}} % Name placeholder
+\submitdate{\rule{3cm}{0.4pt}} % Submission date placeholder
+\problemset{Homework \#1: Introduction to Signals}
+\renewcommand{\duedate}{September 7, 2025}
+\shorttitle{Homework \#1}
 
-\renewcommand{\releasedate}{August 27, 2025}
-\renewcommand{\duedate}{September 6, 2025}
 \begin{document}
 
+% Problem 1
 \problem{1}
-Solve $Ax = b$. OK.
-\problempart
-% (a)
 
-\problempart
-% (b)
+[Adapted from Problem 3 in Vierinen and Jensen] A time scaling system adjusts the scaling of the independent variable: $y(t) = x(\alpha t)$, when $x(t)$ is the signal fed into the system
+and $y(t)$ is the output. Answer the following questions for this system:
+\begin{enumerate}
+    \item \textbf{[5 points]} Draw a block diagram for the system. Label the input, output, and the system.
+    \item \textbf{[5 points]} What is the effect on the signal when $0 < \alpha < 1$. What about $\alpha > 1$?
+    \item \textbf{[5 points]} Prove that the system is linear.
+    \item \textbf{[5 points]} Give an example of a real-world application where studying this system can be useful. Then, for this example, propose a nonlinear modification to the system, which captures a real situation.  
+\end{enumerate}
 
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
 \problem{2}
-\problempart
-% ...
+Consider the signal $x(t) = a^{-tu(t)}$, where $u(t)$ is the unit step function. 
+\begin{enumerate}
+    \item \textbf{[5 points]} Sketch $x(t)$ for time $-2 < t < 2$ for $a > 0$. You are not allowed to use computer programs to do this.
+    \item \textbf{[5 points]} Sketch $y(t)$ for time $-2 < t < 2$ for $a>0$, where $y(t) = 2x(5 - 0.5t)$
+    \item \textbf{[5 points]} Find out whether the signal $y(t)$ is time-invariant.
+    \item \textbf{[5 points]} Find out whether the signal $y(t)$ converges to 0 as $t \to \infty$ for $a > 0$. 
+    \item \textbf{[5 points]} Find the value of $a$ such that $y(1) = 0.1$.
+    \item \textbf{[5 points]} Think of a signal that you can relate $x(t)$ with. Analyze the properties of $x(t)$ to find out a real-world signal that shares similar characteristics.
+\end{enumerate}
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
 
 \problem{3}
-% ...
+For each of the signals below, you have four tasks:
+\begin{enumerate}
+  \item \textbf{[4 points, per signal]} Sketch the signal (clearly label the amplitude and axes)
+  \item \textbf{[8 points, per signal]} Compute \(E_{\infty}\) and \(P_{\infty}\) using the definitions provided in the lecture notes.
+  \item \textbf{[3 points, per signal]} Using Python (or MATLAB), plot the signal over an appropriate interval and confirm your findings.
+  \item \textbf{[5 points total]} Briefly discuss a relevant example where the properties of the signal can be important.
+\end{enumerate}
+You must do the three parts above for each of the three signals below
+\begin{enumerate}
+\item[(a)] $x_1[n] = \left(\tfrac{1}{3}\right)^{n} u[n].$
+
+\item[(b)] $x_2(t) = \mathrm{e}^{\mathrm{j}\,(3t+\pi/7)}.$
+
+\item[(c)] $x_3[n] = \mathrm{e}^{\mathrm{j}\,(\tfrac{\pi}{3}n+\pi/10)}.$
+\end{enumerate}
 
 \end{document}
