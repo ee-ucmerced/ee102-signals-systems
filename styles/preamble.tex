@@ -1,0 +1,71 @@
+% The following packages can be found on http:\\www.ctan.org
+% \usepackage{graphics} % for pdf, bitmapped graphics files
+%\usepackage{epsfig} % for postscript graphics files
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{times} % assumes new font selection scheme installed
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb,mathtools}  % assumes amsmath package installed
+\usepackage{xcolor}
+\usepackage{pgfplots,subcaption}
+\usepackage[hidelinks]{hyperref}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[american]{circuitikz}
+\usepackage{tikz}
+\usepackage{caption}    
+\usepackage{lscape}
+\usepackage{soul}
+\usepackage{tikz}
+\usetikzlibrary{calc,angles,quotes,arrows.meta}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+    pdftitle={week1_notes},
+    pdfpagemode=FullScreen,
+}
+%\usepackage{float} 
+
+%\usepackage[demo]{graphicx}
+\pgfplotsset{compat=1.18}
+% \usepgfplotslibrary{fillbetween}
+
+\newsavebox{\measurebox}
+
+\let\proof\relax\let\endproof\relax
+
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\def\abs#1{\left\lvert#1\right\rvert}
+\let\proof\relax
+\let\endproof\relax
+\usepackage{amsthm}
+\usepackage{accents}
+\usepackage{relsize}
+\newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{statement}{Statement}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+ 
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\theoremstyle{remark}
+\newtheorem*{claim}{Claim}
+\setlength{\parindent}{0cm}
+\newenvironment{nalign}{
+    \begin{equation}
+    \begin{aligned}
+}{
+    \end{aligned}
+    \end{equation}
+    \ignorespacesafterend
+}

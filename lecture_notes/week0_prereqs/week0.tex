@@ -21,7 +21,7 @@
     pdfpagemode=FullScreen,
 }
 
-\renewcommand{\releasedate}{August 29, 2025}
+\renewcommand{\releasedate}{August 29, 2025; Updated: Sep 3, 2025}
 \begin{document}
 
 \section*{EE102 Week 0, Lecture 1 (Fall 2025)}
@@ -34,6 +34,29 @@
   \item Pre-requisites to signal processing: vectors and complex numbers
 \end{itemize}
 
+\section{Why study signal processing?}
+Signal processing and linear systems theory is foundational in engineering. It has revolutionized engineering in more ways than we realize --- machine learning/AI, RF amplifiers, satellite communications, airplanes, medical devices, automotive vehicles, MRI scans, and pretty much every other engineering and science discipline out there \emph{directly} uses concepts from this course. This is fantastic but there is also a downside! Learning signal processing is dependent on many prerequisites as it builds on various other fundamental courses in engineering. As electrical engineers, you are required to learn signal processing and linear systems theory. Other engineering disciplines typically do not require such a course. This gives electrical engineers an edge because what you learn in this course is not just applicable to EE but also to all other areas. So, despite many pre-requisite requirements, I hope that you will be motivated to cross the technical barriers  in learning signal processing.
+
+\subsection{Real-world significance}
+Count the number of questions you answer ``yes'' to from the list below:
+\begin{itemize}
+  \item Do you enjoy music? Did you ever find songs that sounded very similar to each other? Would you like to be able to explain why that's the case (mathematically)?
+  \item Would you like design your own electrical circuits that are able to meet performance specifications of your (future) clients?
+  \item Do you anticipate that you will be working on radio frequency circuits in your career where you need to design circuits and systems that communicate at specific frequencies?
+  \item Are you attracted to the rigor of electrical engineering? Or perhaps, put another way, are you looking forward to setting aside time to learn the mathematical underpinnings of electrical engineering?
+  \item Would you like to gain a better understanding of how various ``scanners'' scan our body parts to provide useful medical information (like X-rays, MRI, CT scans, etc.)?
+  \item Do you want to be able to explain to others how images and colors on any digital display are created and manipulated?
+  \item Would you like to \emph{mathematically} create new music that takes the best parts of some of the songs that you like? Or perhaps, create entirely new sounds that have never been heard before? By doing it mathematically, you will be making the process general, easily customizable, and reproducible.
+  \item Do you anticipate that your career choice after graduation will involve image processing / machine learning / artificial intelligence?
+  \item Are you interested in understanding the underpinnings of the controllers that are used in automotive vehicles, or robotics, or even in the design of precise drugs that target pathogens in the human body?
+  \item Noise canceling in audio tech is a huge industry! Are you someone who fancies designing / understanding these systems?
+  \item Do you want to understand how Shazam (or other apps that can recognize a song just based on a few beats) work?
+\end{itemize}
+If you counted more than a few ``yes'' answers, you are in the right place! This course will help you understand the mathematical underpinnings of many of these applications. Of course, this course will not go into the technical specifics of any of the applications. There won't be enough time for it. Other courses exist for such details. See below for what this course is not.
+\subsection{What signal processing is not?}
+In signal processing, you will \textbf{not} learn the fundamentals of circuit analysis, AC analysis, transistors, communication algorithms, design of RF circuits, or controller design. Most of those topics are already assigned to other specific courses. In signal processing and linear systems course, we will focus on the mathematical tools and techniques used to analyze and process signals and systems.
+
+With that motivation, let us jump into a discussion about various pre-requisites that you will need to be familiar with to succeed in this course.
 \section{Pre-requisite \#1: Vectors}
 When studying problems with many entities/observations, we structure our variables into vectors.
 
@@ -287,4 +310,9 @@ Therefore, the scalar projection of $\textbf{x}$ onto $\textbf{y}$ is $r_x \cos(
 \subsection{Real-world significance}
 We discussed three main topics in this section --- vectors, complex numbers, and their products.
 Representing quantities as vectors has many advantages, which mirrors the advantage of using lists and arrays in computer programming. Inner products are useful in quantifying the alignment between vectors. A simple example is in machine learning, where the similarity between data points can be measured using inner products, which has applications in face detection, recommendation systems, and more. Finally, as discussed, complex numbers help us analyze vectors in a more nuanced way by providing a framework for understanding their magnitude and direction. You will see many more real-world application examples of complex numbers in signal processing. In Fourier analysis, complex exponentials are used as the orthogonal basis functions for representing signals in the frequency domain.
+
+\section{Pre-requisite \#3: Circuits}
+Without going into the specific details about various electrical circuits, this section will briefly discuss the fundamental concepts of circuits that are relevant to signal processing. In signal processing, we will use circuits only as examples. In fact, equivalent examples can be devised that are relevant for other disciplines. For example, in circuit theory, Kirchoff's voltage and current laws are essential tools that are commonly used to analyze currents and voltages. These laws frame the conservation of energy for an electrical circuit setting. An equivalent mechanical engineering example is the analysis of forces in a static system (such as a spring-mass damper system), where conservation of energy provides a similar framework for understanding the system's behavior. 
+
+Historically, signal processing has been a field that has drawn heavily from electrical engineering concepts, particularly in the analysis and manipulation of signals. The design of the feedback amplifier in the 1920s is the prime example. Scientists and engineers were interested in maximizing the signal to noise ratio for amplifier circuits, which led to the use of many of the foundational mathematical theory that existed at the time. The formalization of these mathematical tools for electrical engineering applications led to the development of the field of signal processing. Since then, these tools have found applications in many other disciplines, including mechanical engineering, civil engineering, computer science, biomedical engineering, and more. But for better or for worse, the pedagogy of signal processing has remained set in that historical context. So, without challenging the years of history too much, we will continue to use circuit examples in this course. However, wherever possible, we will try to incorporate broader application examples too. 
 \end{document}
