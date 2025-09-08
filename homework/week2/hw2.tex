@@ -5,6 +5,7 @@
 
 \documentclass{ee102_pset}
 \input{macros.tex}
+\input{preamble.tex}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
@@ -22,6 +23,101 @@
 
 % Problem 1
 \problem{1}
+[Adapted from Lathi 1.1-11] Consider a signal that is a sum of complex exponentials given by
+\[
+x(t)=\sum_{k=m}^{n} D_k\,e^{j\omega_k t}\!
+\]
+where $D_k\in\mathbb{C}$ and $\{\omega_k\}$ are pairwise distinct, that is, $\omega_i \neq \omega_j$ for all $i \neq j$.
 
-TBD
+\problempart{[5 points]} Show that the time-averaged power of $x(t)$ is
+  \[
+  P_\infty(x)=\lim_{T\to\infty}\frac{1}{2T}\int_{-T}^{T}|x(t)|^2\,dt
+  \;=\;\sum_{k=m}^{n}|D_k|^2.
+  \]
+  \emph{Hint:} expand $|x(t)|^2$ and use that $\frac{1}{2T}\!\int_{-T}^{T}\!e^{j(\omega_k-\omega_\ell)t}\,dt\to 0$ when $\omega_k\neq\omega_\ell$.
+
+\problempart{[5 points]} Determine $E_\infty(x)=\int_{-\infty}^{\infty}|x(t)|^2\,dt$. State clearly whether it is finite or infinite for this $x(t)$ and justify.
+
+\problempart{[5 points]} Let
+  \[
+  \tilde{x}(t)\triangleq \overline{x(t)}=\sum_{k=m}^{n}\overline{D_k}\,e^{-j\omega_k t}.
+  \] What is the power for this conjugate signal?
+
+\problempart{[5 points]} Is $x(t)$ even, odd, or neither? If it is not necessarily even/odd, state the sufficient conditions on $\{D_k,\omega_k\}$ under which $x(t)$ becomes even or odd. For a challenge, you can attempt to show both necessary and sufficient conditions.
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+
+\problem{2} Use the unit step $u(t)$ and unit impulse $\delta(t)$ function definitions discussed in class to answer the following questions.
+\problempart{[5 points]} Show that
+  \[
+  \int_{-\infty}^{t} u(\tau)\,d\tau = t\,u(t) \quad (\text{the ramp } r(t)).
+  \]
+
+\problempart{[5 points]} Show that
+  \[
+  \int_{-\infty}^{t}\delta(\tau)\,d\tau = u(t).
+  \]
+
+\problempart{[5 points]} Prove in the sense of distributions that
+  \[
+  \frac{d}{dt}\,u(t)=\delta(t),\qquad \frac{d}{dt}\,[t\,u(t)] = u(t) + t\,\delta(t).
+  \]
+
+% \problempart{[5 points]} Let
+%   \[
+%   \delta_\varepsilon(t)\triangleq \frac{1}{\varepsilon}\,\mathrm{rect}\!\left(\frac{t}{\varepsilon}\right),
+%   \quad \text{so that}\quad \int_{-\infty}^{\infty}\delta_\varepsilon(t)\,dt=1.
+%   \]
+%   Compute $E_\infty(\delta_\varepsilon)=\int_{-\infty}^{\infty}|\delta_\varepsilon(t)|^2\,dt$ and evaluate $\lim_{\varepsilon\to 0^+}E_\infty(\delta_\varepsilon)$. Interpret your result for the unit impulse $\delta$.
+
+\problempart{[5 points]}  For the finite pulse
+  \[
+  p(t)=A\,\mathrm{rect}\!\left(\frac{t-t_0}{T}\right),
+  \]
+  compute $E_\infty(p)$ and $P_\infty(p)$ and state when each is finite/nonzero.
+
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+\problem{3}
+For each signal below, state whether it is periodic. If periodic, find the fundamental period ($T_0$ for continuous time, $N_0$ for discrete time). If it is not periodic, justify your answer.
+
+\problempart{[5 points]} $x(t)=5\sin(10t-0.5)+\cos(5t)$
+\problempart{[5 points]} $x(t)=j\,e^{j10t}$
+\problempart{[5 points]} $x(t)=e^{\,(-0.5+j)\,(t+0.5)}$
+\problempart{[5 points]} $x[n]=e^{j\,12\pi n}$
+\problempart{[5 points]} $x[n]=1+e^{j\,\frac{4\pi}{7}n}-e^{j\,\frac{2\pi}{3}n}$
+
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+\problem{4 } [Adapted from Vierinen Ch.5 P7] Practice with real audio signals. The file \texttt{amplifier.ipynb} (on \href{https://github.com/ee-ucmerced/ee102-signals-systems/tree/main/homework/week2/amplifier.ipynb}{GitHub}) implements the linear amplifier system. The amplified signal is
+\[
+y(t)=\alpha\,x(t).
+\]
+The code reads \texttt{guitar\_clean.wav} (file on \href{https://github.com/ee-ucmerced/ee102-signals-systems/tree/main/homework/week2/guitar\_clean.wav}{GitHub}), plots original vs.\ amplified, normalizes the output to $0.9$ peak, and writes \texttt{guitar\_amp.wav}.
+
+\problempart{[5 points]} Run the script, and produce a figure showing the original $x(t)$ and $\alpha x(t)$ on the same axes. Explain why the saved WAV (after peak normalization) does \emph{not} sound louder even though the plot shows amplification.
+
+\problempart{[5 points]} Using the discrete-time samples $x[n]$ from the WAV file, estimate $P_\infty(x)$ and $P_\infty(\alpha x)$ via
+  \[
+  \widehat{P}=\frac{1}{N}\sum_{n=0}^{N-1}|x[n]|^2.
+  \]
+  Verify the relationship between the two powers before the peak normalization step.
+
+\problempart{[5 points]} Modify the script to \emph{hard-clip} the amplified signal to $[-1,1]$ before saving (no renormalization). Plot waveforms and mark clipped regions. Discuss how clipping affects the spectrum qualitatively.
+
+\problempart{[5 points]} Is $y(t)=\alpha x(t)$ linear? time-invariant? Is the \emph{clipper} system that we discussed during lecture linear? time-invariant? Briefly justify each of the four properties of the systems.
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
 \end{document}
