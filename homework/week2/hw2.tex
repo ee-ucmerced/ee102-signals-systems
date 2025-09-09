@@ -29,7 +29,7 @@ x(t)=\sum_{k=m}^{n} D_k\,e^{j\omega_k t}\!
 \]
 where $D_k\in\mathbb{C}$ and $\{\omega_k\}$ are pairwise distinct, that is, $\omega_i \neq \omega_j$ for all $i \neq j$.
 
-\problempart{[5 points]} Show that the time-averaged power of $x(t)$ is
+\problempart{[10 points]} Show that the time-averaged power of $x(t)$ is
   \[
   P_\infty(x)=\lim_{T\to\infty}\frac{1}{2T}\int_{-T}^{T}|x(t)|^2\,dt
   \;=\;\sum_{k=m}^{n}|D_k|^2.
@@ -61,7 +61,7 @@ where $D_k\in\mathbb{C}$ and $\{\omega_k\}$ are pairwise distinct, that is, $\om
   \int_{-\infty}^{t}\delta(\tau)\,d\tau = u(t).
   \]
 
-\problempart{[5 points]} Prove in the sense of distributions that
+\problempart{[10 points]} Prove in the sense of distributions that
   \[
   \frac{d}{dt}\,u(t)=\delta(t),\qquad \frac{d}{dt}\,[t\,u(t)] = u(t) + t\,\delta(t).
   \]
@@ -73,7 +73,7 @@ where $D_k\in\mathbb{C}$ and $\{\omega_k\}$ are pairwise distinct, that is, $\om
 %   \]
 %   Compute $E_\infty(\delta_\varepsilon)=\int_{-\infty}^{\infty}|\delta_\varepsilon(t)|^2\,dt$ and evaluate $\lim_{\varepsilon\to 0^+}E_\infty(\delta_\varepsilon)$. Interpret your result for the unit impulse $\delta$.
 
-\problempart{[5 points]}  For the finite pulse
+\problempart{[10 points]}  For the finite pulse
   \[
   p(t)=A\,\mathrm{rect}\!\left(\frac{t-t_0}{T}\right),
   \]
@@ -104,17 +104,17 @@ y(t)=\alpha\,x(t).
 \]
 The code reads \texttt{guitar\_clean.wav} (file on \href{https://github.com/ee-ucmerced/ee102-signals-systems/tree/main/homework/week2/guitar\_clean.wav}{GitHub}), plots original vs.\ amplified, normalizes the output to $0.9$ peak, and writes \texttt{guitar\_amp.wav}.
 
-\problempart{[5 points]} Run the script, and produce a figure showing the original $x(t)$ and $\alpha x(t)$ on the same axes. Explain why the saved WAV (after peak normalization) does \emph{not} sound louder even though the plot shows amplification.
+\problempart{[2.5 points]} Run the script, and produce a figure showing the original $x(t)$ and $\alpha x(t)$ on the same axes. Experiment with different amplification factors $\alpha$ (e.g., $1,2,5,10$) and plot each amplified signal on a separate graph.
 
-\problempart{[5 points]} Using the discrete-time samples $x[n]$ from the WAV file, estimate $P_\infty(x)$ and $P_\infty(\alpha x)$ via
+\problempart{[10 points]} Using the discrete-time samples $x[n]$ from the WAV file, estimate $P_\infty(x)$ and $P_\infty(\alpha x)$ via
   \[
   \widehat{P}=\frac{1}{N}\sum_{n=0}^{N-1}|x[n]|^2.
   \]
-  Verify the relationship between the two powers before the peak normalization step.
+  Verify the relationship between the powers of the original and the amplified signal.
 
-\problempart{[5 points]} Modify the script to \emph{hard-clip} the amplified signal to $[-1,1]$ before saving (no renormalization). Plot waveforms and mark clipped regions. Discuss how clipping affects the spectrum qualitatively.
+\problempart{[5 points]} Modify the script to \emph{hard-clip} the amplified signal to $[-1,1]$ before saving (no renormalization). Experiment with at least three different values of $\beta$ and present your results by plotting the waveforms (slice your arrays so that the signal clipping is clearly visible). Discuss how clipping affects the spectrum qualitatively.
 
-\problempart{[5 points]} Is $y(t)=\alpha x(t)$ linear? time-invariant? Is the \emph{clipper} system that we discussed during lecture linear? time-invariant? Briefly justify each of the four properties of the systems.
+\problempart{[2.5 points]} Is $y(t)=\alpha x(t)$ linear? time-invariant? Is the \emph{clipper} system that we discussed during lecture linear? time-invariant? Briefly justify each of the four properties of the systems.
 \vspace*{\fill}
 \begin{center}
 [use more pages if needed]

@@ -1,0 +1,36 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\input{preamble.tex}
+\renewcommand{\releasedate}{September 8, 2025}
+\begin{document}
+
+\section*{EE 102 Week 2, Lecture 1 (Fall 2025)}
+\subsection*{Instructor: \instructor}
+\subsection*{Date: \releasedate}
+\section{Goals}
+\begin{itemize}
+    \item Complex exponentials
+    \item The unit impulse function
+    \item The unit step function
+\end{itemize}
+\section{Complex exponential signals}
+\subsection*{Continuous time}
+\[
+x(t)=A\,e^{j(\omega_0 t+\phi)}=A\cos(\omega_0 t+\phi)+j\,A\sin(\omega_0 t+\phi).
+\]
+Real and imaginary parts are orthogonal sinusoids. Fundamental period $T_0=\frac{2\pi}{\omega_0}$.
+
+\subsection*{Discrete time}
+\[
+x[n]=A\,e^{j(\Omega_0 n+\phi)}.
+\]
+This is periodic iff $\dfrac{\Omega_0}{2\pi}=\dfrac{M}{N}$ with integers $M,N$ coprime. Then the fundamental period is $N_0=N$. Otherwise, it is \emph{aperiodic} on $\mathbb{Z}$.
+
+\subsection*{Geometric (phasor) picture}
+The complex exponential traces a circle of radius $A$ in the complex plane at angular speed $\omega_0$ (continuous) or advances by a fixed angle $\Omega_0$ per sample (discrete). The real part is the projection on the horizontal axis; the imaginary part is the vertical projection.
+\section{The unit impulse function $\delta(t)$}
+% See notes \url{https://ocw.mit.edu/courses/es-1803-differential-equations-spring-2024/mites_1803_s24_topic20.pdf}
+\end{document}
