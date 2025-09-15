@@ -1,0 +1,148 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{siunitx}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\sisetup{per-mode=symbol,retain-explicit-plus}
+
+\newcommand{\Eblank}{\rule{3cm}{0.4pt}}
+\newcommand{\Rankblank}{\rule{3cm}{0.4pt}}
+
+\begin{document}
+\section*{Fall 2025 EE 102: In-class Activity (Sep 15, 2025)}
+
+\section*{Bigger Energy: Electric Vehicles Edition}
+You are driving an electric vehicle (EV) on a one-hour trip from point A to point B. There are many ways you can do this trip --- which one uses the least energy?
+\medskip
+
+\noindent Each team is assigned a simple signal trace \(x(t)\) in units of \si{kW} that represents how much battery is used up in an electric vehicle over \([0,1]\) hour for a given scenario. Your task is to compute the total energy \(E\) (in \si{kWh}) to determine who has the biggest energy consumption and predict your rank (1 = least energy spent). Among your team, you should confirm that everyone has the same answer and come to a consensus of the rank. Then, you will be asked to announce your energy and your guess of where you stand.
+
+\medskip
+
+\textbf{Key formula (use \(t\) in hours):}
+\[
+E  = \int_{-\infty}^{\infty} |x(t)|^2 \,dt.
+\]
+
+\bigskip
+\hrule
+\bigskip
+
+\section*{Team Prompts (pick one per team)}
+All signals are zero outside the intervals shown.
+
+\subsection*{Team 1: Flat road, stop, flat road}
+\[
+x_1(t)=
+\begin{cases}
+12, & 0 \le t < \tfrac{1}{3} \\
+0, & \tfrac{1}{3} \le t < \tfrac{2}{3} \\
+12, & \tfrac{2}{3} \le t \le 1 \\
+0, & \text{otherwise}
+\end{cases}
+\]
+\begin{tcolorbox}[title=Team 1: Record your results]
+Energy \(E=\) \Eblank\ \si{kWh} \quad\quad Predicted rank \(=\) \Rankblank\ (/8)
+\end{tcolorbox}
+
+\subsection*{Team 2: Uphill, stop, downhill}
+\[
+x_2(t)=
+\begin{cases}
+18, & 0 \le t < \tfrac{1}{3} \quad\text{(uphill)}\\
+0,  & \tfrac{1}{3} \le t < \tfrac{2}{3} \quad\text{(stop)}\\
+6,  & \tfrac{2}{3} \le t \le 1 \quad\text{(downhill)}\\
+0,  & \text{otherwise}
+\end{cases}
+\]
+\begin{tcolorbox}[title=Team 2: Record your results]
+Energy \(E=\) \Eblank\ \si{kWh} \quad\quad Predicted rank \(=\) \Rankblank\ (/8)
+\end{tcolorbox}
+
+\subsection*{Team 3: Rapid cruise (less efficient) to destination}
+\[
+x_3(t)=
+\begin{cases}
+13.5, & 0 \le t < \tfrac{2}{3} \\
+0,    & \tfrac{2}{3} \le t \le 1 \\
+0,    & \text{otherwise}
+\end{cases}
+\]
+\begin{tcolorbox}[title=Team 3: Record your results]
+Energy \(E=\) \Eblank\ \si{kWh} \quad\quad Predicted rank \(=\) \Rankblank\ (/8)
+\end{tcolorbox}
+
+\subsection*{Team 4: Dynamic speeding (ramp up, then ramp down)}
+Ramp up such that battery uses from \SI{8}{kW} to \SI{16}{kW} over the first \SI{0.5}{h}, then ramp down to \SI{8}{kW} over the next \SI{0.5}{h}.
+\[
+x_4(t)=
+\begin{cases}
+8 + 16\,t, & 0 \le t < \tfrac{1}{2} \\
+24 - 16\,t, & \tfrac{1}{2} \le t \le 1 \\
+0, & \text{otherwise}
+\end{cases}
+\]
+\begin{tcolorbox}[title=Team 4: Record your results]
+Energy \(E=\) \Eblank\ \si{kWh} \quad\quad Predicted rank \(=\) \Rankblank\ (/8)
+\end{tcolorbox}
+
+\subsection*{Team 5: Stop-and-go traffic (three bursts)}
+Scenario where $x(t) = \SI{18}{kW}$ for three \SI{10}{min} segments, with \SI{10}{min} stops between.
+\[
+x_5(t)=
+\begin{cases}
+18, & 0 \le t < \tfrac{1}{6}, \;\;\tfrac{1}{3}\le t < \tfrac{1}{2}, \;\;\tfrac{2}{3}\le t < \tfrac{5}{6} \\
+0,  & \text{else on }[0,1]\\
+0,  & \text{otherwise}
+\end{cases}
+\]
+\begin{tcolorbox}[title=Team 5: Record your results]
+Energy \(E=\) \Eblank\ \si{kWh} \quad\quad Predicted rank \(=\) \Rankblank\ (/8)
+\end{tcolorbox}
+
+\subsection*{Team 6: Eco mode (slow and steady)}
+\[
+x_6(t)=
+\begin{cases}
+9, & 0 \le t \le 1 \\
+0, & \text{otherwise}
+\end{cases}
+\]
+\begin{tcolorbox}[title=Team 6: Record your results]
+Energy \(E=\) \Eblank\ \si{kWh} \quad\quad Predicted rank \(=\) \Rankblank\ (/8)
+\end{tcolorbox}
+
+\subsection*{Team 7: Late starter, speeding later}
+\[
+x_7(t)=
+\begin{cases}
+0, & 0 \le t < \tfrac{1}{2} \\
+16, & \tfrac{1}{2} \le t \le 1 \\
+0, & \text{otherwise}
+\end{cases}
+\]
+\begin{tcolorbox}[title=Team 7: Record your results]
+Energy \(E=\) \Eblank\ \si{kWh} \quad\quad Predicted rank \(=\) \Rankblank\ (/8)
+\end{tcolorbox}
+
+\subsection*{Team 8 — Two hills then cruise}
+\[
+P_8(t)=
+\begin{cases}
+24, & 0 \le t < \tfrac{1}{4} \\
+6,  & \tfrac{1}{4} \le t < \tfrac{1}{2} \\
+10, & \tfrac{1}{2} \le t \le 1 \\
+0,  & \text{otherwise}
+\end{cases}
+\]
+\begin{tcolorbox}[title=Team 8: Record your results]
+Energy \(E=\) \Eblank\ \si{kWh} \quad\quad Predicted rank \(=\) \Rankblank\ (/8)
+\end{tcolorbox}
+
+\bigskip
+\hrule
+\bigskip
+
+
+\end{document}
