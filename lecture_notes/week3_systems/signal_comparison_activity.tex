@@ -16,7 +16,7 @@
 You are driving an electric vehicle (EV) on a one-hour trip from point A to point B. There are many ways you can do this trip --- which one uses the least energy?
 \medskip
 
-\noindent Each team is assigned a simple signal trace \(x(t)\) in units of \si{kW} that represents how much battery is used up in an electric vehicle over \([0,1]\) hour for a given scenario. Your task is to compute the total energy \(E\) (in \si{kWh}) to determine who has the biggest energy consumption and predict your rank (1 = least energy spent). Among your team, you should confirm that everyone has the same answer and come to a consensus of the rank. Then, you will be asked to announce your energy and your guess of where you stand.
+\noindent Each team is assigned a simple signal trace \(x(t)\)  that represents how much battery is used up in an electric vehicle over \([0,1]\) hour for a given scenario (assume arbitrary units for the math to work out). Your task is to compute the total energy \(E\) (in \si{kWh}) to determine who has the biggest energy consumption and predict your rank (1 = least energy spent). Among your team, you should confirm that everyone has the same answer and come to a consensus of the rank. Then, you will be asked to announce your energy and your guess of where you stand.
 
 \medskip
 
@@ -74,7 +74,7 @@ Energy \(E=\) \Eblank\ \si{kWh} \quad\quad Predicted rank \(=\) \Rankblank\ (/8)
 \end{tcolorbox}
 
 \subsection*{Team 4: Dynamic speeding (ramp up, then ramp down)}
-Ramp up such that battery uses from \SI{8}{kW} to \SI{16}{kW} over the first \SI{0.5}{h}, then ramp down to \SI{8}{kW} over the next \SI{0.5}{h}.
+Ramp up such that battery uses from 8 to 16 over the first \SI{0.5}{h}, then ramp down to 8 over the next \SI{0.5}{h}.
 \[
 x_4(t)=
 \begin{cases}
@@ -88,7 +88,7 @@ Energy \(E=\) \Eblank\ \si{kWh} \quad\quad Predicted rank \(=\) \Rankblank\ (/8)
 \end{tcolorbox}
 
 \subsection*{Team 5: Stop-and-go traffic (three bursts)}
-Scenario where $x(t) = \SI{18}{kW}$ for three \SI{10}{min} segments, with \SI{10}{min} stops between.
+Scenario where $x(t) = 18$ for three \SI{10}{min} segments, with \SI{10}{min} stops between.
 \[
 x_5(t)=
 \begin{cases}

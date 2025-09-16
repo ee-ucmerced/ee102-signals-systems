@@ -33,33 +33,29 @@ A cancellation signal of the \emph{same frequency} is
 x_{\text{cancel}}(t)=\cos(\omega t+\phi_c).
 \]
 
-\problempart
+\problempart{\textbf{[10 points]}}
 Find a value of $\phi_c$ such that $x_{\text{noise}}(t)+x_{\text{cancel}}(t)\equiv 0$. Assume equal amplitudes. Hint: use the cosine addition formula and trignometric identities.
 
 \medskip
 
-\problempart Now suppose
+\problempart{\textbf{[15 points]}} Now suppose
 \[
 x_{\text{noise}}(t)=A\cos(\omega t+\phi),\qquad
 x_{\text{cancel}}(t)=B\cos(\omega t+\phi_c),
 \]
-with $A,B>0$ not \emph{a priori} equal. Using complex exponentials, determine conditions on $B$ and $\phi_c$ for \emph{perfect} cancellation for all $t$. If $B\neq A$ is fixed, is perfect cancellation possible? Discuss the differences in the two methods (part (a): you used trignometric identities and part (b): you used complex exponentials).
+with $A,B>0$ not \emph{a priori} equal. Using \textbf{complex exponentials}, determine conditions on $B$ and $\phi_c$ for \emph{perfect} cancellation for all $t$. If $B\neq A$ is fixed, is perfect cancellation possible? Discuss the differences in the two methods.
 
 
 
-\problempart
-Propose a simple LTI system that, when driven by $x_{\text{noise}}(t)=\cos(\omega_0 t+\phi)$, produces an output $y(t)$ that cancels the noise when added to $x_{\text{noise}}(t)$. 
-\begin{enumerate}
-    \item Draw a block diagram of your system.
-    \item Identify the system's transfer function $H(j\omega)$.
-\end{enumerate}
+\problempart{\textbf{[5 points]}}
+Propose a simple LTI system that, when driven by $x_{\text{noise}}(t)=\cos(\omega_0 t+\phi)$, produces an output $y(t)$ that cancels the noise when added to $x_{\text{noise}}(t)$. Draw a block diagram of your system.
 
 \problempart
-Verify your results with Python. 
+Verify your results with Python.
 \begin{enumerate}
-    \item Generate a signal $x(t)$, generate the cancelling signal, and plot $x$, $y$, and $x+y$ on the same axes.
-    \item Explore two mismatch cases: (i) phase error $\Delta\phi=5^\circ$ with $B=A$, and (ii) amplitude error $B=(1+\epsilon)A$ with $\epsilon=0.05$ and perfect phase. 
-    \item Compute the RMS (root mean squared) of the residual signal $r(t)=x(t)+y(t)$ in each case. The RMS is defined as
+    \item \textbf{[5 points]} Generate a signal $x(t)$, generate the cancelling signal, and plot $x$, $y$, and $x+y$ on the same axes.
+    \item Explore two mismatch cases: (i) \textbf{[5 points]} phase error $\Delta\phi=5^\circ$ with $B=A$, and (ii) \textbf{[5 points]} amplitude error $B=(1+\epsilon)A$ with $\epsilon=0.05$ and perfect phase.
+    \item \textbf{[5 points]} Compute the RMS (root mean squared) of the residual signal $r(t)=x(t)+y(t)$ in each case. The RMS is defined as
     \[
 \text{RMS} = \sqrt{\frac{1}{N}\sum_{n=1}^{N} r(t_n)^2}
 \]
@@ -115,12 +111,12 @@ y(t+t_p) \;=\; -\,\operatorname{clip}\big(x(t)\big).
 
 Prove/disprove the following:
 
-\problempart Sketch the static input-output curve and mark the slopes.
-\problempart Is the system causal?
-\problempart Is it invertible? If not, characterize the largest input set on which it \emph{is} invertible.
-\problempart Is it linear? 
-\problempart Is it time-invariant? Prove or give a counterexample.
-\problempart Compute and sketch $y(t)$ for $x(t)=A\cos(\omega t)$ with $A>V_{\text{ref}}$ (i.e., a clipped sinusoid), and indicate the time fraction spent at each rail.
+\problempart{\textbf{[5 points]}} Sketch the static input-output curve and mark the slopes.
+\problempart{\textbf{[5 points]}} Is the system causal?
+\problempart{\textbf{[5 points]}} Is it invertible? If not, characterize the largest input set on which it \emph{is} invertible.
+\problempart{\textbf{[5 points]}} Is it linear? 
+\problempart{\textbf{[5 points]}} Is it time-invariant? Prove or give a counterexample.
+\problempart{\textbf{[5 points]}} Compute and sketch $y(t)$ for $x(t)=A\cos(\omega t)$ with $A>V_{\text{ref}}$ (i.e., a clipped sinusoid), and indicate the time fraction spent at each rail.
 
 
 \vspace*{\fill}
@@ -130,7 +126,7 @@ Prove/disprove the following:
 % =========================================================
 % Problem 3
 % =========================================================
-\problem{3} 
+\problem{3}
 % \; LTI with internal modes and direct feedthrough (modified P1.7-11)}
 [Adapted from Lathi 1.7-11]
 For a certain LTI system, the output $y(t)$ depends on the input $x(t)$ and two internal modes parameterized by initial conditions $q_1(0)$ and $q_2(0)$. The following observations were made (all signals are right-sided, that is, defined for $t\geq 0$, due to an implicit unit step $u(t)$):
@@ -151,7 +147,7 @@ For $q_1(0)=q_2(0)=0$ and the pulse input
 \[
 x(t)=\Pi_{[-5,\,5]}(t)\;=\;u(t+5)-u(t-5).
 \]
-Find $y(t)$ and sketch it.
+Find $y(t)$ and sketch it \textbf{[20 points]}.
 
 \vspace*{\fill}
 \begin{center}
