@@ -295,8 +295,10 @@ x(t) \;=\; A e^{s t}, \qquad A\in\mathbb{C},\;\; s=\sigma + j\omega \in \mathbb{
 With complex numbers, the central question is always: why did we even introduce the imaginary! Recall that when we worked with 2D vectors, we could represent them instead using a complex scalar. So, the vector operations, which can be tricky to account for become simpler with the standard scalar algebra that is applicable for complex numbers. We want the same convenience with signals. Additionally, as we will see, complex exponentials let us represent a \emph{really} large class of signals such as sinusoids (of all kinds!), exponentials (both growing and decaying), and arbitrary combinations of these!
 
 \begin{popquiz} Recall that the utility of complex numbers is that they allow us to represent higher dimensions, in this case, two signals, using just one signal. Can you identify the two signals represented by $x(t) = e^{j\omega t}$?
-    \popquizsolution{The two signals are the real and imaginary parts of the complex exponential: $\Re\{x(t)\} = \cos(\omega t)$ and $\Im\{x(t)\} = \sin(\omega t)$.}
+\popqsplit 
+The two signals are the real and imaginary parts of the complex exponential: $\Re\{x(t)\} = \cos(\omega t)$ and $\Im\{x(t)\} = \sin(\omega t)$.
 \end{popquiz}
+
 To see that the general complex exponential can represent a large class of signals, write $A = |A|e^{j\phi}$ to obtain the \emph{amplitude-phase} form
 \[
 x(t) \;=\; |A|\,e^{\sigma t}\,e^{j(\omega t + \phi)}
@@ -313,7 +315,8 @@ x(t) = |A|e^{j(\omega t+\phi)} \;\Rightarrow\;
 You can see that $e^{j\omega t}$ is periodic with $T=\tfrac{2\pi}{\omega}$ for $\omega\neq 0$.
 
 \begin{popquiz} When is $A e^{s t}$ a constant $k$?
-    \popquizsolution{Set $\omega=0$ and $\sigma=0$ to get $x(t)=A=k$. For real $k$, choose $A\in\mathbb{R}$.}
+    \popqsplit 
+    Set $\omega=0$ and $\sigma=0$ to get $x(t)=A=k$. For real $k$, choose $A\in\mathbb{R}$.
 \end{popquiz}
 \paragraph{2. Real decaying exponential:}
 Take $\omega=0$, $\sigma<0$, and $A\in\mathbb{R}$:
@@ -321,7 +324,8 @@ Take $\omega=0$, $\sigma<0$, and $A\in\mathbb{R}$:
 x(t)=A e^{\sigma t},\quad \text{monotone decay to $0$ as $t\to\infty$.}
 \]
 \begin{popquiz} Derive the growing exponential using the complex exponential.
-    \popquizsolution{Set $\sigma>0$, $\omega=0$, and $A\in\mathbb{R}$ to get $x(t)=A e^{\sigma t}$, which grows unbounded as $t\to\infty$.}
+    \popqsplit 
+    Set $\sigma>0$, $\omega=0$, and $A\in\mathbb{R}$ to get $x(t)=A e^{\sigma t}$, which grows unbounded as $t\to\infty$.
 \end{popquiz}
 
 \paragraph{3. Exponentially damped sinusoid.}
@@ -330,7 +334,8 @@ Choose $\sigma<0$, $\omega\neq 0$, $A=|A|e^{j\phi}$ and take the real part:
 x(t)=|A|e^{\sigma t}\cos(\omega t+\phi).
 \]
 \begin{popquiz} Derive the exponentially growing cosine using the complex exponential.
-    \popquizsolution[4]{Set $\sigma>0$, $\omega\neq 0$, and $A=|A|e^{j\phi}$ to get $x(t)=|A|e^{\sigma t}\cos(\omega t+\phi)$, which grows unbounded as $t\to\infty$.}
+\popqsplit 
+    Set $\sigma>0$, $\omega\neq 0$, and $A=|A|e^{j\phi}$ to get $x(t)=|A|e^{\sigma t}\cos(\omega t+\phi)$, which grows unbounded as $t\to\infty$.
 \end{popquiz}
 \subsubsection{Using complex algebra}
 You can derive all of the standard signals above from the general complex exponential also by expanding out the complex exponential by writing $A = a_1 + j b_1$ and $s = \sigma + j\omega$:

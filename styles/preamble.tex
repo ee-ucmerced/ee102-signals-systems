@@ -15,6 +15,7 @@
 \usepackage{siunitx}
 \usepackage[most]{tcolorbox}
 \usepackage{enumitem}
+\usepackage{environ}
 % -------- listings (Python) ----------
 \lstdefinestyle{py}{
   language=Python,
@@ -90,49 +91,3 @@
     \end{equation}
     \ignorespacesafterend
 }
-% --- Pop-Quiz environment + solutions (no 'environ' needed) ------------
-% Numbering: section-based; change to global by replacing the definition of \thepopquiz
-\newcounter{popquiz}
-\renewcommand{\thepopquiz}{\thesection.\arabic{popquiz}} % or: \renewcommand{\thepopquiz}{\arabic{popquiz}}
-
-% Storage + flag
-\makeatletter
-\newcommand\popquizsolutions{}     % holds all printed solutions
-\newif\ifpopquizsolutionsflag
-\popquizsolutionsflagfalse
-\newcommand\currentpq{}            % holds current quiz label (snapshotted on begin)
-
-% Pop-quiz box using tcolorbox' counter integration
-\newtcolorbox[use counter=popquiz,number within=section]{popquiz}[1][]{%
-  enhanced,breakable,
-  colback=gray!10, colframe=black,
-  title={Pop Quiz \thepopquiz}, fonttitle=\bfseries,
-  before upper=\global\edef\currentpq{\thepopquiz}, % snapshot label for solutions
-  #1
-}
-
-% Command to record a solution (optionally override the label)
-\newcommand{\popquizsolution}[2][]{%
-  \popquizsolutionsflagtrue
-  \def\pq@label{#1}%
-  \ifx\pq@label\@empty \edef\pq@label{\currentpq}\fi
-  \begingroup
-    \protected@edef\pq@tmp{%
-      \noexpand\par\noexpand\noindent
-      \noexpand\textbf{Pop Quiz \pq@label\noexpand\ Solution. }%
-      \unexpanded{#2}%
-      \noexpand\par
-    }%
-  \endgroup
-  \g@addto@macro\popquizsolutions{\pq@tmp}%
-}
-
-% Print all collected solutions at the end (only if any were added)
-\AtEndDocument{%
-  \ifpopquizsolutionsflag
-    \clearpage
-    \section*{Pop Quiz Solutions}
-    \popquizsolutions
-  \fi
-}
-\makeatother

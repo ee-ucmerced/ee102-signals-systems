@@ -54,3 +54,63 @@
 \setcounter{dbltopnumber}{2}
 \renewcommand\dbltopfraction{.7}
 \renewcommand\dblfloatpagefraction{.7}
+
+
+
+
+% ======= Pop-Quiz for EE102 (boxed quiz + solutions at end) ==================
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{etoolbox} % for \tcbstartrecording/\tcbinputrecords
+
+% Splitter used inside the environment (avoid clashing with \solution)
+\newcommand{\popqsplit}{\tcblower}
+
+% Flag: print the solutions section only if at least one quiz occurred
+\newif\ifEEPopQuizHasSolutions
+\EEPopQuizHasSolutionsfalse
+
+% Start/stop recording all "records=" emitted by popquiz boxes
+\AtBeginDocument{\tcbstartrecording}
+\AtEndDocument{%
+  \tcbstoprecording
+  \ifEEPopQuizHasSolutions
+    \clearpage
+    \section*{Pop Quiz Solutions}
+    \tcbinputrecords
+  \fi
+}
+
+% Pop-quiz box:
+%  - numbered within sections; for global numbering, remove "number within=section"
+%  - anything after \popqsplit is hidden inline, saved to a file, and replayed at the end
+\newtcolorbox[
+  auto counter,
+  number within=section
+]{popquiz}[1][]{%
+  enhanced jigsaw,
+  breakable,
+  colback=gray!10,
+  colframe=black,
+  fonttitle=\bfseries,
+  title={Pop Quiz \thetcbcounter: Check your understanding!},
+  label={popquiz-\thetcbcounter},
+  lowerbox=ignored, % hide solution inline
+  savelowerto=popquiz-\thetcbcounter.tex, % writes alongside your .tex
+  record={\string\EEPopQuizRender{\thetcbcounter}{popquiz-\thetcbcounter.tex}},
+  after upper={%
+    \global\EEPopQuizHasSolutionstrue
+    \par\hfill\itshape Solution on page~\pageref{popquiz-sol-\thetcbcounter}%
+  },
+  #1
+}
+
+% Renderer used at the end for each recorded solution
+\NewTotalTColorBox{\EEPopQuizRender}{mm}{%
+  enhanced jigsaw,
+  breakable,
+  fonttitle=\bfseries,
+  title={Pop Quiz #1: Solution(s)},
+  phantomlabel={popquiz-sol-#1}
+}{%
+  \input{#2}%
+}

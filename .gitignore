@@ -49,3 +49,16 @@ __pycache__/
 *.bcf
 *.run.xml
 *.synctex(busy)
+# --- EE102 pop-quiz generated files (tcolorbox) ---
+# Recorded solution snippets saved by \savelowerto
+**/popquiz-*.tex
+
+# The tcolorbox record index written by \tcbstartrecording
+**/*.records
+
+# If you ever use a solutions directory variant, ignore it too:
+**/solutions/
+**/solutions/*.tex
+
+# (legacy/defensive) if a macro-named dir slipped in:
+**/@@pq@solutionsdir/
