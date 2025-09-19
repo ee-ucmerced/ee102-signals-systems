@@ -35,13 +35,19 @@
 }
 \usepackage[american]{circuitikz}
 \usepackage{tikz}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,angles,quotes}
+\tikzset{
+  >={Latex[length=2.2mm]},
+  block/.style={draw, thick, rectangle, minimum height=10mm, minimum width=24mm, align=center},
+  gain/.style={block, minimum width=14mm},
+  sum/.style={draw, thick, circle, inner sep=0pt, minimum size=6mm},
+  conn/.style={-Latex, thick},
+}
 \usepackage{caption}    
 \usepackage{lscape}
 \usepackage{soul}
-\usepackage{tikz}
 \usepackage{physics}
-\usetikzlibrary{calc,angles,quotes,arrows.meta}
-
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
