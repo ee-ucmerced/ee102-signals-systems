@@ -1,0 +1,88 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+
+
+\documentclass{ee102_pset}
+\input{macros.tex}
+\input{preamble.tex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[american]{circuitikz}
+
+% Assignment info
+\author{\rule{3cm}{0.4pt}} % Name placeholder
+\submitdate{No submission\:}
+
+% \submitdate{60 minutes} % Submission date placeholder
+\problemset{Practice Midterm Quiz \#1}
+\renewcommand{\duedate}{No submission\:}
+\shorttitle{Practice Midterm Quiz \#1}
+
+\begin{document}
+\problem{1} 
+You have a e-scooter that you use to commute to campus. This is a multi-part problem about the scooter's battery performance. Assume that the battery percentage decays exponentially with time when the scooter is in use, and that it charges up linearly when plugged in. For a 8-hour work day, the scooter is used for 6 hours and then is charged for 2 hours. Assume that the e-scooter battery is fully charged at $t=0$. For simplicity, assume that full charge is 1 and zero charge is 0. The time constant for the exponential decay is $\tau=3$ hours. That is, after using the battery for 3 hours the charge goes from 1 to $e^{-1} \approx 0.3$. The battery charges linearly at a rate of $0.25$ per hour, so in 4 hours it will charge all the way from 0 to 1.
+
+\problempart Describe (with equations) the battery percentage $x(t)$ as a function of time $t$ (in hours) over the course of a single 8-hour work day. You may assume that the battery is fully charged at $t=0$.
+
+\problempart Sketch the battery percentage $x(t)$ (this is your Y-axis) as a function of time $t$ (in hours) over the course of a 5-day work week. Since we are only talking about the 8-hour work day, you should assume that a day effectively is 8 hours long. 
+
+\problempart Fed up with the sub-par performance, you buy a replacement battery. The new battery has a much slower decay rate, with a time constant of $\tau=6$ hours (so, after 6 hours of use, the battery charge goes from 1 to $e^{-1} \approx 0.3$). However, the new battery also charges more slowly, at a rate of $\frac{1}{8}$ per hour (so, in 8 hours it will charge all the way from 0 to 1). Write the equation for the battery charge performance, $x_{\text{new}}(t)$.
+
+\problempart By computing the energy of the battery charge performance signal over a 5-day work week, determine which battery is better. Note that the energy of a signal $x(t)$ over a time interval $[t_1,t_2]$ is defined as
+\[
+E = \int_{t_1}^{t_2} |x(t)|^2 dt.
+\]
+
+\problempart Describe $x_{\text{new}}(t)$ in terms of $x(t)$ using signal transformations.
+
+\problempart Assume that you model your battery charge performance for all time $(-\infty, \infty)$. Then, is $x(t)$ a periodic signal? If yes, what is its fundamental period? If no, propose a modification to the signal that would make it periodic.
+
+\problempart Write $x(t)$ over a single 8-hour work day using two fundamental signals: the unit step $u(t)$ and the general complex exponential signal $Ae^{st}$, where $A$ and $s$ are complex numbers. You are allowed to choose constants and time-shift parameters as needed but you are not allowed to use any other functions (e.g., no sinusoids, no exponentials, no ramps, etc.).
+
+\problempart Describe a system that takes a constant value for the level of battery charge (between 0 and 1) as an input, and produces the battery charge performance signal $x(t)$ as an output. Assume that the initial charge level is 0. Is this system linear? Is it time-invariant? Justify your answers.
+
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+\problem{2}
+Consider the following non-causal system 
+
+\[
+y(t) = \int_{t-t_0}^{t+t_1} x(\tau) d\tau
+\]
+where $0 < t_0 < t_1$ are fixed positive constants.
+
+\problempart For $x(t) = \delta(t)$, find and sketch $y(t)$. Note that $\delta(t)$ is the unit impulse function.
+
+\problempart For an input $x(t) = \sin(t) - \sin(t-2)$, find $y(t)$ for $t_0 = 1$ and $t_1 = 2$. Note that $u(t)$ is the unit step function.
+
+\problempart Is this system linear? Justify your answer.
+
+\problempart Is this system time-invariant? Justify your answer.
+
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+\problem{3} For any signal $x(t)$ with energy $E$, answer the following questions
+
+\problempart Prove that the energy of the signal $y(t) = A x(b_1 t - t_0)$, where $A, b_1, t_0$ are real-valued constants, is given by 
+
+\[
+E_y = |A|^2 \frac{E}{|b_1|}
+\]
+
+\problempart Describe the system that takes $x(t)$ as input and produces $y(t)$ as output (as defined above) and give a real example of a physical system that processes signals in this way.
+
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+\end{document}
+
