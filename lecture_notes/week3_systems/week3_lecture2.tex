@@ -213,4 +213,50 @@ q(0)=\alpha_4\,q_1(0)+\alpha_5\,q_2(0)
 y(t)=\alpha_1 y_1^{\mathrm{ZS}}(t)+\alpha_2 y_2^{\mathrm{ZS}}(t)+\alpha_3 y_3^{\mathrm{ZS}}(t-t_0)
       +\alpha_4 y_{q_1}(t)+\alpha_5 y_{q_2}(t).
 \]
+\subsection{Example: LTI system properties to compute system response}
+
+Consider a continuous-time LTI system with input $x(t)$ and output $y(t)$. We have the following information about the system:
+\[
+\begin{aligned}
+x_1(t)&=\cos(t) 
+&&\longrightarrow&&
+y_1(t)=\tfrac{1}{10}\cos(t)-\tfrac{3}{10}\sin(t),\\[2pt]
+x_2(t)&=\cos(2t) 
+&&\longrightarrow&&
+y_2(t)=\tfrac{1}{5}\cos(2t)+\tfrac{3}{10}\sin(2t),\\[2pt]
+x_3(t)&=\delta(t)
+&&\longrightarrow&&
+y_3(t)=\delta(t),\\[2pt]
+\end{aligned}
+\]
+
+Then, for a new input
+\[
+x_{\text{new}}(t)=\cos(2t)-10\sin(t+10),
+\]
+our goal is to find $y_{\text{new}}(t)$ using only linearity and time invariance properties of the system. 
+
+Let us start by noting that since $\sin(t)=\cos\!\big(t-\tfrac{\pi}{2}\big)$, we can use time-invariance of the system to write the output for $\sin(t)$ (say $y_4(t)$) as
+\[
+y_4(t)=y_1\!\Big(t-\tfrac{\pi}{2}\Big)
+=\tfrac{1}{10}\sin(t)+\tfrac{3}{10}\cos(t).
+\]
+Then, the output to $\sin(t+10)$ is (say $y_5(t)$), again due to time-invariance is obtained by shifting $y_4(t)$ by $10$:
+\[
+\begin{aligned}
+y_5(t)
+&=\tfrac{1}{10}\sin(t+10)+\tfrac{3}{10}\cos(t+10)
+\end{aligned}
+\]
+Putting it all together using the linearity of the system, we get the desired output $y_{\text{new}}(t)$:
+\[\,y_{\text{new}}(t)
+=\tfrac{1}{5}\cos(2t)+\tfrac{3}{10}\sin(2t)\;-\;\sin(t+10)\;-\;3\cos(t+10)\,.
+\]
+
+Finally, if the system has an initial condition at $t=0$, superpose the corresponding measured responses:
+\[
+\,y_{\text{new,IC}}(t)=y_{\text{new}}(t)\;+\;a\,\delta(t)\,,
+\]
+with $a \in\mathbb{R}$ set by the magnitude of the initial condition.
+
 \end{document}
