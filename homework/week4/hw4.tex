@@ -22,21 +22,22 @@ h(t) = e^{-2t}u(t)
 \]
 where $u(t)$ is the unit step function.
 
-\problempart[5 points] What is the output $y(t)$ of the system when the input is $x(t) = k \delta(t)$, where $k$ is a constant?
+\problempart[10 points] What is the output $y(t)$ of the system when the input is $x(t) = k \delta(t)$, where $k$ is a constant?
 
-\problempart[5 points] Prove that the system is linear and time-invariant. 
+\problempart[10 points] Prove that the system is linear and time-invariant. 
 
 Hint: For an impulse input $\delta(t)$, the output is $h(t)$. What is the output when the input is $\delta(t - t_0)$? Use this to prove time-invariance. For linearity, use the properties of the delta function.
 
-\problempart[10 points] What is the output $y(t)$ of the system when the input is $x(t) = u(t)$? You must find this by starting from the relationship between the step signal and the impulse signal (from HW 2): 
+\problempart[15 points] What is the output $y(t)$ of the system when the input is $x(t) = u(t)$? You must find this by starting from the relationship between the step signal and the impulse signal (from HW 2): 
 \[
 u(t) = \int_{-\infty}^{t} \delta(\tau) d\tau
 \]
 
+Then, use linearity and the impulse response $h(t)$ to find the output $y(t)$.
 
-\problempart[20 points] Find the output $y(t)$ of the system when the input is a pulse signal of amplitude $A$ and duration $\tau, \quad x(t) = A[u(t) - u(t-\tau)]$.
+\problempart[15 points] Find the output $y(t)$ of the system when the input is a pulse signal of amplitude $A$ and duration $\tau, \quad x(t) = A[u(t) - u(t-\tau)]$.
 
-\problempart[5 points each] Find the output of the system to the following general input signals
+\problempart[10 points each] Find the output of the system to the following general input signals
 \begin{enumerate}
     \item $x(t) = e^{-3t}u(t)$
     \item $x(t) = \cos(2t)u(t)$
@@ -45,46 +46,46 @@ u(t) = \int_{-\infty}^{t} \delta(\tau) d\tau
 \end{enumerate}
 
 
+% \problem{2}
+
+% Let $x[n]$ be a 1-D signal that represents grayscale colors as pixel intensities (0 is black and 255 is white):
+% \[
+% x[n] = [\,50,\;100,\;240,\;255,\;200,\;120,\;80,\;80,\;90,\;150,\;220,\;240\,],
+% \qquad 0\le n\le 11.
+% \]
+% Assume causal zero-padding outside the given range, that is, $x[n]=0$ for $n<0$ or $n>11$. Your goal is to compute $y[n]$ by hand and also using a for loop implementation (in Python or MATLAB) of the convolution sum. \textbf{You are not allowed to use external libraries to compute the convolution.}
+
+% Consider these physically meaningful impulse responses $h[\cdot]$ (all causal) of LTI systems:
+
+% \problempart [12 points] A blurring system:
+% \[
+% h[n]=\tfrac13\,[\,\delta[n]+\delta[n-1]+\delta[n-2]\,]
+% \]
+
+% \problempart [12 points] A first-difference (edge detector):
+% \[
+% h[n]=\delta[n]-\delta[n-1],
+% \]
+
+% \problempart [12 points] Exponential smoothing
+% \[
+% h[n]=[\,0.6,\;0.3,\;0.1\,]\text{ for }n=0,1,2, \text{ else }0.
+% \]
+
+% For each of the parts above, 
+% \begin{enumerate}
+%   \item By hand, write the convolution sum for $y[n]$ and compute numerically $y[n]$ at $n=0,1,2$.
+%   \item Implement a for loop that computes $y[n]$ for all $n$ for system above. Make sure to plot the original $x[n]$ and each $y[n]$ on the same axes.
+%   \item Apply repeated convolution to intensify the effect of the system. You can choose one of the systems above and experiment with repeated convolutions.
+% \end{enumerate}
+
 \problem{2}
-
-Let $x[n]$ be a 1-D signal that represents grayscale colors as pixel intensities (0 is black and 255 is white):
-\[
-x[n] = [\,50,\;100,\;240,\;255,\;200,\;120,\;80,\;80,\;90,\;150,\;220,\;240\,],
-\qquad 0\le n\le 11.
-\]
-Assume causal zero-padding outside the given range, that is, $x[n]=0$ for $n<0$ or $n>11$. Your goal is to compute $y[n]$ by hand and also using a for loop implementation (in Python or MATLAB) of the convolution sum. \textbf{You are not allowed to use external libraries to compute the convolution.}
-
-Consider these physically meaningful impulse responses $h[\cdot]$ (all causal) of LTI systems:
-
-\problempart [12 points] A blurring system:
-\[
-h[n]=\tfrac13\,[\,\delta[n]+\delta[n-1]+\delta[n-2]\,]
-\]
-
-\problempart [12 points] A first-difference (edge detector):
-\[
-h[n]=\delta[n]-\delta[n-1],
-\]
-
-\problempart [12 points] Exponential smoothing
-\[
-h[n]=[\,0.6,\;0.3,\;0.1\,]\text{ for }n=0,1,2, \text{ else }0.
-\]
-
-For each of the parts above, 
-\begin{enumerate}
-  \item By hand, write the convolution sum for $y[n]$ and compute numerically $y[n]$ at $n=0,1,2$.
-  \item Implement a for loop that computes $y[n]$ for all $n$ for system above. Make sure to plot the original $x[n]$ and each $y[n]$ on the same axes.
-  \item Apply repeated convolution to intensify the effect of the system. You can choose one of the systems above and experiment with repeated convolutions.
-\end{enumerate}
-
-\problem{3}
 
 Reflect on your understanding of the following:
 
-\problempart [1 point] What is the purpose of convolutions in signal processing?
+\problempart [4 points] What is the purpose of convolutions in signal processing?
 
-\problempart [2 point] Give an example of a system from one of your other classes (you must mention the name and number of the class) that can be modeled as an LTI system. Write about what would be the impulse response of that system and where you might use convolutions to analyze that system.
+\problempart [4 points] Give an example of a system from one of your other classes (you must mention the name and number of the class) that can be modeled as an LTI system. Write about what would be the impulse response of that system and where you might use convolutions to analyze that system.
 
-\problempart [1 point] How long did this assignment take you to complete (this does not include the time spent in lectures or in labs, but it does include the time spent programming).
+\problempart [2 points] How long did this assignment take you to complete (this does not include the time spent in lectures or in labs, but it does include the time spent programming).
 \end{document}

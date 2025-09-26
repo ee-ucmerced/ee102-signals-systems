@@ -1,0 +1,88 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\input{preamble.tex}
+\renewcommand{\releasedate}{September 29, 2025}
+
+\newcommand{\Eblank}{\rule{3cm}{0.4pt}}
+\newcommand{\Rankblank}{\rule{3cm}{0.4pt}}
+
+\begin{document}
+
+\section*{EE 102 Week 5, Lecture 1 (Fall 2025)}
+\subsection*{Instructor: \instructor}
+\subsection*{Date: \releasedate}
+
+\section{Goals}
+
+\section{Review: LTI systems and convolutions}
+Recall that using the linearity and time-invariance of the system, we can define the output, $y(t)$ of the system to any arbitrary input $x(t)$ in terms of the impulse response of the system $h(t)$ using the following integral:
+\begin{equation}
+y(t) = (x * h)(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau.
+\label{eq:convolution}
+\end{equation}
+This integral is called the convolution integral. 
+\begin{popquiz}
+Using the convolution integral, show that you recover the impulse response $h(t)$ when the input is $\delta(t)$. As a consequence, you will have proven that the convolution of a signal (in this case, $h(t)$) with an impulse is equal to the same signal. 
+\popqsplit
+Substitute $x(t) = \delta(t)$ in equation~\eqref{eq:convolution} to write
+\[
+y(t) = (x * h)(t) = \int_{-\infty}^{\infty} \delta(\tau) h(t - \tau) d\tau.
+\]
+Since $\delta(\tau)$ is non-zero only when $\tau = 0$, we have 
+\[
+y(t) = h(t)\int_{-\infty}^{\infty} \delta(\tau) d\tau
+\]
+with $h(t)$ out of the integral since it does not depend on $\tau$. Notice that the integral is equal to 1 (definition of the impulse signal). So, we get the desired result $y(t) = h(t)$. Additionally, notice that $\delta(t) * h(t) = h(t)$ --- holds true in general for any signal.
+\end{popquiz}
+
+\section{Time-domain system response}
+In this section, we discuss the response of systems in time-domain. We focus our discussion on linear systems and their responses. The overarching message about linear systems is that: if you \emph{know} how the system responds under a given condition or an input, then you can construct the system output if any linear combination of the known conditions occur. In other words, you can use the isolated system response to obtain the output to a new input that is a linear combination of the inputs for which you have the data already. This is called the \emph{principle of superposition}. We often find it useful to talk about two kinds of system outputs: the ``natural'' or the characterisitic output of the system when there are no forcing inputs and the output of the system to forced inputs. For linear systems, we can add these two outputs to get the full output of the system when both are present simultaneously.
+
+\subsection{Building intuition for a system's responses}
+Consider yourself --- a student invested in learning new things --- as a system. As you stroll past on campus, you must have observed that the number of birds in and around the lakes on campus increases during the Spring season and reduces as the weather changes and it becomes hotter. Without any one explicitly teaching you the ecology of bird movement, you self-learn and update your knowledge about bird movement as you observe the number of birds and correlate it with the season. This is your natural response as a ``system'' that is invested in learning new things. simultaneously, if you enroll in an ecology class as you expand your general education, you might be ``forced'' to learn (due to the pressure of exams!) that birds have a specific moving pattern and that they rest near the lakes in Merced during the months of March and move away to cooler and higher altitude forests during the summer. This is your response to the external input (the instruction in the ecology course). Your overall learning (if your learning progresses linearly) is the sum of your self-learned concepts and the concepts from the course. In this case, a nonlinear learner can have an advantage --- one who accentuates their overall learning by synthesizing new (extra) knowledge by combining the natural (self-learning) and forced learning in innovative ways. 
+
+We conclude by writing the output of any general linear system as a combination of the natural/characteristic/initial condition response and the forced response. For a system with initial condition $x_0$ and an input $u(t)$, we write the output $y(t)$ as
+\[
+y(t) = y_{0}(t) + y_{\text{forced}}(t)
+\]
+where $y_0(t)$ is the initial condition response to initial condition $x_0$. This is the characteristic response of the system without any forced inputs (the self-learning by seeing initial conditions, in the example above). Finally, $y_{\text{forced}}(t)$ is the forced response, that is, the output of the system when only the forced input $u(t)$ is present in isolation (the forced course-based learning, in the example above). 
+\subsection{Example: Analyzing an RC circuit using convolution}
+Consider an RC circuit shown in the diagram~\ref{fig:rc-circuit}. A typical analysis of such circuits uses differential equations to describe and compute the system response (recall pre-requisite \#3 where you solved a differential equation to solve this circuit). Here, we will use convolution to find the output of the system to various common types of inputs: (a) the initial condition response of the circuit (modeling the characteristic response), (b) forced input to a step input voltage (modeling DC input), and (c) forced input to a sinusoidal voltage input (modeling AC input). 
+
+For (a), let us assume that we have an initial voltage of $v_0$ volts on the capacitor. An initial condition means that it is a voltage that is present at time $t = 0$ and there is no force that maintains this condition. Using our knowledge of signals, we can model this initial condition as an impulse at $t = 0$, which is simply given by $v_0\delta(0)$. From the pop quiz at the beginning of this lecture, you know that the output of the system to an impulse is just the impulse response. 
+
+So, the impulse response of the system has other names --- the characteristic response, the natural response, or the unit initial condition response. We conclude by writing the output $y_{0}(t)$, to initial condition, without any forced input using the convolution integral (see equation~\eqref{eq:convolution}) as  
+\[
+y_0(t) = v_0 h(t)
+\] 
+where $v_0$ is the magnitude of the initial condition. To find the impulse response of the RC circuit, we will have to rely on our circuits knowledge --- signal processing can only get us so far! From circuit theory, we know that an initial voltage on a capacitor decays exponentially (with a time constant of $RC$) through the resistor in the circuit. Thus, the impulse response of an RC circuit (response to unit impulse) is 
+\begin{equation}
+\label{eq:h-rc}
+h(t) = e^{-\frac{t}{RC}}.
+\end{equation}
+
+Therefore, the output to the initial voltage $v_0$ volts is $y_0(t) = v_0 e^{-\frac{t}{RC}}$.
+
+\begin{popquiz}
+    Prove that the impulse response of an RC circuit is given by equation~\eqref{eq:h-rc}.
+    \popqsplit
+    Write the differential equation using Kirchoff's voltage law,
+    \[
+    \frac{1}{C}\frac{di}{dt} + R i = 0
+    \] 
+\end{popquiz}
+
+Now, for case (b), let's compute the forced input response of the RC circuit for a scaled step input that models a DC voltage applied to the circuit $x(t) = v_{\text{DC}} u(t)$. By applying the convolution integral, we can compute the system output $y(t)$ as 
+\[
+y(t) = \int_{-\infty}{\infty} v_{\text{DC}} u(\tau) h(t - \tau) d\tau
+
+\]
+\subsection{Example: Analyzing an image using convolution}
+
+\section{Visualizing convolution}
+
+\section{System applications: interactive explorations}
+\end{document}
