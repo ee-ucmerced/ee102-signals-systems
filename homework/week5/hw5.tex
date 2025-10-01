@@ -1,0 +1,57 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+
+
+\documentclass{ee102_pset}
+\input{macros.tex}
+\input{preamble.tex}
+
+% Assignment info
+\author{\rule{3cm}{0.4pt}} % Name placeholder
+\submitdate{\rule{3cm}{0.4pt}} % Submission date placeholder
+\problemset{Homework \#5: Introduction to the frequency domain}
+\renewcommand{\duedate}{October 6, 2025}
+\shorttitle{Homework \#5}
+
+\begin{document}
+\problem{1}
+
+\problem{2}
+
+\problem{3}
+
+Let $x[n]$ be a 1-D signal that represents grayscale colors as pixel intensities (0 is black and 255 is white):
+\[
+x[n] = [\,50,\;100,\;240,\;255,\;200,\;120,\;80,\;80,\;90,\;150,\;220,\;240\,],
+\qquad 0\le n\le 11.
+\]
+Assume causal zero-padding outside the given range, that is, $x[n]=0$ for $n<0$ or $n>11$. Your goal is to compute $y[n]$ by hand and also using a for loop implementation (in Python or MATLAB) of the convolution sum. \textbf{You are not allowed to use external libraries to compute the convolution.}
+
+Consider these physically meaningful impulse responses $h[\cdot]$ (all causal) of LTI systems:
+
+\problempart [12 points] A blurring system:
+\[
+h[n]=\tfrac13\,[\,\delta[n]+\delta[n-1]+\delta[n-2]\,]
+\]
+
+\problempart [12 points] A first-difference (edge detector):
+\[
+h[n]=\delta[n]-\delta[n-1],
+\]
+
+\problempart [12 points] Exponential smoothing
+\[
+h[n]=[\,0.6,\;0.3,\;0.1\,]\text{ for }n=0,1,2, \text{ else }0.
+\]
+
+For each of the parts above, 
+\begin{enumerate}
+  \item By hand, write the convolution sum for $y[n]$ and compute numerically $y[n]$ at $n=0,1,2$.
+  \item Implement a for loop that computes $y[n]$ for all $n$ for system above. Make sure to plot the original $x[n]$ and each $y[n]$ on the same axes.
+  \item Apply repeated convolution to intensify the effect of the system. You can choose one of the systems above and experiment with repeated convolutions.
+\end{enumerate}
+
+\problem{4}
+\problempart [1 point] How long did this assignment take you to complete (this does not include the time spent in lectures or in labs, but it does include the time spent programming).
+\end{document}
