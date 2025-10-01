@@ -98,11 +98,15 @@ A typical analysis of such circuits uses differential equations to describe and 
 
     For time-invariance, consider one of the input-output pairs, say equation~\eqref{eq:y1} and a time-shifted input $u_1(t - t_1)$. Prove that the output to the time-shifted input is the same as applying time-shift in the original output $y_1$.
 
-    For causality, note that the voltage output is zero for all negative time in a RC circuit. Therefore, it is a causal system.
+    For causality, note that the impulse response (voltage output to an impulse) is zero for all negative time in a RC circuit. You will need to closed-form expression for the impulse response to show this formally.
 \end{popquiz}
 
 \subsubsection{An impulse input to an RC circuit}
-An impulse at $t = 0$ is simply given by $v_0\delta(t)$, where $v_0$ is the magnitude of the impulse (the area under the curve of this impulse is $v_0$). From the pop quiz at the beginning of this lecture, you know that the output of the system (with zero initial conditions) to an impulse is just the impulse response. Since the system is linear (see pop quiz above), the output of the system to a scaled impulse $v_0\delta(t)$ will be equal to   
+An impulse at $t = 0$ is simply given by $v_{\text{in}}(t) = v_0\delta(t)$, where $v_0$ is the magnitude of the impulse (the area under the curve of this impulse is $v_0$). That is, 
+\[
+\int_{-\infty}^{\infty} v_{\text{in}}(t) dt = v_0.
+\]
+From the pop quiz at the beginning of this lecture, you know that the output of the system (with zero initial conditions) to an impulse is just the impulse response. Since the system is linear (see pop quiz above), the output of the system to a scaled impulse $v_0\delta(t)$ will be equal to   
 \[
 y(t) = v_0 h(t)
 \] 
@@ -174,16 +178,21 @@ which can be evaluated as
 \[
 y(t) = v_{\text{DC}} \int_{0}^{t} h(t - \tau) d\tau
 \]
-since the step function is zero for $\tau < 0$ and $h(t - \tau)$ is zero for $\tau > t$ (causality of the real-life RC circuit's voltage response). To further understand this, you can see that the step input of the DC voltage is only applied at time $t = 0$. So, anything for negative time is 0. Similarly, you will see that the impulse response of the system will be zero for any negative time. Therefore, we can limit the integration limits to $0$ and $t$. Next, we can substitute the impulse response from equation~\eqref{eq:h-rc} to get
+since the step function is zero for $\tau < 0$ and $h(t - \tau)$ is zero for $\tau > t$ (causality of the real-life RC circuit's voltage response). To further understand this, you can see that the step input of the DC voltage is only applied at time $t = 0$. So, anything for negative time is 0 (\textbf{\color{blue}important note:} we must account for this by multiplying a $u(t)$ to the final output expression!). Similarly, you will see that the impulse response of the system will be zero for any negative time. Therefore, we can limit the integration limits to $0$ and $t$. Next, we can substitute the impulse response from equation~\eqref{eq:h-rc} to get
 \[
 y(t) = \frac{v_{\text{DC}}}{RC} \int_{0}^{t} e^{-\frac{t - \tau}{RC}} d\tau.
 \]
 Evaluating this integral, we get
 \begin{equation}
     \label{eq:step-RC}
-y(t) = \frac{v_{\text{DC}}}{RC} \left(1 - e^{-\frac{t}{RC}}\right)u(t).
+y(t) = v_{\text{DC}} \left(1 - e^{-\frac{t}{RC}}\right)u(t).
 \end{equation}
 This is the forced response of the RC circuit to a step input voltage. 
+\begin{popquiz}
+    Verify the above equation from your circuit theory notes. Does it match up with the the output of an RC circuit when a DC voltage is applied as input?
+    \popqsplit
+    You should work on finding your circuit theory (ENGR/EE 065) notes and make sure that you understand why the two output expressions match. 
+\end{popquiz}
 
 \subsubsection{A sinusoidal input to an RC circuit}
 We can compute the forced response of the RC circuit to a sinusoidal input voltage $x(t) = v_{\text{AC}} \cos(\omega t) u(t)$. Using the convolution integral, we can write
@@ -195,7 +204,7 @@ Substituting the expressions for $x(t)$ and $h(t)$, we get
     \label{eq:sine-RC}
 y(t) = \int_{0}^{t} v_{\text{AC}} \cos(\omega \tau)\frac{1}{RC} e^{-\frac{t - \tau}{RC}} d\tau.
 \end{equation}
-Evaluating this integral will give us the forced response of the RC circuit to the sinusoidal input. This is same as the pre-requisite \#3 problem set! As you might remember, integrating the above requires a bit of effort as it is an integration by parts. Later on in this course, we will solve this using an easier method.
+Evaluating this integral will give us the forced response of the RC circuit to the sinusoidal input. This is same as the pre-requisite \#3 problem set! As you might remember, integrating the above requires a bit of effort as it is an integration by parts. Keep reading this section to learn a much easier way to do the same. 
 \subsubsection{A generalized complex exponential signal input to an RC circuit}
 For a complex exponential signal, note that we are aiming for analysis of a broader variety of possible real signals. As we have seen before, complex exponentials can be used to define sinusoids, exponentials, and their combinations. By isolating the real and imaginary parts as needed, we can get a large class of signals as a subset of the general complex exponential signal $x(t) = A e^{st}$ where $A$ and $s$ are complex numbers. We can apply the convolution integral~\eqref{eq:convolution} to compute the output of the signal $y(t)$ to this input. As expected, the output will also be a complex signal and its special cases will lead to the computation of the output of the system for the input signal represented in that special case. 
 For zero initial conditions, we write the convolution equation for this input as
