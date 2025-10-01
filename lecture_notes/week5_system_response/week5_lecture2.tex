@@ -9,6 +9,8 @@
 \newcommand{\Eblank}{\rule{3cm}{0.4pt}}
 \newcommand{\Rankblank}{\rule{3cm}{0.4pt}}
 
+\newcommand{\uof}[1]{u\!\left[#1\right]} % discrete-time unit step
+
 \begin{document}
 
 \section*{EE 102 Week 5, Lecture 2 (Fall 2025)}
@@ -19,6 +21,250 @@
 Apply convolution to an image processing example.
 Visualize convolution using graphs.
 Motivate the frequency domain using the general complex exponential signal.
+\section{Example: A discrete-time echo system}
+An audio receiver system produces an echo. When excited by a unit impulse, it responds with an echo of magnitude $1$ at $n=0$ that decays exponentially as $\alpha^n$ for $\alpha \in (0,1)$ until $n=5$ (that is, for six seconds in total). You may assume that $\alpha = \tfrac{1}{2}$ for numerical parts. Answer the following:
+\begin{enumerate}
+    \item[(A)] Sketch the impulse response $h[n]$ and label $h[0], h[1], \ldots, h[5]$.
+    \item[(B)] We want to understand the kind of echo that will be produced when the audio receiver system is excited by a pulse input of unit amplitude lasting three seconds, starting at $n=0$ and staying at unit amplitude until $n=3$. Find $y[n]$ for this input using convolution and show your steps.
+\end{enumerate}
+The impulse response of the system is
+\[
+h[n]=
+\begin{cases}
+\alpha^{n}, & 0\le n\le 5,\\
+0, & \text{otherwise,}
+\end{cases}
+\]
+The input is a unit amplitude tone that starts at $n=0$ and lasts three seconds. So, we can write the pulse signal for the input $x[n]$ as
+\[
+x[n]=u[n]-u[n-3]=
+\begin{cases}
+1, & n=0,1,2,\\
+0, & \text{otherwise.}
+\end{cases}
+\]
+
+Now, we can compute the output $y[n]$ using convolution:
+\[
+y[n]=\sum_{k=-\infty}^{\infty} x[k]\,h[n-k],
+\]
+and give $y[n]$ explicitly for all $n$ where it is nonzero. It is important that we are careful about all values of $n$ for which $y[n]$ is nonzero. Echos can last longer than the original sound!
+
+We will solve this by using illustrations of convolution. For each index $n=0,1,\dots $, draw three plots in a row for each $n$:
+\[
+x[k],\qquad h[n-k]\ \text{(as a function of $k$)},\qquad \text{and the resulting single sample }y[n],
+\]
+so that the overlap of $x[k]$ and $h[n-k]$ and the accumulation giving $y[n]$ are visually clear.
+
+Let's start by drawing $h[n]$ for $\alpha = \tfrac{1}{2}$:
+
+\def\Alpha{0.5}
+\def\HLen{6}     % h[n] support: 0..6
+\def\kmin{-2}    % plotting k-range
+\def\kmax{10}
+
+\begin{figure}[h]
+    \centering
+   
+    \begin{tikzpicture}[x=0.8cm,y=4cm]
+    \draw[->] (-0.8,0) -- (\HLen+1.2,0) node[below] {$n$};
+    \draw[->] (0,-0.02) -- (0,1.1) node[left] {$h[n]$};
+    \foreach \n in {0,...,\HLen}{
+        \pgfmathparse{pow(\Alpha,\n)}
+        \let\v\pgfmathresult
+        \draw[very thick] (\n,0) -- (\n,\v);
+        \fill (\n,\v) circle (1.6pt);
+        \node[below=3pt] at (\n,0) {\small \n};
+    }
+    \end{tikzpicture}
+    \label{fig:hn}
+    \caption{Impulse response $h[n]$ for $\alpha=\tfrac12$.}
+\end{figure}
+
+% --- macro: draw x[k], h[n-k], and y[n] for a given n ---
+\newcommand{\ConvPanel}[1]{%
+  \def\n{#1}%
+  \begin{tikzpicture}[x=0.8cm,y=3.2cm]
+    % Axes for x[k]
+    \begin{scope}
+      \draw[->] (\kmin-0.6,0) -- (\kmax+0.6,0) node[below] {$k$};
+      \draw[->] (0,-0.02) -- (0,1.05);
+      \node[above left] at (0,1.05) {$x[k]$};
+      \foreach \k in {\kmin,...,\kmax}{
+        \pgfmathparse{(\k>=0 && \k<=2) ? 1 : 0}
+        \let\vx\pgfmathresult
+        \ifdim \vx pt>0pt
+          \draw[very thick] (\k,0) -- (\k,\vx);
+          \fill (\k,\vx) circle (1.4pt);
+        \fi
+        \node[below=3pt] at (\k,0) {\scriptsize \k};
+      }
+    \end{scope}
+
+    % Axes for h[n-k]
+    \begin{scope}[shift={(0,-1.6)}]
+      \draw[->] (\kmin-0.6,0) -- (\kmax+0.6,0) node[below] {$k$};
+      \draw[->] (0,-0.02) -- (0,1.05);
+      \node[above left] at (0,1.05) {$h[n-k],\ n=\n$};
+      \foreach \k in {\kmin,...,\kmax}{
+        % support: 0 <= n-k <= HLen  <=> n-HLen <= k <= n
+        \pgfmathparse{(\k>=\n-\HLen && \k<=\n) ? pow(\Alpha,\n-\k) : 0}
+        \let\vhnk\pgfmathresult
+        \ifdim \vhnk pt>0pt
+          \draw[very thick,opacity=0.85] (\k,0) -- (\k,\vhnk);
+          \fill (\k,\vhnk) circle (1.4pt);
+        \fi
+        \node[below=3pt] at (\k,0) {\scriptsize \k};
+      }
+    \end{scope}
+
+    % Axes for y[n] (single stem at n)
+    \begin{scope}[shift={(0,-3.2)}]
+      \draw[->] (\kmin-0.6,0) -- (\kmax+0.6,0) node[below] {$n$};
+      \draw[->] (0,-0.02) -- (0,1.2);
+      \node[above left] at (0,1.2) {$y[n]$};
+      % y[n] = h[n]+h[n-1]+h[n-2] with truncation to 0..HLen
+      \pgfmathparse{(\n>=0   && \n<=\HLen)   ? pow(\Alpha,\n)   : 0} \let\yA\pgfmathresult
+      \pgfmathparse{(\n-1>=0 && \n-1<=\HLen) ? pow(\Alpha,\n-1) : 0} \let\yB\pgfmathresult
+      \pgfmathparse{(\n-2>=0 && \n-2<=\HLen) ? pow(\Alpha,\n-2) : 0} \let\yC\pgfmathresult
+      \pgfmathparse{\yA+\yB+\yC} \let\yval\pgfmathresult
+      \draw[very thick] (\n,0) -- (\n,\yval);
+      \fill (\n,\yval) circle (1.8pt);
+      \foreach \kk in {\kmin,...,\kmax} \node[below=3pt] at (\kk,0) {\scriptsize \kk};
+    \end{scope}
+  \end{tikzpicture}%
+}
+\begin{center}\textbf{Sliding convolution panels}\end{center}
+\ConvPanel{0}
+
+\medskip
+\ConvPanel{1}
+
+\medskip
+\ConvPanel{2}
+
+\medskip
+\subsection{Convolution computation}
+
+Let us compute the output for various values of $n$:
+\[
+\begin{array}{c|l}
+n & y[n] \\ \hline
+-2: & 0\\
+-1: & 0\\
+0: & 1\\
+1: & 1+\alpha\\
+2: & 1+\alpha+\alpha^2\\
+3: & \alpha+\alpha^2+\alpha^3\\
+4: & \alpha^2+\alpha^3+\alpha^4\\
+5: & \alpha^3+\alpha^4+\alpha^5\\
+6: & \alpha^4+\alpha^5+\alpha^6\\
+7: & \alpha^5+\alpha^6\\
+8: & \alpha^6\\
+9: & 0\\
+10: & 0
+\end{array}
+\quad\Rightarrow\quad
+\text{with }\alpha=\tfrac12:\ 
+y[0..8]=\Big[1,\tfrac32,\tfrac74,\tfrac78,\tfrac7{16},\tfrac7{32},\tfrac7{64},\tfrac3{64},\tfrac1{64}\Big].
+\]
+\newpage
+% ---- knobs you can tweak ----
+\def\Alpha{0.5}   % = 1/2
+\def\HLen{6}      % h[n] nonzero for n=0..6
+\def\Xmin{-2} \def\Xmax{5}    % x[k] axis range
+\def\Kmin{-6} \def\Kmax{10}   % h[n-k], y[n] axis range
+\def\xscale{0.65cm} \def\yscale{1.5cm}
+\def\panelgap{0.9cm}
+
+% ---- helper: empty axes with labels ----
+\newcommand{\EmptyAxes}[4]{%
+% #1 xmin, #2 xmax, #3 y-label, #4 x-label (usually k)
+\begin{tikzpicture}[x=\xscale,y=\yscale]
+  \draw[->] (#1-0.6,0) -- (#2+0.6,0) node[below] {#4};
+  \draw[->] (0,-0.05) -- (0,1.05) node[left] {#3};
+  \foreach \t in {#1,...,#2} \node[below=3pt] at (\t,0) {\scriptsize \t};
+\end{tikzpicture}%
+}
+
+% ---- (A) BLANK active-learning panel for a given n ----
+\newcommand{\BlankConvPanel}[1]{%
+\noindent\textbf{Graphically solve for $n=#1$}\\
+\EmptyAxes{\Xmin}{\Xmax}{$x[k]$}{$k$}\hspace{\panelgap}%
+\EmptyAxes{\Kmin}{\Kmax}{$h[n-k]$}{$k$}\hspace{\panelgap}%
+\EmptyAxes{\Kmin}{\Kmax}{$y[n]$}{$n$}\\[8pt]
+}
+
+% ---- (B) FILLED panel for n=0 with answer + short solution ----
+\newcommand{\FilledPanelNZero}{%
+\noindent\textbf{(Solved) Graphically show for $n=0$}\\
+% x[k]
+\begin{tikzpicture}[x=0.65*\xscale,y=0.65*\yscale]
+  \draw[->] (\Xmin-0.6,0) -- (\Xmax+0.6,0) node[below] {$k$};
+  \draw[->] (0,-0.05) -- (0,1.15) node[left] {$x[k]$};
+  \foreach \t in {\Xmin,...,\Xmax} \node[below=3pt] at (\t,0) {\scriptsize \t};
+  % stems: x[0]=x[1]=x[2]=1
+  \foreach \k in {0,1,2}{
+    \draw[very thick] (\k,0) -- (\k,1);
+    \fill (\k,1) circle (1.6pt);
+  }
+\end{tikzpicture}
+\hspace{\panelgap}
+% h[n-k] with n=0: nonzero for k in [-6,0], value alpha^{-k}
+\begin{tikzpicture}[x=0.65*\xscale,y=0.65*\yscale]
+  \draw[->] (\Kmin-0.6,0) -- (\Kmax-4.0,0) node[below] {$k$};
+  \draw[->] (0,-0.05) -- (0,1.15) node[left] {$h[n-k]$};
+  \foreach \t in {-6,...,2} \node[below=3pt] at (\t,0) {\scriptsize \t};
+  \foreach \k in {-6,-5,...,0}{
+    \pgfmathparse{pow(\Alpha,-\k)}
+    \let\val\pgfmathresult
+    \draw[very thick] (\k,0) -- (\k,\val);
+    \fill (\k,\val) circle (1.6pt);
+  }
+\end{tikzpicture}
+\hspace{\panelgap}
+% y[n] single stem at n=0 of height 1
+
+\begin{tikzpicture}[x=0.65*\xscale,y=0.65*\yscale]
+  \draw[->] (\Kmin+3.0,0) -- (\Kmax-4.0,0) node[below] {$n$};
+  \draw[->] (0,-0.05) -- (0,1.15) node[above] {$y[0]=\sum_{k} x[k]\,h[0-k]
+= x[0]\,h[0]+x[1]\,h[-1]+x[2]\,h[-2]
+= 1+0+0=1.$};
+  \foreach \t in {-2,...,2} \node[below=3pt] at (\t,0) {\scriptsize \t};
+  \draw[very thick] (0,0) -- (0,1);
+  \fill (0,1) circle (1.8pt);
+\end{tikzpicture}\\[8pt]
+}
+
+% ---- (C) Generate the 10 requested panels ----
+% Tip: Put five per page using manual page breaks or minipages.
+% Page 1 (example):
+\newpage
+\thispagestyle{fancy}
+% add header: EE 102 activity 
+\lhead{NAME: \underline{\hspace{5cm}}}
+\rhead{EE 102: In-class activity}
+\section*{Visualize convolution}
+\BlankConvPanel{-1}
+\hrule
+\FilledPanelNZero
+\hrule
+\BlankConvPanel{1}
+% \hrule[4pt]
+\newpage
+\BlankConvPanel{2}
+\hrule
+\BlankConvPanel{3}
+\hrule
+\BlankConvPanel{4}
+% \hrule[2pt]
+\newpage
+
+\BlankConvPanel{5}
+\hrule
+\BlankConvPanel{6}
+\hrule
+\BlankConvPanel{7}
 \section{Convolution Example: Image Processing}
  
 \end{document}

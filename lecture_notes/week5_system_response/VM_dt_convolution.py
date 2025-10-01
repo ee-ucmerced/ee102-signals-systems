@@ -33,26 +33,44 @@ def make_signal(kind, n, **p):
 
 def make_h(kind, m, **p):
     h = np.zeros_like(m, dtype=float)
+
     if kind == "Impulse δ[n]":
         h[m == 0] = p["A"]
+
     elif kind == "Averager (length L)":
-        L = p["L"]
-        L = max(1, min(L, len(m)))
+        L = max(1, min(p["L"], len(m)))
         center = 0
         half = L // 2
         idx = (m >= center - half) & (m < center - half + L)
         h[idx] = 1.0 / L
+
     elif kind == "Exponential decay α^n u[n]":
-        alpha = p["alpha"]
-        h[m >= 0] = (alpha ** (m[m >= 0]))
-        h /= h.sum() if h.sum() != 0 else 1
+        alpha   = p["alpha"]
+        N0      = p.get("N0", 0)
+        N1      = p.get("N1", m.max() + 1)       # exclusive upper bound
+        reset   = p.get("reset_at_N0", False)     # if True: α^{n-N0} on [N0,N1)
+        idx     = (m >= N0) & (m < N1)            # window u[n-N0]-u[n-N1]
+
+        if reset:
+            h[idx] = alpha ** (m[idx] - N0)      # starts at 1 at n=N0
+        else:
+            h[idx] = alpha ** (m[idx])           # continues global α^n
+
+        if p.get("normalize", False):
+            s = h.sum()
+            if s != 0:
+                h /= s
+
     elif kind == "3-tap custom [b-1, 1, b+1] at 0":
         b = p["b"]
         h[m == -1] = b - 1
         h[m ==  0] = 1.0
         h[m == +1] = b + 1
-        s = h.sum()
-        if p["normalize"] and s != 0: h /= s
+        if p.get("normalize", True):
+            s = h.sum()
+            if s != 0:
+                h /= s
+
     return h
 
 # Domain
@@ -94,6 +112,15 @@ with c1:
     x = make_signal(kind_x, n, **params_x)
     fig1, ax1 = plt.subplots()
     ax1.stem(n, x)
+    # AUTO LIMITS for x-panel
+    nz = np.flatnonzero(x)
+    if nz.size:
+        ax1.set_xlim(n[nz[0]] - 2, n[nz[-1]] + 2)
+        ax1.set_ylim(0, 1.1 * np.max(x[nz]))
+    else:
+        ax1.set_xlim(n[0], n[-1])
+        ax1.set_ylim(0, 1.0)
+
     ax1.set_xlabel("n")
     ax1.set_ylabel("x[n]")
     ax1.grid(True, alpha=0.3)
@@ -112,12 +139,28 @@ with c2:
         params_h["L"] = st.slider("L (odd recommended)", 1, min(51, len(m)), 5, step=2)
     elif kind_h == "Exponential decay α^n u[n]":
         params_h["alpha"] = st.slider("α", 0.0, 1.0, 0.8, step=0.01)
+        N0, N1 = st.slider(
+            "Window [N0, N1) where decay exists",
+            int(m.min()), int(m.max()) + 1, (0, 20)
+        )
+        params_h["N0"], params_h["N1"] = int(N0), int(N1)
+        params_h["reset_at_N0"] = st.checkbox("Reset to 1 at n = N0 (use α^{n-N0})", value=False)
+        params_h["normalize"]   = st.checkbox("Normalize h to sum = 1", value=False)
     elif kind_h == "3-tap custom [b-1, 1, b+1] at 0":
         params_h["b"] = st.slider("b", -2.0, 2.0, 0.0, step=0.1)
         params_h["normalize"] = st.checkbox("Normalize sum to 1", value=True)
     h = make_h(kind_h, m, **params_h)
     fig2, ax2 = plt.subplots()
     ax2.stem(m, h)
+    # AUTO LIMITS for h-panel
+    nz = np.flatnonzero(h)
+    if nz.size:
+        ax2.set_xlim(m[nz[0]] - 2, m[nz[-1]] + 2)
+        ax2.set_ylim(0, 1.1 * np.max(h[nz]))
+    else:
+        ax2.set_xlim(m[0], m[-1])
+        ax2.set_ylim(0, 1.0)
+
     ax2.set_xlabel("n")
     ax2.set_ylabel("h[n]")
     ax2.grid(True, alpha=0.3)
@@ -137,6 +180,23 @@ with c3:
         k = np.arange(n[0] + m[0] + (len(m)-1), n[-1] + m[-1] - (len(m)-1) + 1)
     fig3, ax3 = plt.subplots()
     ax3.stem(k, y)
+    # AUTO LIMITS for y-panel
+    nz = np.flatnonzero(y)
+    if nz.size:
+        xmin = k[nz[0]] - 2
+        xmax = k[nz[-1]] + 2
+        # allow negative outputs too; pad by 10%
+        ymin = min(0.0, 1.1 * np.min(y[nz]))
+        ymax = max(0.0, 1.1 * np.max(y[nz]))
+        if np.isclose(ymin, ymax):  # edge case: single nonzero
+            pad = 0.1 * abs(ymax) if ymax != 0 else 1.0
+            ymin, ymax = ymax - pad, ymax + pad
+        ax3.set_xlim(xmin, xmax)
+        ax3.set_ylim(ymin, ymax)
+    else:
+        ax3.set_xlim(k[0], k[-1])
+        ax3.set_ylim(-1.0, 1.0)
+
     ax3.set_xlabel("n")
     ax3.set_ylabel("y[n]")
     ax3.grid(True, alpha=0.3)
