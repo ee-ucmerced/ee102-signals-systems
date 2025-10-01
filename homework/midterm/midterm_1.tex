@@ -1,0 +1,77 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+
+
+\documentclass{ee102_pset}
+\input{macros.tex}
+\input{preamble.tex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[american]{circuitikz}
+
+% Assignment info
+\author{\rule{3cm}{0.4pt}} % Name placeholder
+\submitdate{\rule{3cm}{0.4pt}} % Submission date placeholder
+
+% \submitdate{60 minutes} % Submission date placeholder
+\problemset{Midterm Exam \#1}
+\renewcommand{\duedate}{Sep 24, 2025 at 5:40 PM}
+\shorttitle{Midterm Exam \#1}
+
+\begin{document}
+% add a box of rules for midterm
+\begin{center}
+\fbox{\begin{minipage}{0.9\textwidth}
+\textbf{Exam instructions and rules:}
+\begin{itemize}
+    \item You have 60 minutes to complete this exam.
+    \item The exam will start at 4:40 PM and end at 5:40 PM on September 24, 2025. You may leave early after submitting your exam.
+    \item You may use a calculator, but no other electronic devices (e.g., phones, laptops, tablets).
+    \item You may not use any notes, textbooks, or other reference materials.
+    \item Show all your work. Answers without supporting work may receive little or no credit.
+    \item Write clearly and box your final answers.
+    \item If you need more space for your answers, you may use the back of the pages or additional sheets of paper. Be sure to label your answers clearly.
+    \item This exam has 3 pages (including this cover page).
+    \item Please write your name on each page of your submission.
+    \item You may not discuss this exam with anyone until after the submission deadline.
+\end{itemize}
+Good luck! You may turn over to the next page at 4:40 PM.
+\end{minipage}}
+\end{center}
+\newpage 
+\problem{1} 
+Consider a bacterial cell (a pathogen) that causes gut infection. A single cell can divide into two cells every 30 minutes. If you ever have E.coli infection in your gut, this is approximatively how long it takes for the bacteria to double! An antibiotic drug that you take every two hours acts impulsively and eliminates all bacteria cells down to 1 (so, after every 2 hours only 1 cell remains). 
+
+\problempart[10 points] Assume that you start with a single bacterial cell. Describe the bacterial population $x(t)$ as a function of time $t$ in continuous-time domain.
+\problempart[5 points] Sketch the bacterial population $x(t)$ as a function of time $t$ for all time: $0 \leq t \leq 8$ hours. Hint: Use hour as your time unit to simplify your computations.
+\problempart[10 points] Consider the signal $x(t)$ for $t \in [0, \infty]$. Assume that the antibiotic drug is taken every 4 hours instead of 2. Denote the bacterial population in this case as $\bar{x}(t)$. Write $\bar{x}(t)$ in terms of $x(t)$ using signal transformations.
+
+\problempart [10 points] Assume that you model your bacterial population for all time $(-\infty, \infty)$. Then, is $x(t)$ a periodic signal? If yes, what is its fundamental period? If no, propose a modification to the signal that would make it periodic.
+
+\problempart [10 points] Write the equation of $x(t)$ (or its modified periodic version) over a single time period using only unit step functions. You are allowed to choose constants and time-shift parameters as needed but you are not allowed to use any other functions (e.g., no ramps, exponentials, sinusoids, etc.).
+
+% \problempart [5 points] Compute the energy of $x(t)$ over a single time period using the definition of energy for continuous-time signals:
+% \[
+% E = \int_{t_1}^{t_2} |x(t)|^2 dt.
+% \]
+
+\problempart [15 points] Who's more sick? Consider a period of 1-day (24 hours) and assume that the signals are zero outside the 1-day period. The bacteria in Jacob's gut grows every 15 minutes (that is, it doubles every 15 minutes) but this person takes a dose of the antibiotic drug every hour that brings down the count of the bacteria to 1. On the other hand, bacteria in Aliyah's gut grows every 30 minutes and she takes the antibiotic drug every 2 hours. Using an appropriate signal quantification metric, find out who will be more sick after 1 day.
+
+\problempart [5 points] Consider the human as the system that takes the antibiotic drug as input and produces (reports) the bacterial population as output. Draw the system block diagram.
+
+\problempart [10 points] Show whether the system in the previous part is linear or not, and whether it is time-invariant or not. Justify your answers.
+
+\problempart [10 points] Use the general complex exponential and the impulse function to define the bacterial population $x(t)$ over a single time period. You are not allowed to use step functions, ramps, sinusoids, or any other functions.
+\problem{2} 
+
+\problempart[5 points] Compute the energy of an exponentially decaying signal $x_1(t) = e^{-at}u(t)$, where $a>0$, using the definition of energy for continuous-time signals:
+\[
+E = \int_{-\infty}^{\infty} |x(t)|^2 dt.
+\]
+
+\problempart[10 points] Compute the energy for $x_2(t) = e^{-t}u(t)$. Find out the relationship between the energies of $x_1(t)$ and $x_2(t)$.
+
+\end{document}
