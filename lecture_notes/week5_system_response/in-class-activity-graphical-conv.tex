@@ -1,0 +1,111 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\input{preamble.tex}
+\renewcommand{\releasedate}{September 29, 2025}
+
+\newcommand{\Eblank}{\rule{3cm}{0.4pt}}
+\newcommand{\Rankblank}{\rule{3cm}{0.4pt}}
+
+\newcommand{\uof}[1]{u\!\left[#1\right]} % discrete-time unit step
+
+\begin{document}
+% \section{In-class activity on convolution}
+% ---- knobs you can tweak ----
+\def\Alpha{0.5}   % = 1/2
+\def\HLen{6}      % h[n] nonzero for n=0..6
+\def\Xmin{-2} \def\Xmax{5}    % x[k] axis range
+\def\Kmin{-6} \def\Kmax{10}   % h[n-k], y[n] axis range
+\def\xscale{0.65cm} \def\yscale{1.5cm}
+\def\panelgap{0.9cm}
+
+% ---- helper: empty axes with labels ----
+\newcommand{\EmptyAxes}[4]{%
+% #1 xmin, #2 xmax, #3 y-label, #4 x-label (usually k)
+\begin{tikzpicture}[x=\xscale,y=\yscale]
+  \draw[->] (#1-0.6,0) -- (#2+0.6,0) node[below] {#4};
+  \draw[->] (0,-0.05) -- (0,1.05) node[left] {#3};
+  \foreach \t in {#1,...,#2} \node[below=3pt] at (\t,0) {\scriptsize \t};
+\end{tikzpicture}%
+}
+
+% ---- (A) BLANK active-learning panel for a given n ----
+\newcommand{\BlankConvPanel}[1]{%
+\noindent\textbf{Graphically solve for $n=#1$}\\
+\EmptyAxes{\Xmin}{\Xmax}{$x[k]$}{$k$}\hspace{\panelgap}%
+\EmptyAxes{\Kmin}{\Kmax}{$h[n-k]$}{$k$}\hspace{\panelgap}%
+\EmptyAxes{\Kmin}{\Kmax}{$y[n]$}{$n$}\\[8pt]
+}
+
+% ---- (B) FILLED panel for n=0 with answer + short solution ----
+\newcommand{\FilledPanelNZero}{%
+\noindent\textbf{(Solved) Graphically show for $n=0$}\\
+% x[k]
+\begin{tikzpicture}[x=0.65*\xscale,y=0.65*\yscale]
+  \draw[->] (\Xmin-0.6,0) -- (\Xmax+0.6,0) node[below] {$k$};
+  \draw[->] (0,-0.05) -- (0,1.15) node[left] {$x[k]$};
+  \foreach \t in {\Xmin,...,\Xmax} \node[below=3pt] at (\t,0) {\scriptsize \t};
+  % stems: x[0]=x[1]=x[2]=1
+  \foreach \k in {0,1,2}{
+    \draw[very thick] (\k,0) -- (\k,1);
+    \fill (\k,1) circle (1.6pt);
+  }
+\end{tikzpicture}
+\hspace{\panelgap}
+% h[n-k] with n=0: nonzero for k in [-6,0], value alpha^{-k}
+\begin{tikzpicture}[x=0.65*\xscale,y=0.65*\yscale]
+  \draw[->] (\Kmin-0.6,0) -- (\Kmax-4.0,0) node[below] {$k$};
+  \draw[->] (0,-0.05) -- (0,1.15) node[left] {$h[n-k]$};
+  \foreach \t in {-6,...,2} \node[below=3pt] at (\t,0) {\scriptsize \t};
+  \foreach \k in {-6,-5,...,0}{
+    \pgfmathparse{pow(\Alpha,-\k)}
+    \let\val\pgfmathresult
+    \draw[very thick] (\k,0) -- (\k,\val);
+    \fill (\k,\val) circle (1.6pt);
+  }
+\end{tikzpicture}
+\hspace{\panelgap}
+% y[n] single stem at n=0 of height 1
+
+\begin{tikzpicture}[x=0.65*\xscale,y=0.65*\yscale]
+  \draw[->] (\Kmin+3.0,0) -- (\Kmax-4.0,0) node[below] {$n$};
+  \draw[->] (0,-0.05) -- (0,1.15) node[above] {$y[0]=\sum_{k} x[k]\,h[0-k]
+= x[0]\,h[0]+x[1]\,h[-1]+x[2]\,h[-2]
+= 1+0+0=1.$};
+  \foreach \t in {-2,...,2} \node[below=3pt] at (\t,0) {\scriptsize \t};
+  \draw[very thick] (0,0) -- (0,1);
+  \fill (0,1) circle (1.8pt);
+\end{tikzpicture}\\[8pt]
+}
+
+% ---- (C) Generate the 10 requested panels ----
+% Tip: Put five per page using manual page breaks or minipages.
+% Page 1 (example):
+\thispagestyle{fancy}
+% add header: EE 102 activity 
+\lhead{NAME: \underline{\hspace{5cm}}}
+\rhead{EE 102: In-class activity}
+\section*{Visualize convolution}
+\BlankConvPanel{-1}
+\hrule
+\FilledPanelNZero
+\hrule
+\BlankConvPanel{1}
+% \hrule[4pt]
+\newpage
+\BlankConvPanel{2}
+\hrule
+\BlankConvPanel{3}
+\hrule
+\BlankConvPanel{4}
+% \hrule[2pt]
+\newpage
+
+\BlankConvPanel{5}
+\hrule
+\BlankConvPanel{6}
+\hrule
+\BlankConvPanel{7}
+\end{document}

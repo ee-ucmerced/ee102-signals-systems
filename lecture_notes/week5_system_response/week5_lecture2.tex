@@ -18,9 +18,37 @@
 \subsection*{Date: \releasedate}
 
 \section{Goals}
-Apply convolution to an image processing example.
-Visualize convolution using graphs.
-Motivate the frequency domain using the general complex exponential signal.
+The main goal of this lecture is to learn how to visualize the process of convolution using graphs. 
+
+\section{Review: Convolution definition}
+Recall that in continuous-time, the output $y(t)$ of an LTI system with input $x(t)$ and impulse response $h(t)$ is given by the convolution integral:
+\[
+y(t) = x(t) * h(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) \, d\tau.
+\]
+\begin{popquiz}
+Prove that convolution is commutative, i.e., show that $x(t) * h(t) = h(t) * x(t)$.
+\popqsplit 
+Write the convolution integral for left-hand side as 
+\[
+x(t) * h(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) \, d\tau.
+\]
+Now, let $s = t - \tau$. Then, $\tau = t - s$ and $d\tau = -ds$. When $\tau$ goes from $-\infty$ to $\infty$, $s$ goes from $\infty$ to $-\infty$. Thus, we can rewrite the integral as
+\[
+x(t) * h(t) = \int_{\infty}^{-\infty} x(t - s) h(s) (-ds) = \int_{-\infty}^{\infty} h(s) x(t - s) \, ds.
+\]
+This is exactly the convolution integral for $h(t) * x(t)$. Hence, convolution is commutative.
+\end{popquiz}
+\section{Discrete time convolution}
+Similar to the derivation for continuous-time convolution, we can derive the discrete-time convolution sum. Consider a discrete-time LTI system with input $x[n]$, output $y[n]$, and impulse response $h[n]$. Note that for a discrete-time impulse $\delta[n]$, the output is $h[n]$. Recall the sifting property of the discrete-time impulse:
+\[
+x[n] = \sum_{k=-\infty}^{\infty} x[k] \delta[n - k].
+\]
+Using linearity and time-invariance of the system, we can write the output as
+\[
+y[n] = \sum_{k=-\infty}^{\infty} x[k] h[n - k].
+\]
+This is the discrete-time convolution sum, denoted by $y[n] = x[n] * h[n]$.
+
 \section{Example: A discrete-time echo system}
 An audio receiver system produces an echo. When excited by a unit impulse, it responds with an echo of magnitude $1$ at $n=0$ that decays exponentially as $\alpha^n$ for $\alpha \in (0,1)$ until $n=5$ (that is, for six seconds in total). You may assume that $\alpha = \tfrac{1}{2}$ for numerical parts. Answer the following:
 \begin{enumerate}
@@ -50,7 +78,102 @@ y[n]=\sum_{k=-\infty}^{\infty} x[k]\,h[n-k],
 \]
 and give $y[n]$ explicitly for all $n$ where it is nonzero. It is important that we are careful about all values of $n$ for which $y[n]$ is nonzero. Echos can last longer than the original sound!
 
-We will solve this by using illustrations of convolution. For each index $n=0,1,\dots $, draw three plots in a row for each $n$:
+% --- macro: draw x[k], h[n-k], and y[n] for a given n ---
+\newcommand{\ConvPanel}[1]{%
+  \def\n{#1}%
+  \begin{tikzpicture}[x=0.8cm,y=2.2cm]
+
+    % ===== Panel: x[k] =====
+    \begin{scope}
+      \draw[->] (\kmin-0.6,0) -- (\kmax+0.6,0) node[below] {$k$};
+      \draw[->] (0,-0.02) -- (0,1.05);
+      \node[above left] at (0,1.05) {$x[k]$};
+
+      % stems (blue) with values on top; NO y-axis tick labels
+      \foreach \k in {\kmin,...,\kmax}{
+        \pgfmathparse{(\k>=0 && \k<=2) ? 1 : 0}
+        \let\vx\pgfmathresult
+        \ifdim \vx pt>0pt
+          \draw[very thick,blue] (\k,0) -- (\k,\vx);
+          \fill[blue] (\k,\vx) circle (1.4pt);
+          \node[above=3pt] at (\k,\vx) {\scriptsize \pgfmathprintnumber[precision=1]{\vx}};
+        \fi
+        \node[below=1pt] at (\k,0) {\scriptsize \k};
+      }
+    \end{scope}
+
+    % ===== Panel: h[n-k] =====
+    \begin{scope}[shift={(0,-1.6)}]
+      % FORCE axis to -6..10
+      \draw[->] (-6.6,0) -- (10.6,0) node[below] {$k$};
+      \draw[->] (0,-0.02) -- (0,1.05);
+      \node[left] at (0,1.05) {$h[n-k],\ n=\n$};
+
+      % stems (blue) with values on top; NO y-axis tick labels
+      \foreach \k in {-6,...,10}{
+        % support: 0 <= n-k <= HLen  <=> n-HLen <= k <= n
+        \pgfmathparse{(\k>=\n-\HLen && \k<=\n) ? pow(\Alpha,\n-\k) : 0}
+        \let\vhnk\pgfmathresult
+        \ifdim \vhnk pt>0pt
+          \draw[very thick,blue,opacity=0.95] (\k,0) -- (\k,\vhnk);
+          \fill[blue] (\k,\vhnk) circle (1.4pt);
+          \node[above=6pt] at (\k,\vhnk) {\tiny \pgfmathprintnumber[precision=4]{\vhnk}};
+        \fi
+        \node[below=3pt] at (\k,0) {\scriptsize \k};
+      }
+    \end{scope}
+
+    % ===== Panel: y[n] =====
+    \begin{scope}[shift={(0,-4.2)}]
+      \draw[->] (\kmin-0.6,0) -- (\kmax+0.6,0) node[below] {$n$};
+      \draw[->] (0,-0.02) -- (0,1.8);
+      \node[right] at (0,1.8) {$y[n]$};
+
+      % y[n] = h[n]+h[n-1]+h[n-2] with truncation to 0..HLen
+      \pgfmathparse{(\n>=0   && \n<=\HLen)   ? pow(\Alpha,\n)   : 0} \let\yA\pgfmathresult
+      \pgfmathparse{(\n-1>=0 && \n-1<=\HLen) ? pow(\Alpha,\n-1) : 0} \let\yB\pgfmathresult
+      \pgfmathparse{(\n-2>=0 && \n-2<=\HLen) ? pow(\Alpha,\n-2) : 0} \let\yC\pgfmathresult
+      \pgfmathparse{\yA+\yB+\yC} \let\yval\pgfmathresult
+
+      % single stem (blue) with value on top; NO y-axis tick labels
+      \draw[very thick,blue] (\n,0) -- (\n,\yval);
+      \fill[blue] (\n,\yval) circle (1.8pt);
+      \node[above=2pt] at (\n,\yval) {\scriptsize \pgfmathprintnumber[precision=2]{\yval}};
+
+      \foreach \kk in {\kmin,...,\kmax} \node[below=3pt] at (\kk,0) {\scriptsize \kk};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+
+\subsection{Convolution computation (without visualizing)}
+
+Let us compute the output for various values of $n$ using the convolution sum directly:
+\[
+\begin{array}{c|l}
+n & y[n] \\ \hline
+-2: & 0\\
+-1: & 0\\
+0: & 1\\
+1: & 1+\alpha\\
+2: & 1+\alpha+\alpha^2\\
+3: & \alpha+\alpha^2+\alpha^3\\
+4: & \alpha^2+\alpha^3+\alpha^4\\
+5: & \alpha^3+\alpha^4+\alpha^5\\
+6: & \alpha^4+\alpha^5+\alpha^6\\
+7: & \alpha^5+\alpha^6\\
+8: & \alpha^6\\
+9: & 0\\
+10: & 0
+\end{array}
+\quad\Rightarrow\quad
+\text{with }\alpha=\tfrac12:\ 
+y[0..8]=\Big[1,\tfrac32,\tfrac74,\tfrac78,\tfrac7{16},\tfrac7{32},\tfrac7{64},\tfrac3{64},\tfrac1{64}\Big].
+\]
+So, we find that the output $y[n]$ is nonzero for $n=0,1,\ldots,8$. In general, the output of convolution in discrete-time is equal to $N+M-1$ where $N$ and $M$ are the lengths of the two signals being convolved. Here, the length of $x[n]$ is $3$ and the length of $h[n]$ is $6$, so the length of $y[n]$ is $3+6-1=8$. \textbf{This is important!}
+% send the rest of the content after this always at the end:
+\subsection{Visualizing convolution (with graphs)}
+Now, we will solve this by using illustrations of convolution. For each index $n=0,1,\dots $, draw three plots in a row for each $n$:
 \[
 x[k],\qquad h[n-k]\ \text{(as a function of $k$)},\qquad \text{and the resulting single sample }y[n],
 \]
@@ -80,191 +203,83 @@ Let's start by drawing $h[n]$ for $\alpha = \tfrac{1}{2}$:
     \label{fig:hn}
     \caption{Impulse response $h[n]$ for $\alpha=\tfrac12$.}
 \end{figure}
+% ---- h[k] figure (now k = -6..10), with y-axis ticks/labels and stem value labels ----
+\subsection{Idea: Flip `h' and slide through `x'}
+Note the x-axis labels carefully! We have $x[k]$ and $h[k]$ because we need these for the convolution sum. We are interested in finding $y[n]$ for each value of $n$. For each $n$, we have a $x[k]$ and $h[k]$ that we use for all values of $k$ to solve the convolution sum. Notice that $h[k]$ is not directly used in the convolution sum, instead we have $h[n-k]$. This means that for each value of $n$, we need to flip $h[k]$ around the vertical axis and then shift it by $n$ units to get $h[n-k]$.
 
-% --- macro: draw x[k], h[n-k], and y[n] for a given n ---
-\newcommand{\ConvPanel}[1]{%
-  \def\n{#1}%
-  \begin{tikzpicture}[x=0.8cm,y=3.2cm]
-    % Axes for x[k]
-    \begin{scope}
-      \draw[->] (\kmin-0.6,0) -- (\kmax+0.6,0) node[below] {$k$};
-      \draw[->] (0,-0.02) -- (0,1.05);
-      \node[above left] at (0,1.05) {$x[k]$};
-      \foreach \k in {\kmin,...,\kmax}{
-        \pgfmathparse{(\k>=0 && \k<=2) ? 1 : 0}
-        \let\vx\pgfmathresult
-        \ifdim \vx pt>0pt
-          \draw[very thick] (\k,0) -- (\k,\vx);
-          \fill (\k,\vx) circle (1.4pt);
-        \fi
-        \node[below=3pt] at (\k,0) {\scriptsize \k};
-      }
-    \end{scope}
+For $n=0$, the convolution is visualized in Figure~\ref{fig:conv_n0}. 
+\begin{figure}[h]
+    \centering
+    \ConvPanel{0}
+    \caption{Convolution for $n=0$.}
+    \label{fig:conv_n0}
+\end{figure}
 
-    % Axes for h[n-k]
-    \begin{scope}[shift={(0,-1.6)}]
-      \draw[->] (\kmin-0.6,0) -- (\kmax+0.6,0) node[below] {$k$};
-      \draw[->] (0,-0.02) -- (0,1.05);
-      \node[above left] at (0,1.05) {$h[n-k],\ n=\n$};
-      \foreach \k in {\kmin,...,\kmax}{
-        % support: 0 <= n-k <= HLen  <=> n-HLen <= k <= n
-        \pgfmathparse{(\k>=\n-\HLen && \k<=\n) ? pow(\Alpha,\n-\k) : 0}
-        \let\vhnk\pgfmathresult
-        \ifdim \vhnk pt>0pt
-          \draw[very thick,opacity=0.85] (\k,0) -- (\k,\vhnk);
-          \fill (\k,\vhnk) circle (1.4pt);
-        \fi
-        \node[below=3pt] at (\k,0) {\scriptsize \k};
-      }
-    \end{scope}
 
-    % Axes for y[n] (single stem at n)
-    \begin{scope}[shift={(0,-3.2)}]
-      \draw[->] (\kmin-0.6,0) -- (\kmax+0.6,0) node[below] {$n$};
-      \draw[->] (0,-0.02) -- (0,1.2);
-      \node[above left] at (0,1.2) {$y[n]$};
-      % y[n] = h[n]+h[n-1]+h[n-2] with truncation to 0..HLen
-      \pgfmathparse{(\n>=0   && \n<=\HLen)   ? pow(\Alpha,\n)   : 0} \let\yA\pgfmathresult
-      \pgfmathparse{(\n-1>=0 && \n-1<=\HLen) ? pow(\Alpha,\n-1) : 0} \let\yB\pgfmathresult
-      \pgfmathparse{(\n-2>=0 && \n-2<=\HLen) ? pow(\Alpha,\n-2) : 0} \let\yC\pgfmathresult
-      \pgfmathparse{\yA+\yB+\yC} \let\yval\pgfmathresult
-      \draw[very thick] (\n,0) -- (\n,\yval);
-      \fill (\n,\yval) circle (1.8pt);
-      \foreach \kk in {\kmin,...,\kmax} \node[below=3pt] at (\kk,0) {\scriptsize \kk};
-    \end{scope}
-  \end{tikzpicture}%
-}
-\begin{center}\textbf{Sliding convolution panels}\end{center}
-\ConvPanel{0}
+Then, for $n=1$, the convolution is visualized in Figure~\ref{fig:conv_n1} and for all other values of $n$ see Figures~\ref{fig:conv_n2},~\ref{fig:conv_n3},~\ref{fig:conv_n4},~\ref{fig:conv_n5},~\ref{fig:conv_n6},~\ref{fig:conv_n7},~\ref{fig:conv_n8}, and~\ref{fig:conv_n9}.
+
+% \begin{center}\textbf{Sliding convolution panels}\end{center}
+\begin{figure}[h]
+    \centering
+    \ConvPanel{1}
+    \caption{Convolution for $n=1$.}
+    \label{fig:conv_n1}
+\end{figure}
 
 \medskip
-\ConvPanel{1}
+\begin{figure}[h]
+    \centering
+    \ConvPanel{2}
+    \caption{Convolution for $n=2$.}
+    \label{fig:conv_n2}
+\end{figure}
 
 \medskip
-\ConvPanel{2}
 
+% All other values of $n$ are shown below:
+\begin{figure}[h!]
+    \centering
+    \ConvPanel{3}
+    \caption{Convolution for $n=3$.}
+    \label{fig:conv_n3}
+\end{figure}
+\begin{figure}[h!]
+    \centering
+    \ConvPanel{4}
+    \caption{Convolution for $n=4$.}
+    \label{fig:conv_n4}
+\end{figure}
+\begin{figure}[h!]
+    \centering
+    \ConvPanel{5}
+    \caption{Convolution for $n=5$.}
+    \label{fig:conv_n5}
+\end{figure}
+\begin{figure}[h!]
+    \centering
+    \ConvPanel{6}
+    \caption{Convolution for $n=6$.}
+    \label{fig:conv_n6}
+\end{figure}
+\begin{figure}[h!]
+    \centering
+    \ConvPanel{7}
+    \caption{Convolution for $n=7$.}
+    \label{fig:conv_n7}
+\end{figure}
 \medskip
-\subsection{Convolution computation}
+\begin{figure}[h!]
+    \centering
+    \ConvPanel{8}
+    \caption{Convolution for $n=8$.}
+    \label{fig:conv_n8}
+\end{figure}
+\medskip
+\begin{figure}[h!]
+    \centering
+    \ConvPanel{9}
+    \caption{Convolution for $n=9$.}
+    \label{fig:conv_n9}
+\end{figure}
 
-Let us compute the output for various values of $n$:
-\[
-\begin{array}{c|l}
-n & y[n] \\ \hline
--2: & 0\\
--1: & 0\\
-0: & 1\\
-1: & 1+\alpha\\
-2: & 1+\alpha+\alpha^2\\
-3: & \alpha+\alpha^2+\alpha^3\\
-4: & \alpha^2+\alpha^3+\alpha^4\\
-5: & \alpha^3+\alpha^4+\alpha^5\\
-6: & \alpha^4+\alpha^5+\alpha^6\\
-7: & \alpha^5+\alpha^6\\
-8: & \alpha^6\\
-9: & 0\\
-10: & 0
-\end{array}
-\quad\Rightarrow\quad
-\text{with }\alpha=\tfrac12:\ 
-y[0..8]=\Big[1,\tfrac32,\tfrac74,\tfrac78,\tfrac7{16},\tfrac7{32},\tfrac7{64},\tfrac3{64},\tfrac1{64}\Big].
-\]
-\newpage
-% ---- knobs you can tweak ----
-\def\Alpha{0.5}   % = 1/2
-\def\HLen{6}      % h[n] nonzero for n=0..6
-\def\Xmin{-2} \def\Xmax{5}    % x[k] axis range
-\def\Kmin{-6} \def\Kmax{10}   % h[n-k], y[n] axis range
-\def\xscale{0.65cm} \def\yscale{1.5cm}
-\def\panelgap{0.9cm}
-
-% ---- helper: empty axes with labels ----
-\newcommand{\EmptyAxes}[4]{%
-% #1 xmin, #2 xmax, #3 y-label, #4 x-label (usually k)
-\begin{tikzpicture}[x=\xscale,y=\yscale]
-  \draw[->] (#1-0.6,0) -- (#2+0.6,0) node[below] {#4};
-  \draw[->] (0,-0.05) -- (0,1.05) node[left] {#3};
-  \foreach \t in {#1,...,#2} \node[below=3pt] at (\t,0) {\scriptsize \t};
-\end{tikzpicture}%
-}
-
-% ---- (A) BLANK active-learning panel for a given n ----
-\newcommand{\BlankConvPanel}[1]{%
-\noindent\textbf{Graphically solve for $n=#1$}\\
-\EmptyAxes{\Xmin}{\Xmax}{$x[k]$}{$k$}\hspace{\panelgap}%
-\EmptyAxes{\Kmin}{\Kmax}{$h[n-k]$}{$k$}\hspace{\panelgap}%
-\EmptyAxes{\Kmin}{\Kmax}{$y[n]$}{$n$}\\[8pt]
-}
-
-% ---- (B) FILLED panel for n=0 with answer + short solution ----
-\newcommand{\FilledPanelNZero}{%
-\noindent\textbf{(Solved) Graphically show for $n=0$}\\
-% x[k]
-\begin{tikzpicture}[x=0.65*\xscale,y=0.65*\yscale]
-  \draw[->] (\Xmin-0.6,0) -- (\Xmax+0.6,0) node[below] {$k$};
-  \draw[->] (0,-0.05) -- (0,1.15) node[left] {$x[k]$};
-  \foreach \t in {\Xmin,...,\Xmax} \node[below=3pt] at (\t,0) {\scriptsize \t};
-  % stems: x[0]=x[1]=x[2]=1
-  \foreach \k in {0,1,2}{
-    \draw[very thick] (\k,0) -- (\k,1);
-    \fill (\k,1) circle (1.6pt);
-  }
-\end{tikzpicture}
-\hspace{\panelgap}
-% h[n-k] with n=0: nonzero for k in [-6,0], value alpha^{-k}
-\begin{tikzpicture}[x=0.65*\xscale,y=0.65*\yscale]
-  \draw[->] (\Kmin-0.6,0) -- (\Kmax-4.0,0) node[below] {$k$};
-  \draw[->] (0,-0.05) -- (0,1.15) node[left] {$h[n-k]$};
-  \foreach \t in {-6,...,2} \node[below=3pt] at (\t,0) {\scriptsize \t};
-  \foreach \k in {-6,-5,...,0}{
-    \pgfmathparse{pow(\Alpha,-\k)}
-    \let\val\pgfmathresult
-    \draw[very thick] (\k,0) -- (\k,\val);
-    \fill (\k,\val) circle (1.6pt);
-  }
-\end{tikzpicture}
-\hspace{\panelgap}
-% y[n] single stem at n=0 of height 1
-
-\begin{tikzpicture}[x=0.65*\xscale,y=0.65*\yscale]
-  \draw[->] (\Kmin+3.0,0) -- (\Kmax-4.0,0) node[below] {$n$};
-  \draw[->] (0,-0.05) -- (0,1.15) node[above] {$y[0]=\sum_{k} x[k]\,h[0-k]
-= x[0]\,h[0]+x[1]\,h[-1]+x[2]\,h[-2]
-= 1+0+0=1.$};
-  \foreach \t in {-2,...,2} \node[below=3pt] at (\t,0) {\scriptsize \t};
-  \draw[very thick] (0,0) -- (0,1);
-  \fill (0,1) circle (1.8pt);
-\end{tikzpicture}\\[8pt]
-}
-
-% ---- (C) Generate the 10 requested panels ----
-% Tip: Put five per page using manual page breaks or minipages.
-% Page 1 (example):
-\newpage
-\thispagestyle{fancy}
-% add header: EE 102 activity 
-\lhead{NAME: \underline{\hspace{5cm}}}
-\rhead{EE 102: In-class activity}
-\section*{Visualize convolution}
-\BlankConvPanel{-1}
-\hrule
-\FilledPanelNZero
-\hrule
-\BlankConvPanel{1}
-% \hrule[4pt]
-\newpage
-\BlankConvPanel{2}
-\hrule
-\BlankConvPanel{3}
-\hrule
-\BlankConvPanel{4}
-% \hrule[2pt]
-\newpage
-
-\BlankConvPanel{5}
-\hrule
-\BlankConvPanel{6}
-\hrule
-\BlankConvPanel{7}
-\section{Convolution Example: Image Processing}
- 
 \end{document}

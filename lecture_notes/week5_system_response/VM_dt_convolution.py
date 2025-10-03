@@ -2,8 +2,34 @@
 import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
+import tempfile, pathlib  
+from matplotlib import animation
+import io
+
+
 
 st.set_page_config(page_title="Discrete-Time Convolution", layout="wide")
+
+
+def _h_at_minus_k(m_idx, h_arr, k_idx):
+    """Return array v[k] = h[-k] aligned to k_idx."""
+    v = np.zeros_like(k_idx, dtype=float)
+    for i, kv in enumerate(k_idx):
+        j = np.where(m_idx == -kv)[0]
+        if j.size:
+            v[i] = h_arr[j[0]]
+    return v
+
+def _h_at_n_minus_k(m_idx, h_arr, k_idx, n_out):
+    """Return array v[k] = h[n_out - k] aligned to k_idx."""
+    v = np.zeros_like(k_idx, dtype=float)
+    for i, kv in enumerate(k_idx):
+        j = np.where(m_idx == (n_out - kv))[0]
+        if j.size:
+            v[i] = h_arr[j[0]]
+    return v
+
+
 
 def make_signal(kind, n, **p):
     x = np.zeros_like(n, dtype=float)
@@ -201,6 +227,6 @@ with c3:
     ax3.set_ylabel("y[n]")
     ax3.grid(True, alpha=0.3)
     st.pyplot(fig3)
-
+    
 # Helpful initial state (obvious convolution):
 # Try x: "Rectangular pulse" (A=1, width ~11), h: "Averager (length L)" (L=5).
