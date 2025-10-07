@@ -19,4 +19,116 @@
 
 \section{Goals}
 The main goal of this lecture is to write the Fourier series representation of periodic signals. To motivate this, we will show how sinusoidal signals are eigenfunctions of LTI systems (that is, when a sinusoid is input to an LTI system, the output is also a sinusoid of the same frequency). This will lead us to the Fourier series representation of periodic signals.
+
+\section{Recap: The convolution integral}
+Recall that for a continuous-time LTI system with impulse response \(h(t)\), the output \(y(t)\) to an input \(x(t)\) is given by the convolution integral:
+\[
+y(t) = x(t) * h(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau.
+\]
+In discrete-time, we have an equivalent expression for the convolution sum. Here, for an input $x[n]$ and impulse response \(h[n]\), the output \(y[n]\) is given by:
+\[
+y[n] = x[n] * h[n] = \sum_{k=-\infty}^{\infty} x[k] h[n - k].
+\]
+\begin{popquiz}
+  What is the maximum non-zero value of \(y[n]\) if the length of \(x[n]\) is \(M\) and the length of \(h[n]\) is \(N\)? Note that in discrete-time for finite-length signals, the length of a signal is defined as the number of samples in the signal for which the signal is non-zero.
+
+  \popqsplit
+  The length of \(y[n]\) is \(M + N - 1\). To see this, use the graphical intuition of convolution. We flip the impulse response and slide it ($h[n-k]$) as $n$ varies, across the input signal $x[k]$. Mathematically, the flip is making $h[k]$ to $h[-k]$ and the slide is making it $h[n-k]$ (the shift to the right by $n$, for positive $n$). The first non-zero value of $y[n]$ occurs when the last (right most) non-zero sample of $h[n-k]$ aligns with the first non-zero sample of $x[k]$ (since $h$ was flipped). The last non-zero value of $y[n]$ occurs when the left-most non-zero sample of $h[n-k]$ aligns with the last non-zero sample of $x[k]$. So, the total number of non-zero samples in $y[n]$ is the sum of the lengths of $x[n]$ and $h[n]$ minus 1 (since the two end points are counted twice).
+\end{popquiz}
+\section{The importance of sinusoids}
+Historically, sinusoids have been very important in engineering and science. This is because many natural phenomena are periodic (for example, sound waves, light waves, etc.).  In engineering, the motion of rotation objects (for example, wheels, gears, etc.), the alternating current (AC) in power systems, and the oscillations in electrical circuits are all periodic. Therefore, we focus our attention to this most fundamental class of periodic signals: sinusoids.
+
+In defining convolution, the key idea was to express any given signal as a linear combination of shifted impulses. Similarly, we pose the following question: can we express any given periodic signal as a linear combination of sinusoids? The answer is yes, as you will see in the next few lectures.
+
+\subsection{Sinusoids are a special case of the general complex exponential}
+Recall that the general complex exponential is given by:
+\[
+x_g(t) = A_z e^{st},
+\]
+where \(A_z\) and \(s\) are complex numbers. We can write \(A_z\) and \(s\) in terms of their real and imaginary parts as:
+\[
+A_z = a_1 + j b_1, \quad s = \sigma + j\omega,
+\] 
+where \(a_1, b_1, \sigma, \omega\) are real numbers. Substituting these into the expression for \(x(t)\), we have:
+\[
+x(t) = (a_1 + j b_1) e^{(\sigma + j\omega)t} = (a_1 + j b_1) e^{\sigma t} e^{j\omega t}.
+\]
+The general complex exponential can be used to represent a wide variety of signals by choosing special case values of \(A_z\) and \(s\) and then taking the real or the imaginary part, as needed.
+
+\begin{popquiz}
+  For what values of \(A_z\) and \(s\) do we get a sinusoidal signal $x(t) = A\sin(\omega t)$? 
+  \popqsplit
+  For $A_z = A$ (a real number) and $s = j\omega$, that is, $\sigma = 0$, we have 
+  \[
+  x(t) = A e^{j\omega t} = A \cos(\omega t) + j A \sin(\omega t).
+  \]
+  Taking the imaginary part, we get $x(t) = \Im(x_g(t)) = A \sin(\omega t)$.
+\end{popquiz}
+Note that the sinusoidal signal is periodic with period \(T_0 = \frac{2\pi}{\omega}\). A simple way to denote a sinusoidal signal is to use the complex exponential notation: $A e^{j\omega t}$, and then take the real or imaginary part as needed. With the exponential function, we avoid the possibility of integration by parts (and we will be able to see more advantages next). 
+
+\section{The eigenfunction of LTI systems}
+Let us consider an LTI system with impulse response \(h(t)\) and an input $x(t) = Ae^{j\omega t}$. The output of the system is given by the convolution integral:
+\begin{align*}
+y(t) &= x(t) * h(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau \\
+\intertext{by commutativity of convolution, we can also write:}
+&= \int_{-\infty}^{\infty} h(\tau) x(t - \tau) d\tau \\
+&= \int_{-\infty}^{\infty} h(\tau) A e^{j\omega (t - \tau)} d\tau \\
+&= A e^{j\omega t} \left[\int_{-\infty}^{\infty} h(\tau) e^{-j\omega \tau} d\tau\right]
+\end{align*}
+This is a very interesting result! 
+
+\paragraph{Observation 1} The input appears exactly as it is in the output, except for a scaling factor that is within the square brackets. This means that when a complex exponential is input to an LTI system, the output is also a complex exponential signal. 
+
+\textbf{A word of caution:} the output above is only valid if the integral converges. This is true for physically realizable systems (for example, systems with stable impulse responses). More concretely, we need the impulse response to be absolutely integrable, that is, 
+\[\int_{-\infty}^{\infty} |h(t)| dt < \infty\] for the integral to converge. Then, the system is said to be BIBO (bounded-input bounded-output) stable since a bounded input will produce a bounded output (this is true, in general for any LTI system with absolutely integrable impulse response).
+
+\paragraph{Observation 2} For a general complex exponential input, the above derivation still holds:
+
+\[
+y(t) = A e^{st} \left[\int_{-\infty}^{\infty} h(\tau) e^{-s \tau} d\tau\right].
+\]
+
+In the equation above, you might recognize the term in the square brackets as the Laplace transform of the impulse response \(h(t)\) evaluated at \(s\)! So, the output of the system is the input scaled by the Laplace transform of the impulse response!
+
+
+\subsection{The meaning of the word ``eigen''}
+Recall the definition of eigenvalues and eigenvectors from linear algebra. For a square matrix \(A\), if there exists a non-zero vector \(v\) such that
+\[
+Av = \lambda v,
+\]
+where \(\lambda\) is a scalar, then \(v\) is called an eigenvector of \(A\) and \(\lambda\) is called the corresponding eigenvalue. The word ``eigen'' is a German word that means ``own'' or ``self'', or ``characteristic''. In the case of vectors, the eigenvectors are the special vectors that, when the matrix transformation $A$ is applied to them, the output remains in the same direction as $v$, just scaled by $\lambda$. So, they remain their ``own self'' even after the matrix transformation is applied to them. Now, since $v$ is a vector, it is called an eigenvector. 
+
+For our discussion on signals and systems, we do not have vectors. Instead, we have signals $x(t), y(t)$, and so on which are functions of time. So, we define a new term called \textbf{an eigenfunction}. 
+
+The meaning of eigenfunction is similar to that of eigenvectors. It is that special function that, when the system transformation is applied to it, the output remains the same function (up to a scaling factor). In our case, the complex exponential is that special function. When it is input to an LTI system, the output remains a complex exponential of the same frequency (up to a scaling factor). So, we say that complex exponentials are eigenfunctions of LTI systems.
+
+\section{Linear combinations of sinusoids}
+Since the system is linear, we can write the following for various combinations of inputs $a_i e^{s_i t}$:
+\begin{align*}
+  \text{if } x_1(t) &= a_1 e^{s_1 t}, \text{ then } y_1(t) = a_1 e^{s_1 t} H(s_1), \\
+  \text{if } x_2(t) &= a_2 e^{s_2 t}, \text{ then } y_2(t) = a_2 e^{s_2 t} H(s_2), \\
+  &\vdotswithin{=} \\
+  \text{if } x_n(t) &= a_n e^{s_n t}, \text{ then } y_n(t) = a_n e^{s_n t} H(s_n).
+\end{align*}
+By linearity, if the input is a linear combination of the above inputs, that is,
+\begin{equation}
+x(t) = \sum_{k=1}^{n} a_k e^{s_k t},
+\label{eq:lincomb}
+\end{equation}
+then the output is given by
+\[
+y(t) = \sum_{k=1}^{n} a_k e^{s_k t} H(s_k).
+\]
+This is a very powerful result! It means that if we can express any given signal as a linear combination of complex exponentials, then we can easily find the output of the system to that input.
+
+Now what remains is to write the equation~\eqref{eq:lincomb} for any given arbitrary signal. That is, can we represent any signal $x(t)$ as a linear combination of complex exponentials? This is where Fourier series comes in as it provides us a way to compute the coefficients \(a_k\) and the exponents \(s_k\) for periodic signals. We will see this in the next lecture.
+\section{Recommended Practice Problems}
+
+To practice the concepts learned in this lecture, here are the recommended examples and problems that you should practice:
+\begin{enumerate}
+  \item Example 3.1 in Oppenheim and Willsky Signals and Systems textbook (2nd edition): the problem with $x(t) = e^{j2t}$ and the system description given by $y(t) = x(t-3)$
+  \item Problems 3.17 and 3.18 in Oppenheim and Willsky Signals and Systems textbook (2nd edition).
+  \item A challenging (but similar to midterm 1) problem: Problem 3.13 in Oppenheim and Willsky Signals and Systems textbook (2nd edition) on computing the output of a periodic signal with period $T_0 = 8$ and impulse response $H(j\omega)$ given to you.
+\end{enumerate}
+
 \end{document}
