@@ -23,6 +23,7 @@ Consider the RC circuit example in previous problem sets and use its impulse res
 x(t) = \sum_{n=-\infty}^{\infty} \delta(t - n)
 \]
 
+Hint: You can find the Fourier series representation of the input signal and then use the property of LTI systems that relates the Fourier series coefficients of the input and output signals.
 \problempart[20 points] A square wave of amplitude 1 sketched below in Figure~\ref{fig:square_wave}. 
 \begin{figure}[h]
   \centering
@@ -59,17 +60,31 @@ x(t) = \sum_{n=-\infty}^{\infty} \delta(t - n)
 \caption{A square wave of amplitude $A$ and period $T=1$.}
 \label{fig:square_wave}
 
+
 \end{figure}
-\problempart[20 points] The $x(t)$ above in part (b) models a PWM signal that drives a motor at a fixed duty cycle. As you engineer your system dynamics, you decided to increase the speed of the motor by twice. For this new PWM signal, sketch the signal and use the answer from the previous part along with properties of LTI systems to find the Fourier series representation of the output signal.
+
+Hint: One period of the signal that is sketched above is \[
+x(t) = \begin{cases}
+1, & -\tfrac{1}{4} \le t < \tfrac{1}{4},\\
+0, & -\tfrac{1}{2} \le t < -\tfrac{1}{4},\\
+0, & \tfrac{1}{4} \le t < \tfrac{1}{2}.
+\end{cases}
+\]
+So, one possible time period is from $-\tfrac{1}{2}$ to $\tfrac{1}{2}$.
+\problempart[20 points] The $x(t)$ above in part (b) models a PWM signal that drives a motor at a fixed duty cycle. As you engineer your system, you realized that you need double the speed of the motor. For this new PWM signal, sketch the signal and use the answer from the previous part along with properties of LTI systems to find the Fourier series representation of the output signal.
+
+Hint: You can use the time-scaling property to solve this problem. Then use the previous results and properties of the Fourier series to get the final answer. So, you don't need to compute the Fourier series from scratch!
 
 \problempart[10 points] Write Python/MATLAB code to implement the signals in (b) and (c). Compute the outputs, the Fourier series representations, and plot the magnitude spectra of the outputs. Validate your results using these simulations. 
+
 \problem{2}
 Compute the Fourier series representation of the following signals. For each part, if you consider only the first $N$ terms of the Fourier series, compute the error energy in the representation for $N=1,2,3,4$. You are allowed to use computer programs for computations, if it helps.
 
-\problempart[15 points] A triangular signal sketched below in Figure~\ref{fig:problem2}A.
+\problempart[15 points] A triangular signal with time period = 1. The sketch below in Figure~\ref{fig:problem2}A shows the signal for one time period from 0 to 1. The signal repeats itself periodically from 1 to 2, 2 to 3, and so on (and also for negative time, so you get a periodic signal).
 
+Hint: This is only one part of the signal you worked on in the reading assignment. Use the results from that problem to get the Fourier series representation of this signal. 
 \problempart[15 points] 
-A rectangular signal sketched below in Figure~\ref{fig:problem2}B.
+A rectangular signal sketched below in Figure~\ref{fig:problem2}B for one time period from 0 to 2. The time period of this signal is 2. The signal is 1 from 0 to 1 and 0 from 1 to 2. The signal repeats itself periodically for all time.
 
 \begin{figure}[h]
 \centering
@@ -92,13 +107,14 @@ A rectangular signal sketched below in Figure~\ref{fig:problem2}B.
 \hspace{1.2cm}
 % Figure (b): y(t)
 \begin{tikzpicture}[x=3.0cm,y=3.0cm,line cap=round]
-\def\R{1.55}
+\def\R{2.5}
 % axes
 \draw[->] (-0.08,0)--(\R,0) node[below] {$t$};
 \draw[->] (0,-0.08)--(0,1.15);
 % ticks
 \draw (0,1) -- ++(-0.03,0) node[left] {1};
 \draw (1,0) -- ++(0,-0.03) node[below] {1};
+\draw (2,0) -- ++(0,-0.03) node[below] {2};
 \node[below left] at (0,0) {0};
 % signal y(t): unit rectangle on [0,1]
 \draw[very thick] (0,0) -- (0,1) -- (1,1) -- (1,0) -- (\R,0);
