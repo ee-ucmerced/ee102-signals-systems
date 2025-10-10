@@ -72,7 +72,7 @@ Moreover, note that $e^{jk 2\pi}= \cos(2\pi k)+j\sin(2\pi k)=1$ for every intege
 
 Let's start to answer the second part of the goal: how do we find $a_k$? We will start with a simple example.
 \subsection{Example: A mix-sinusoidal audio signal}
-Consider the Signal below that represents a combination of three sinusoids (added together). When you play a note of music at one specific frequency, you are playing one sinusoid. When you play a chord, you are playing multiple sinusoids at the same time by combining them together. So, in this example, we are representing an audio chord as a linear combination of complex exponentials to start our journey of representing \emph{any} periodic signal as a linear combination of complex exponentials.
+Consider the signal below that represents a combination of three sinusoids (added together). When you play a note of music at one specific frequency, you are playing one sinusoid. When you play a chord, you are playing multiple sinusoids at the same time by combining them together. So, in this example, we are representing an audio chord as a linear combination of complex exponentials to start our journey of representing \emph{any} periodic signal as a linear combination of complex exponentials.
 
 Consider
 \[
@@ -98,13 +98,12 @@ x(t)=\sum_{k=-6}^{6} a_k\,e^{jk\omega_0 t},\qquad \omega_0=2,
 with the nonzero Fourier series coefficients as
 \[
 \begin{aligned}
-&a_{\pm 1} = 0,\qquad a_{\pm 2}=\frac{1}{2},\qquad a_{\pm 3}=\pm \frac{1}{2j},\\
-&a_{\pm 4}=0,\qquad a_{\pm 5}=0,\qquad a_{\pm 6}=\pm \frac{1}{2j},\qquad a_0=0,
+a_{\pm 2}=\frac{1}{2},\qquad a_{\pm 3}=\pm \frac{1}{2j},a_{\pm 6}=\pm \frac{1}{2j},
 \end{aligned}
 \]
 where the ``$\pm$'' pairs obey $a_{-k}=a_k^\ast$ for this real $x(t)$. 
 
-Here, the $\cos$ term contributes the even coefficients $a_{\pm2}$; the $\sin$ terms contribute the odd, purely imaginary coefficients at $k=\pm3,\pm6$.
+Here, the $\cos$ term contributes the even coefficients $a_{\pm2}$; the $\sin$ terms contribute the odd, purely imaginary coefficients at $k=\pm3,\pm6$. All other $a_k$ are zero.
 
 \section{The Trigonometric Form of Fourier Series}
 If the linear combination form in equation~\eqref{eq:fourier-series} is confusing and the fact that ``we are representing everything as a linear combination of sinusoids'' is not obvious to you, you can see how we can rewrite the Fourier series synthesis equation~\eqref{eq:fourier-series} in a more familiar trigonometric form. Although you might not find the formulation below much useful, it will at least convince you that we are indeed representing everything as a linear combination of sinusoids.
@@ -115,18 +114,20 @@ For real $x(t)$, $x^\ast(t)=x(t)$, and
 x(t)=\sum_{k=-\infty}^{\infty} a_k e^{jk\omega_0 t}
 =\sum_{k=1}^{\infty}\!\left( a_k e^{jk\omega_0 t}+a_{-k} e^{-jk\omega_0 t}\right)+a_0.
 \]
-Since $x(t)$ is real, we must have $a_{-k}=a_k^\ast$. Therefore
+Since $x(t)$ is real, we must have $a_{-k}=a_k^\ast$ (you can see that this is indeed the case in the example above with real signals). Therefore
 \[
 x(t)=a_0+\sum_{k=1}^{\infty}\!\left[a_k e^{jk\omega_0 t}+a_k^\ast e^{-jk\omega_0 t}\right]
-= a_0+ 2\sum_{k=1}^{\infty} \Re\!\big\{a_k e^{jk\omega_0 t}\big\}.
+= a_0+ 2\sum_{k=1}^{\infty} \Re\!\big\{a_k e^{jk\omega_0 t}\big\},
 \]
+where we used the fact that for any complex number $z$, $z+z^\ast=2\Re\{z\}$.
+
 Writing $a_k=B_k+jC_k$ with $B_k,C_k\in\mathbb{R}$, we obtain the trigonometric form
 \begin{equation}
 \,x(t)=a_0+2\sum_{k=1}^{\infty}\!\big[\,B_k\cos(k\omega_0 t)-C_k\sin(k\omega_0 t)\,\big].\,
 \label{eq:trig-form}
 \end{equation}
 
-Equation~\eqref{eq:trig-form} shows that $x(t)$ is a linear combination of sinusoids at frequencies $k\omega_0$, $k=1,2,\ldots$ with real coefficients. The constant term $a_0$ is the DC component (average value) of $x(t)$ (as we will see again in the next section).
+Equation~\eqref{eq:trig-form} shows that $x(t)$ is a linear combination of sinusoids at frequencies $k\omega_0$, $k=1,2,\ldots$ with real coefficients. The constant term $a_0$ is the DC component (average value) of $x(t)$ (as we will see again in the next section). It's also finally an equation without any complex numbers or the imaginary term $j$ in it! So, it's hopefully more intuitive now. Let's continue towards our main goal --- finding $a_k$.
 
 \subsection{The Fourier coefficients}
 To find $a_k$ generally, let's start by multiplying both sides of equation~\eqref{eq:fourier-series} by $e^{-jn\omega_0 t}$ for some integer $n \in \mathbb{Z}$, we get
@@ -180,7 +181,7 @@ There are many helpful properties that you should know about Fourier series coef
 
 \paragraph{Linearity}
 
-If $z(t)=A x(t)+B y(t)$, then the Fourier Series coefficients satisfy
+For two periodic signals $x(t)$ and $y(t)$ with Fourier Series coefficients $a_k$ and $b_k$, if we construct another signal by linear superposition, $z(t)=A x(t)+B y(t)$, then the Fourier Series coefficients for $z(t)$ satisfy
 \[
 z(t)\;\Longleftrightarrow\; \{\,A a_k + B b_k\,\}_{k\in\mathbb{Z}}.
 \]
@@ -191,26 +192,95 @@ The Fourier series coefficients for the output $y(t)$ of a system with impulse r
 Let $y(t)=(x*h)(t)$ denote periodic convolution with period $T$.
 We write the Fourier series expansion of $x(t)$ and $h(t)$ as
 \[
-x(t)=\sum_{k} a_k e^{jk\omega_0 t},\qquad 
-h(t)=\sum_{m} b_m e^{jm\omega_0 t}.
+x(t)=\sum_{\ell=-\infty}^{\infty} a_\ell e^{j\ell\omega_0 t},
+\qquad
+h(t)=\sum_{m=-\infty}^{\infty} b_m e^{jm\omega_0 t},
+\qquad \omega_0=\tfrac{2\pi}{T}.
 \]
-Now, let's apply the periodic convolution integral to evaluate the Fourier series coefficients of $y(t)$:
+Let $y(t)=(x*h)(t)$ denote the periodic convolution (integrate only for one period):,
 \[
-y(t)=\int_{0}^{T} x(\tau)\,h(t-\tau)\,d\tau
-=\int_{0}^{T}\left(\sum_{\ell} a_\ell e^{j\ell\omega_0 \tau}\right)
-\left(\sum_{m} b_m e^{jm\omega_0 (t-\tau)}\right)d\tau.
+y(t)=\int_{0}^{T} x(\tau)\,h(t-\tau)\,d\tau .
 \]
-Interchanging sum and integral and using orthogonality,
+Let $\{c_k\}$ be the Fourier Series coefficients of $y(t)$, defined as
 \[
-y(t)= \sum_{k} \Big(T\,a_k b_k\Big)\,e^{jk\omega_0 t}.
+c_k=\frac1T \int_{0}^{T} y(t)\,e^{-jk\omega_0 t}\,dt .
 \]
-Therefore, if $y(t)=\sum_k c_k e^{jk\omega_0 t}$, then
-\[
-\,c_k = T\,a_k\,b_k\,
-\]
-which shows line-by-line filtering in the Fourier series domain.
 
-\paragraph{Filtering of output using aperiodic $h(t)$}
+We can find $c_k$ in terms of $a_k$ and $b_k$ using convolution as follows. Start by substituting the expression for $y(t)$ into the definition of $c_k$:
+\[
+c_k=\frac1T\int_{0}^{T} \left[\int_{0}^{T} x(\tau)\,h(t-\tau)\,d\tau\right]
+e^{-jk\omega_0 t}\,dt .
+\]
+
+Now, using the following equations for the Fourier Series expansions of $x(\tau)$ and $h(t-\tau)$ (this is also an in-place proof for the time-shift property of Fourier Series!):
+
+\[
+x(\tau)=\sum_{\ell} a_\ell e^{j\ell\omega_0 \tau}
+\]
+and
+\[
+h(t-\tau)=\sum_{m} b_m e^{jm\omega_0 (t-\tau)}
+= \sum_{m} b_m e^{jm\omega_0 t}\,e^{-jm\omega_0 \tau},
+\]
+we get
+\[
+\begin{aligned}
+c_k
+&=\frac1T\int_{0}^{T}\!\!\int_{0}^{T}
+\left(\sum_{\ell} a_\ell e^{j\ell\omega_0 \tau}\right)
+\left(\sum_{m} b_m e^{jm\omega_0 t}e^{-jm\omega_0 \tau}\right)
+e^{-jk\omega_0 t}\,d\tau\,dt .
+\end{aligned}
+\]
+
+Interchange sums and integrals and collect factors together to write,
+\[
+\begin{aligned}
+c_k
+&=\frac1T\sum_{\ell}\sum_{m} a_\ell b_m
+\int_{0}^{T}\!\!\int_{0}^{T}
+e^{j\ell\omega_0 \tau} \, e^{-jm\omega_0 \tau}\,
+e^{jm\omega_0 t}\,e^{-jk\omega_0 t}\, d\tau\,dt \\
+&=\frac1T\sum_{\ell}\sum_{m} a_\ell b_m
+\left[\int_{0}^{T} e^{j(m-k)\omega_0 t}\,dt\right]
+\left[\int_{0}^{T} e^{j(\ell-m)\omega_0 \tau}\,d\tau\right].
+\end{aligned}
+\]
+
+Finally, note that periodic integral over one period is 0 unless the integrand is constant. So, for any integers $p$,
+\(
+\int_{0}^{T} e^{jp\omega_0 t}\,dt
+=\begin{cases}
+T, & p=0,\\
+0, & p\neq 0.
+\end{cases}
+\)
+Hence the $t$-integral is zero unless $m=k$, and the $\tau$-integral is zero
+unless $\ell=m$:
+\[
+\int_{0}^{T} e^{j(m-k)\omega_0 t}\,dt = T\,\delta_{m,k},
+\qquad
+\int_{0}^{T} e^{j(\ell-m)\omega_0 \tau}\,d\tau = T\,\delta_{\ell,m}.
+\]
+
+So, only the terms with $\ell=m=k$ survive!
+\[
+c_k=\frac1T \sum_{\ell}\sum_{m} a_\ell b_m \,(T\delta_{m,k})\,(T\delta_{\ell,m})
+=\frac1T \,(T)(T)\, a_k b_k
+= T\,a_k b_k .
+\]
+
+\[
+c_k = T\,a_k\,b_k\,,\qquad k\in\mathbb{Z}.
+\]
+
+Thus, periodic convolution corresponds to a \emph{line-by-line} product of Fourier Series
+coefficients: each harmonic $k$ of the output equals $T$ times the product of
+the input and impulse response harmonics at the same $k$.
+
+
+
+\paragraph{Filtering of output using aperiodic impulse response}
 
 If $h(t)$ is aperiodic (but LTI) and $x(t)$ is $T$-periodic with Fourier Series coefficients $\{a_k\}$, then
 \[
@@ -221,7 +291,11 @@ Hence
 \[
 \,y(t)=\sum_{k=-\infty}^{\infty} a_k\,H(jk\omega_0)\,e^{jk\omega_0 t}\,
 \]
-i.e., each harmonic is scaled by the continuous-time frequency response $H(j\omega)$ evaluated at $\omega= k\omega_0$.
+i.e., each harmonic is scaled by the continuous-time frequency response $H(j\omega)$ evaluated at $\omega= k\omega_0$. So, the Fourier Series coefficients of $y(t)$ are
+\[
+c_k=a_k\,H(jk\omega_0).
+\]
+This will be very useful for your homework problems!
 
 \section{Practice Problems}
 \begin{enumerate}
