@@ -1,0 +1,233 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\input{preamble.tex}
+\renewcommand{\releasedate}{October 8, 2025}
+
+\newcommand{\Eblank}{\rule{3cm}{0.4pt}}
+\newcommand{\Rankblank}{\rule{3cm}{0.4pt}}
+
+\newcommand{\uof}[1]{u\!\left[#1\right]} % discrete-time unit step
+
+\begin{document}
+
+\section*{EE 102 Week 6, Lecture 2 (Fall 2025)}
+\subsection*{Instructor: \instructor}
+\subsection*{Date: \releasedate}
+
+\section{Introduction and Review}
+At the end of the previous lecture, we established that $e^{j\omega t}$ is an eigenfunction of LTI systems. That is, for an input $x(t)=e^{j\omega t}$, the output $y(t)$ is also a complex exponential at the same frequency $\omega$ but scaled by a complex number $H(j\omega)$:
+\[
+y(t)=H(j\omega)e^{j\omega t}.
+\]
+where 
+\[
+H(j\omega)=\int_{-\infty}^{\infty} h(\tau)\,e^{-j\omega \tau}\,d\tau.
+\]
+As a result of this \emph{very important} result, we proposed that if we are able to write any signal $x(t)$ as a linear combination of complex exponentials, then we can find the output $y(t)$ of an LTI system by simply scaling each complex exponential by $H(j\omega)$ and adding them up! 
+
+The previous line is a one-line summary of Fourier analysis and synthesis --- something that we will be spending a lot of time on in the next few weeks.
+
+We start this journey by positing the following problem:  Given a $T$-periodic signal $x(t)$, can we write it as a linear combination of complex exponentials? If so, how? More concretely, can we write
+\[
+x(t)=\sum_{k=-\infty}^{\infty} a_k\,e^{jk\omega_0 t}, 
+\qquad \omega_0=\tfrac{2\pi}{T},
+\]
+the complex Fourier series coefficients are $\{a_k\}$. Note that $a_k \in \mathbb{C}$ are complex numbers, in general. The big question is; how do we find $a_k$?
+
+\section{Goals}
+Represent any periodic signal $x(t)$ as a linear combination of complex exponentials:
+\begin{equation}
+x(t)=\sum_{k=-\infty}^{\infty} a_k\,e^{jk\omega_0 t}.
+\label{eq:fourier-series}
+\end{equation}
+Find the coefficients $a_k$.
+\section{Introduction to Fourier Series}
+Since the first part of the goal is ``any periodic signal $x(t)$'' and we are claiming that $x(t)$ can be written as a linear combination of complex exponentials. So, it must be true that (and we should make sure of it) that $e^{jk\omega_0 t}$ is periodic for every integer $k$.
+\begin{popquiz}
+Prove that (a) $e^{j\omega_0 t}$, (b) $e^{jk\omega_0 t}$ for $k \in \mathbb{Z}$, and (c) $\displaystyle\sum_{k=-\infty}^{\infty} e^{jk\omega_0 t}$ are all periodic and find their fundamental periods.
+\popqsplit
+We can just consider the general case: for $x(t) = e^{jk\omega_0 t}$ to be periodic with period $T$ we need
+$x(t+T)=x(t)$, i.e.,
+\[
+e^{jk\omega_0 (t+T)}=e^{jk\omega_0 t}
+\;\Longleftrightarrow\;
+e^{jk\omega_0 T}=1 
+\;\Longleftrightarrow\; k\omega_0 T=2\pi m,\; m\in\mathbb{Z}.
+\]
+Thus any $T=\dfrac{2\pi m}{k\omega_0}$ is a period and the smallest period (the fundamental period) is
+\[
+T_0=\frac{2\pi}{|k|\omega_0}.
+\]
+Since each harmonic $e^{jk\omega_0 t}$ has a period that is an integer divisor of $\dfrac{2\pi}{\omega_0}$, the sum of all harmonics is periodic with the common (fundamental) period
+\[
+T_0=\frac{2\pi}{\omega_0}.
+\]
+For $k=1$, we get the simpler result for $e^{j\omega_0 t}$.
+
+Moreover, note that $e^{jk 2\pi}= \cos(2\pi k)+j\sin(2\pi k)=1$ for every integer $k$, confirming periodicity.
+\end{popquiz}
+
+Let's start to answer the second part of the goal: how do we find $a_k$? We will start with a simple example.
+\subsection{Example: A mix-sinusoidal audio signal}
+Consider the Signal below that represents a combination of three sinusoids (added together). When you play a note of music at one specific frequency, you are playing one sinusoid. When you play a chord, you are playing multiple sinusoids at the same time by combining them together. So, in this example, we are representing an audio chord as a linear combination of complex exponentials to start our journey of representing \emph{any} periodic signal as a linear combination of complex exponentials.
+
+Consider
+\[
+x(t)=\sin(6t)+\cos(2t)+\sin(12t),\qquad \omega_0=2.
+\]
+Write $x(t)$ as a linear combination of $e^{jk\omega_0 t}$:
+\[
+\sin(6t)=\frac{1}{2j}\!\left(e^{j6t}-e^{-j6t}\right)
+= \frac{1}{2j}\!\left(e^{j(3)\omega_0 t}-e^{-j(3)\omega_0 t}\right),
+\]
+\[
+\cos(2t)=\frac{1}{2}\!\left(e^{j2t}+e^{-j2t}\right)
+=\frac{1}{2}\!\left(e^{j(1)\omega_0 t}+e^{-j(1)\omega_0 t}\right),
+\]
+\[
+\sin(12t)=\frac{1}{2j}\!\left(e^{j12t}-e^{-j12t}\right)
+= \frac{1}{2j}\!\left(e^{j(6)\omega_0 t}-e^{-j(6)\omega_0 t}\right).
+\]
+Hence
+\[
+x(t)=\sum_{k=-6}^{6} a_k\,e^{jk\omega_0 t},\qquad \omega_0=2,
+\]
+with the nonzero Fourier series coefficients as
+\[
+\begin{aligned}
+&a_{\pm 1} = 0,\qquad a_{\pm 2}=\frac{1}{2},\qquad a_{\pm 3}=\pm \frac{1}{2j},\\
+&a_{\pm 4}=0,\qquad a_{\pm 5}=0,\qquad a_{\pm 6}=\pm \frac{1}{2j},\qquad a_0=0,
+\end{aligned}
+\]
+where the ``$\pm$'' pairs obey $a_{-k}=a_k^\ast$ for this real $x(t)$. 
+
+Here, the $\cos$ term contributes the even coefficients $a_{\pm2}$; the $\sin$ terms contribute the odd, purely imaginary coefficients at $k=\pm3,\pm6$.
+
+\section{The Trigonometric Form of Fourier Series}
+If the linear combination form in equation~\eqref{eq:fourier-series} is confusing and the fact that ``we are representing everything as a linear combination of sinusoids'' is not obvious to you, you can see how we can rewrite the Fourier series synthesis equation~\eqref{eq:fourier-series} in a more familiar trigonometric form. Although you might not find the formulation below much useful, it will at least convince you that we are indeed representing everything as a linear combination of sinusoids.
+\subsection{From exponentials to trigonometry}
+
+For real $x(t)$, $x^\ast(t)=x(t)$, and
+\[
+x(t)=\sum_{k=-\infty}^{\infty} a_k e^{jk\omega_0 t}
+=\sum_{k=1}^{\infty}\!\left( a_k e^{jk\omega_0 t}+a_{-k} e^{-jk\omega_0 t}\right)+a_0.
+\]
+Since $x(t)$ is real, we must have $a_{-k}=a_k^\ast$. Therefore
+\[
+x(t)=a_0+\sum_{k=1}^{\infty}\!\left[a_k e^{jk\omega_0 t}+a_k^\ast e^{-jk\omega_0 t}\right]
+= a_0+ 2\sum_{k=1}^{\infty} \Re\!\big\{a_k e^{jk\omega_0 t}\big\}.
+\]
+Writing $a_k=B_k+jC_k$ with $B_k,C_k\in\mathbb{R}$, we obtain the trigonometric form
+\begin{equation}
+\,x(t)=a_0+2\sum_{k=1}^{\infty}\!\big[\,B_k\cos(k\omega_0 t)-C_k\sin(k\omega_0 t)\,\big].\,
+\label{eq:trig-form}
+\end{equation}
+
+Equation~\eqref{eq:trig-form} shows that $x(t)$ is a linear combination of sinusoids at frequencies $k\omega_0$, $k=1,2,\ldots$ with real coefficients. The constant term $a_0$ is the DC component (average value) of $x(t)$ (as we will see again in the next section).
+
+\subsection{The Fourier coefficients}
+To find $a_k$ generally, let's start by multiplying both sides of equation~\eqref{eq:fourier-series} by $e^{-jn\omega_0 t}$ for some integer $n \in \mathbb{Z}$, we get
+\[
+x(t)\,e^{-jn\omega_0 t}
+=\sum_{k=-\infty}^{\infty} a_k\,e^{jk\omega_0 t}\,e^{-jn\omega_0 t}
+=\sum_{k=-\infty}^{\infty} a_k\,e^{j(k-n)\omega_0 t}.
+\]
+Next, let us integrate this equation over $[0,T)$,
+\[
+\int_{0}^{T} x(t)\,e^{-jn\omega_0 t}\,dt
+=\sum_{k=-\infty}^{\infty} a_k \int_{0}^{T} e^{j(k-n)\omega_0 t}\,dt
+\]
+Now, we need to evaluate the integral on the right-hand side. We have two cases:
+\begin{itemize}
+\item If $k=n$, then 
+\[ \int_{0}^{T} e^{j(k-n)\omega_0 t}\,dt=\int_{0}^{T} 1\,dt=T\] since $e^{j0}=1$.
+
+\item If $k\neq n$, then we have 
+\[
+\int_{0}^{T} e^{j(k-n)\omega_0 t}\,dt
+\]
+Using orthogonality over one period $T$, this integral is 0 (since integrating a sinusoid over one period will lead to the positive and negative areas canceling out). You can verify this by direct integration too:
+\[
+\int_{0}^{T} e^{j(k-n)\omega_0 t}\,dt
+=\left[\frac{e^{j(k-n)\omega_0 t}}{j(k-n)\omega_0}\right]_{0}^{T}
+=\frac{e^{j(k-n)\omega_0 T}-1}{j(k-n)\omega_0}=0
+\]
+since $e^{j(k-n)\omega_0 T}=e^{j(k-n)2\pi}=1$ for every integer $k-n$ (from the pop-quiz above).
+\end{itemize}
+
+Hence, we have the Fourier series analysis equation (the equation that gives us values of $a_k$):
+\[
+\,a_n=\frac{1}{T}\int_{0}^{T} x(t)\,e^{-jn\omega_0 t}\,dt\,
+\qquad n\in\mathbb{Z},
+\]
+if you replace $n$ by $k$, you get the more familiar form:
+\[
+a_k=\frac{1}{T}\int_{0}^{T} x(t)\,e^{-jk\omega_0 t}\,dt,
+\qquad k\in\mathbb{Z},
+\]
+which is the formula for the Fourier series coefficients.
+Note that for $k=0$, we have
+\[
+a_0=\frac{1}{T}\int_{0}^{T} x(t)\,dt,
+\]
+which is the average value (or DC component) of $x(t)$ over one period.
+
+\subsection{Properties of Fourier Series coefficients}
+There are many helpful properties that you should know about Fourier series coefficients. Here are a few of them (you can find the full list in the textbook):
+
+\paragraph{Linearity}
+
+If $z(t)=A x(t)+B y(t)$, then the Fourier Series coefficients satisfy
+\[
+z(t)\;\Longleftrightarrow\; \{\,A a_k + B b_k\,\}_{k\in\mathbb{Z}}.
+\]
+
+\paragraph{Periodic convolution}
+The Fourier series coefficients for the output $y(t)$ of a system with impulse response $h(t)$ to a periodic input $x(t)$ can be computed using periodic convolution.
+
+Let $y(t)=(x*h)(t)$ denote periodic convolution with period $T$.
+We write the Fourier series expansion of $x(t)$ and $h(t)$ as
+\[
+x(t)=\sum_{k} a_k e^{jk\omega_0 t},\qquad 
+h(t)=\sum_{m} b_m e^{jm\omega_0 t}.
+\]
+Now, let's apply the periodic convolution integral to evaluate the Fourier series coefficients of $y(t)$:
+\[
+y(t)=\int_{0}^{T} x(\tau)\,h(t-\tau)\,d\tau
+=\int_{0}^{T}\left(\sum_{\ell} a_\ell e^{j\ell\omega_0 \tau}\right)
+\left(\sum_{m} b_m e^{jm\omega_0 (t-\tau)}\right)d\tau.
+\]
+Interchanging sum and integral and using orthogonality,
+\[
+y(t)= \sum_{k} \Big(T\,a_k b_k\Big)\,e^{jk\omega_0 t}.
+\]
+Therefore, if $y(t)=\sum_k c_k e^{jk\omega_0 t}$, then
+\[
+\,c_k = T\,a_k\,b_k\,
+\]
+which shows line-by-line filtering in the Fourier series domain.
+
+\paragraph{Filtering of output using aperiodic $h(t)$}
+
+If $h(t)$ is aperiodic (but LTI) and $x(t)$ is $T$-periodic with Fourier Series coefficients $\{a_k\}$, then
+\[
+y(t)=(x*h)(t)=\int_{-\infty}^{\infty} h(\tau)\,x(t-\tau)\,d\tau
+= \sum_{k} a_k e^{jk\omega_0 t}\,\underbrace{\int_{-\infty}^{\infty} h(\tau)\,e^{-jk\omega_0 \tau}\,d\tau}_{\displaystyle H(jk\omega_0)}.
+\]
+Hence
+\[
+\,y(t)=\sum_{k=-\infty}^{\infty} a_k\,H(jk\omega_0)\,e^{jk\omega_0 t}\,
+\]
+i.e., each harmonic is scaled by the continuous-time frequency response $H(j\omega)$ evaluated at $\omega= k\omega_0$.
+
+\section{Practice Problems}
+\begin{enumerate}
+    \item Solved Example 3.6 in Oppenheim and Willsky (2nd Edition) --- the square wave
+    \item Solved Example 3.7 in Oppenheim and Willsky (2nd Edition) --- the ramp function
+    \item Work through the properties in Table 3.1 in Oppenheim and Willsky (2nd Edition)
+    \item Solved Example 3.5 in Oppenheim and Willsky (2nd Edition) --- the square wave \textbf{(this is similar to HW 6 problem 1 and 2!)}
+\end{enumerate}
+\end{document}
