@@ -1,0 +1,224 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\input{preamble.tex}
+\renewcommand{\releasedate}{October 13, 2025}
+
+\newcommand{\Eblank}{\rule{3cm}{0.4pt}}
+\newcommand{\Rankblank}{\rule{3cm}{0.4pt}}
+
+\newcommand{\uof}[1]{u\!\left[#1\right]} % discrete-time unit step
+
+\begin{document}
+
+\section*{EE 102 Week 7, Lecture 1 (Fall 2025)}
+\subsection*{Instructor: \instructor}
+\subsection*{Date: \releasedate}
+
+\section{Goals}
+By the end of this lecture, you should be able to:
+\begin{itemize}
+\item Review EE 102 so far and discuss course goals. 
+\item Appreciate the motivation behind signals and systems. 
+\item Understand how linear combinations of sinusoids can approximate arbitrary signals.
+\item Analyze the Fourier series representation of discrete-time periodic signals.
+\end{itemize}
+
+\section{Review of EE 102 So Far}
+\subsection{Review: Signals}
+We started this course by introducing signals (as mathematical functions that convey information). In continuous-time, we denote signals as $x(t)$, where $t$ is a continuous variable representing time and in discrete-time, we denote signals as $x[n]$, where $n$ is an integer representing the sample index. Then, we set up many properties and transformations that can be applied to signals. Here's a reminder of some of the most notable ones:
+\begin{itemize}
+\item Time-shifting: $x(t - t_0)$ shifts the signal $x(t)$ to the right by $t_0$ units.
+\item Time-scaling: $x(at)$ compresses the signal if $a > 1$ and stretches it if $0 < a < 1$.
+\item Time-reversal: $x(-t)$ flips the signal around the vertical axis.
+\item Periodicity: A signal $x(t)$ is periodic with period $T$ if $x(t + T) = x(t)$ for all $t$.
+\item Even and odd signals: A signal is even if $x(t) = x(-t)$ and odd if $x(t) = -x(-t)$.
+\end{itemize}
+\subsection{Review: The trio of special signals}
+We spent quite a bit of time discussing three special signals that are fundamental to signal processing:
+
+\paragraph{The unit impulse signal:} The unit impulse signal, denoted as $\delta(t)$ in continuous-time and $\delta[n]$ in discrete-time, is defined as:
+\[
+\delta(t) = \begin{cases}
+\infty, & t = 0 \\
+0, & t \neq 0
+\end{cases}
+\]
+So, it is zero everywhere except at $t = 0$, where it is infinitely high! A useful way to define it is through its integral property:
+\[
+\int_{-\infty}^{\infty} \delta(t) dt = 1
+\]
+In discrete-time, the unit impulse is defined as:
+\[
+\delta[n] = \begin{cases}
+1, & n = 0 \\
+0, & n \neq 0
+\end{cases}
+\]
+and it has the summation property:
+\[
+\sum_{n=-\infty}^{\infty} \delta[n] = 1
+\]
+
+\paragraph{The unit step signal:} The unit step signal, denoted as $u(t)$ in continuous-time and $u[n]$ in discrete-time, is defined as:
+\[
+u(t) = \begin{cases}
+1, & t \geq 0 \\
+0, & t < 0
+\end{cases}
+\]
+In discrete-time, the unit step is defined as:
+\[
+u[n] = \begin{cases}
+1, & n \geq 0 \\
+0, & n < 0
+\end{cases}
+\]
+
+We discussed how integration of the unit impulse gives the unit step:
+\[
+u(t) = \int_{-\infty}^{t} \delta(\tau) d\tau
+\]
+and summation of the unit impulse gives the unit step in discrete-time:
+\[
+u[n] = \sum_{k=-\infty}^{n} \delta[k]
+\]
+
+\paragraph{The complex exponential signal:} The complex exponential signal, in its general form, is given by:
+\[
+x(t) = Ae^{st}
+\]
+where $A$ and $s$ are complex numbers. For $s = j\omega$ (purely imaginary) and $A \in \mathbb{R}$, we get sinusoidal signals (cosine and sine):
+\[
+x(t) = Ae^{j\omega t} = A\cos(\omega t) + jA\sin(\omega t)
+\]
+
+\subsection{The overarching goal of signal processing}
+Although you can state the goal in many formal ways, let us try to simplify the goal down to something that we can make intuitive sense of. We define the trio of special signals above for a reason --- the central hypothesis of signal processing is that \textbf{any arbitrary signal can be broken down into a sum of these special signals}. That is, you can write any signal $x(t)$ only using impulses, or only using steps, or only using complex exponentials! So, we set ourselves the following question:
+
+\begin{center}\boxed{\text{How can we represent any arbitrary signal using only these special signals?}}\end{center}
+
+\subsection{The sifting property to write signals using impulses}
+The sifting property of the impulse function allows us to express any continuous-time signal $x(t)$ as an integral of scaled and shifted impulses:
+\[
+x(t) = \int_{-\infty}^{\infty} x(\tau) \delta(t - \tau) d\tau
+\]
+In discrete-time, we can express any signal $x[n]$ as a sum of scaled and shifted impulses:
+\[
+x[n] = \sum_{k=-\infty}^{\infty} x[k] \delta[n - k]
+\]
+ You can imagine that breaking a signal down into impulses is not that hard --- you just need to sample the signal at literally every point in time and place an impulse at that point with the appropriate scaling. So, it is intuitive! Similarly, we can visualize easily how any arbitrary signal can be constructed using steps (imagine a staircase approximation of a signal). Mathematically, this follows from the fact that the step is the integral of the impulse. However, the last special signal --- the complex exponential --- is not as intuitive. How can we represent any arbitrary signal using only complex exponentials? We know that complex exponential, $e^{j \omega t}$ is an oscillatory signal. It is not that obvious how we can use oscillatory signals to represent arbitrary signals. We discuss this next.
+\subsection{Using complex exponentials to represent signals}
+The Fourier analysis is the answer to this question. We are currently engaged in building towards Fourier analysis that will let us express any arbitrary signal as a sum of complex exponentials. Since the idea is not that intuitive, the mathematical foundations are also not as straightforward as the sifting property. So, we simplify the task --- we first ask a simpler question for signals with nicer properties. We ask ``can we represent periodic signals using complex exponentials?'' The answer is yes, and this is the Fourier series representation of periodic signals. 
+
+\subsection{Introduction systems}
+To realize any application of signals and signal processing, we need to introduce the ``processing'' examples. This is what gets us to ``systems''. A system is an object that takes in an input signal, processes it, and produces an output signal. We denote systems using a block diagram as shown below:
+\[
+\begin{array}{c}
+\text{Input } x(t) \quad \longrightarrow \quad \boxed{\text{System}} \quad \longrightarrow \quad \text{Output } y(t)
+\end{array}
+\]
+
+\subsection{Properties of systems}
+We discussed many properties of systems. Here are some of the most important ones:
+\begin{itemize}
+\item Linearity: A system is linear if it satisfies the principles of superposition and scaling. That is, for any inputs $x_1(t)$ and $x_2(t)$, and any scalars $a$ and $b$, the system satisfies: 
+\[
+y(t) = T\{ax_1(t) + bx_2(t)\} = ay_1(t) + by_2(t)
+\]
+where $y_1(t) = T\{x_1(t)\}$ and $y_2(t) = T\{x_2(t)\}$.
+\item Time-invariance: A system is time-invariant if a time shift in the input signal results in an identical time shift in the output signal. That is, if $y(t) = T\{x(t)\}$, then for any time shift $t_0$, we have: 
+\[
+y(t - t_0) = T\{x(t - t_0)\}
+\]
+\end{itemize}
+
+For LTI systems, we can compute the output of the system to any arbitrary input using the convolution operation. 
+\subsection{Impulse response and convolution}
+We define the impulse response of an LTI system as the output of the system when the input is an impulse signal. That is, if the input to the system is $\delta(t)$, then the output is $h(t)$, which is the impulse response. In block diagram form:
+\[
+\begin{array}{c}
+\delta(t) \quad \longrightarrow \quad \boxed{\text{LTI System}} \quad \longrightarrow \quad h(t)
+\end{array}
+\]
+The impulse response characterizes the behavior of the LTI system completely. For any arbitrary input signal $x(t)$, the output $y(t)$ can be computed using the convolution operation:
+\[
+y(t) = x(t) * h(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau
+\]
+
+Now, we move on to the next question that remains unanswered --- how can we represent signals using complex exponentials? and how can we use this to find out the output of LTI systems to arbitrary inputs?
+
+We will spend the next 2-3 weeks answering this question using Fourier analysis.
+\begin{popquiz}
+In your own words, write the goals of signal processing. Then, describe what Fourier series is and write both the synthesis and analysis equations for Fourier series.
+\popqsplit
+The Fourier series synthesis equation lets us \emph{synthesize} a periodic signal $x(t)$ using a sum of complex exponentials:
+\[
+x(t) = \sum_{k=-\infty}^{\infty} a_k e^{j k \omega_0 t}
+\]
+where $a_k$ are the Fourier coefficients and $\omega_0 = \frac{2\pi}{T}$ is the fundamental frequency for a signal with period $T$.
+
+The Fourier series analysis equation lets us \emph{analyze} a periodic signal $x(t)$ to find its Fourier coefficients:
+\[
+a_k = \frac{1}{T} \int_{T} x(t) e^{-j k \omega_0 t} dt
+\]
+where the integration is over a period. 
+\end{popquiz}
+
+\section{Properties of Fourier Series}
+We discussed the linearity and time-shifting properties of Fourier series last time. Here's a reminder:
+\begin{itemize}
+    \item Linearity: If $x_1(t)$ and $x_2(t)$ have Fourier coefficients $a_k$ and $b_k$ respectively, then for any scalars $A$ and $B$, the signal $x(t) = A x_1(t) + B x_2(t)$ has Fourier coefficients:
+    \[c_k = A a_k + B b_k
+    \]
+    \item Time-shifting: If $x(t)$ has Fourier coefficients $a_k$, then the time-shifted signal $x(t - t_0)$ has Fourier coefficients:
+    \item \[c_k = a_k e^{-j k \omega_0 t_0}
+    \]
+\end{itemize}
+
+We also discussed the filtering property and derived it using convolution. For a system with impulse response $h(t)$ and a periodic input $x(t)$, the Fourier coefficients of the output $y(t)$ are given by:
+\[
+c_k = a_k H(j k \omega_0)
+\]
+where from the convolution equation, we found that 
+\[
+H(j k \omega_0) = \int_{-\infty}^{\infty} h(t) e^{-j k \omega_0 t} dt.
+\]
+Note that this is called the \emph{frequency response} of the system.
+
+\begin{popquiz}
+Prove the differentiation property of the Fourier series. That is, if $x(t)$ has Fourier coefficients $a_k$, then show that the derivative $x'(t)$ has Fourier coefficients $c_k = j k \omega_0 a_k$.
+\popqsplit 
+We start with the Fourier series synthesis equation for $x(t)$:
+\[
+x(t) = \sum_{k=-\infty}^{\infty} a_k e^{j k \omega_0 t}
+\]
+Differentiating both sides with respect to $t$, we get:
+\[
+x'(t) = \sum_{k=-\infty}^{\infty} a_k \frac{d}{dt} e^{j k \omega_0 t} = \sum_{k=-\infty}^{\infty} a_k (j k \omega_0) e^{j k \omega_0 t}
+\]
+Thus, the Fourier coefficients of $x'(t)$ are:
+\[
+c_k = j k \omega_0 a_k
+\]
+You can also derive this using the analysis equation by integrating by parts (will be much harder!) or by using the filtering equation above by observing that differentiation in time domain corresponds to multiplication by $j \omega$ in frequency domain.
+\end{popquiz}
+
+\section{Discrete-time Fourier Series}
+In discrete-time, the Fourier series synthesis and analysis follows pretty much the same form as continuous-time. The synthesis equation is given by:
+\[
+x[n] = \sum_{k=0}^{N-1} a_k e^{j k \omega_0 n}
+\]
+where $N$ is the period of the signal and $\omega_0 = \frac{2\pi}{N}$ is the fundamental frequency. The analysis equation is given by:
+\[
+a_k = \frac{1}{N} \sum_{n=0}^{N-1} x[n] e^{-j k \omega_0 n}
+\]
+Note that the integration is replaced by a summation in discrete-time. Also, the sum in the synthesis equation is from $0$ to $N-1$ because the Fourier coefficients are periodic with period $N$ in discrete-time. You may also use any integer multiples of $N$ in the limits of the summation, as you are only summing over one period. 
+
+\section{Recommended Practice Problems}
+
+To practice the concepts learned in this lecture, here are the recommended examples and problems that you should practice:
+
+\end{document}

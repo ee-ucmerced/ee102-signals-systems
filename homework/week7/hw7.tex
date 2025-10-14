@@ -1,0 +1,46 @@
+
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+
+
+\documentclass{ee102_pset}
+\input{macros.tex}
+\input{preamble.tex}
+
+% Assignment info
+\author{\rule{3cm}{0.4pt}} % Name placeholder
+\submitdate{\rule{3cm}{0.4pt}} % Submission date placeholder
+\problemset{Homework \#7: Applications of Fourier Series}
+
+\renewcommand{\duedate}{October 20, 2025}
+\shorttitle{Homework \#7}
+
+\begin{document}
+\problem{1}
+
+[Adapted from Oppenheim and Willsky, Problem 3.62]
+
+Using full-wave rectification, we can create a DC power supply using AC signal input. Answer the following questions about this system:
+
+\problempart[5 points] Sketch a block diagram of the rectifier system. Note that the input is an AC signal x(t) and the output is a DC signal y(t).
+\problempart[5 points] Write the output signal y(t) as a function of the input signal x(t).
+\problempart[5 points] Sketch the input and output waveforms if $x(t) = \cos(t)$. What are the fundamental periods of the input and output?
+
+\problempart[15 points] If $x(t) = \cos(t)$, determine the coefficients of the Fourier series for the output $y(t)$ using two approaches: 
+\begin{itemize}
+\item Directly from the definition of the Fourier series analysis equation.
+\item Using the relationship between the Fourier series coefficients of the input and output signals.
+\end{itemize}
+
+\problempart[10 points] What is the amplitude of the DC component of the input signal? What is the amplitude of the DC component of the output signal?
+
+\problempart[10 points] Model your domestic power supply input as a sinusoidal signal. Find the amplitudes and frequency used in the US for the AC power supply to describe the input. Sketch both input and the output waveforms for this input. Compute its Fourier series coefficients.
+
+\problempart[20 points] Approximate the output signal (rectified signal) using the first $N$ non-zero terms of its Fourier series (use $N = 5$ as a starting point). Using computer programming, compute the error energy between the actual output signal and the approximated output signal (as it changes with $N$). Plot the error as a function of time for one period of the output signal.
+
+\problempart[10 points] Write down the Parseval's theorem for Fourier series and validate the theorem computationally by computing the energy of the output signal using both sides of the theorem. Comment on your results.
+
+\problempart[20 points] Due to a fault in the AC power supply, the input signal is (very slowly) decaying exponentially with time. Show that you can model a decaying sinusoidal input signal by choosing the constants in the general form of the complex exponential signal $x(t) = Ae^{st}$, where $s = \sigma + j\omega$. With an appropriate choice of constants, compute the Fourier series coefficients of the output signal for this input. How does this compare to the Fourier series coefficients of the output signal for a pure sinusoidal input? Using Fourier analysis and comparion of coefficients, can you explain the differences in the output signals for these two cases?
+
+\end{document}
