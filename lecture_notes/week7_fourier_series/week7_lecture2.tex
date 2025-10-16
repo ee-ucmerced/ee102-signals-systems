@@ -1,0 +1,144 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\input{preamble.tex}
+\renewcommand{\releasedate}{October 13, 2025}
+
+\newcommand{\Eblank}{\rule{3cm}{0.4pt}}
+\newcommand{\Rankblank}{\rule{3cm}{0.4pt}}
+
+\newcommand{\uof}[1]{u\!\left[#1\right]} % discrete-time unit step
+
+\begin{document}
+
+\section*{EE 102 Week 7, Lecture 1 (Fall 2025)}
+\subsection*{Instructor: \instructor}
+\subsection*{Date: \releasedate}
+
+\section{Goals}
+By the end of this lecture, you should be able to:
+\begin{itemize}
+\item Understand that Fourier series is the optimal approximator of periodic signals. That is, it minimizes the error energy between the actual signal and the approximated signal.
+\item Apply Parseval's theorem and Fourier series property to analyze a real-world engineering system. 
+\end{itemize}
+
+\section{Review}
+Recall the Fourier Series (FS) synthesis equation:
+\[
+x(t) = \sum_{k=-\infty}^{\infty} a_k e^{j k \omega_0 t}
+\]
+where we sum infinite number of terms to get the signal back \emph{exactly}. But what if we only use a finite number of terms? We can define a truncated sum:
+\[
+x_{\text{FS},N}(t) = \sum_{k=-N}^{N} a_k e^{j k \omega_0 t}
+\]
+where \(N\) is a positive integer. This is an approximation of the original signal \(x(t)\). We can define an error signal
+\[
+e_N(t) = x(t) - x_{\text{FS},N}(t)
+\]
+and the error energy over a period as
+\[
+E_N = \int_{t_0}^{t_0+T} |e_N(t)|^2 dt
+\]
+where \(T\) is the period of the signal.
+
+The key idea is that FS gives us an approximation of the signal that minimizes this error energy \(E_N\) for a given \(N\). This means that among all possible ways to approximate \(x(t)\) using \(2N+1\) terms, the FS approximation \(x_{\text{FS},N}(t)\) is the best in terms of minimizing the error energy. Further, in the limit of \(N \to \infty\), the error energy \(E_N\) approaches zero, and the approximation becomes exact.
+
+\section{Intution for sums of sinusoids}
+We have noted many times that the FS gives us a way to write any periodic signal as a sum of sinusoids. But how would this be possible for signals with discontinuities? This is unintuitive because sinusoids are smooth, oscillating functions. So, how can they combine together to form a signal that is dicontinuous, like an impulse train, for example?
+
+To build intuition for this fact, recall that Fourier series for real signals is a sum of cosines. We start by writing the exponential FS:
+\[
+x(t) = \sum_{k=-\infty}^{\infty} a_k e^{j k \omega_0 t}
+\]
+where \(a_k\) are the complex Fourier coefficients. For real signals, we can use the property that \(a_{-k} = a_k^*\) to rewrite this by breaking the sum into positive and negative \(k\) terms, and the DC term for \(k=0\):
+\[
+x(t) = a_0 + \sum_{k=1}^{\infty} a_k e^{j k \omega_0 t} + \sum_{k=-\infty}^{-1} a_k e^{j k \omega_0 t}
+\]
+Now, apply a change of variable \(m = -k\) in the last sum:
+\[
+x(t) = a_0 + \sum_{k=1}^{\infty} a_k e^{j k \omega_0 t} + \sum_{m=1}^{\infty} a_{-m} e^{-j m \omega_0 t}
+\]
+We can combine the two sums now as they both have the same limits. In combining the sums, we also recall the property that for real signals \(a_{-k} = a_k^*\):
+\[
+x(t) = a_0 + \sum_{k=1}^{\infty} \left( a_k e^{j k \omega_0 t} + a_k^* e^{-j k \omega_0 t} \right)
+\]
+Finally, we can use Euler's formula to rewrite the terms in the sum as cosines. 
+
+\paragraph{Case 1: Real and Even}
+Let's consider a simple case. For real and even signals, the Fourier coefficients \(a_k\) are real and even. This means that \(a_k = a_k^*\) and \(a_{-k} = a_k\). Therefore, we can write:
+\[
+x(t) = a_0 + \sum_{k=1}^{\infty} 2 a_k \cos(k \omega_0 t)
+\]
+This is a sum of cosines with amplitudes \(2 a_k\)! 
+
+\paragraph{Case 2: Complex $a_k$}
+For general real signals, the Fourier coefficients \(a_k\) are complex. We can express \(a_k\) in polar form as \(a_k = |a_k| e^{j \phi_k}\), where \(|a_k|\) is the magnitude and \(\phi_k\) is the phase. Then, we can write:
+\[
+x(t) = a_0 + \sum_{k=1}^{\infty} 2 |a_k| \cos(k \omega_0 t + \phi_k)
+\]
+This is a sum of cosines with amplitudes \(2 |a_k|\) and phase shifts \(\phi_k\).
+
+\begin{popquiz}
+On Desmos Graphing Calculator, explore how sums of cosines can approximate discontinuities. Create a visual graph that ``looks'' like a train of impulses.
+\popqsplit
+Keep on adding cosine sums with higher frequencies and observe how the approximation improves.
+\end{popquiz}
+
+\subsection{Virtual manipulator: Gibbs Phenomena}
+For a train of impulses (HW \#6 Problem 1), the Fourier coefficients are all equal to \(1/T\). Therefore, the FS representation is:
+\[
+x(t) = \sum_{k=-\infty}^{\infty} \frac{1}{T} e^{j k \omega_0 t}
+\]
+Explore the virtual manipulative on Fourier analysis of impulses by running \texttt{streamlit run VM\_impulse\_fourier\_analysis.py} on your computer. Then, attempt to show the following by changing the knobs on the simulation:
+\begin{itemize}
+    \item With two sinusoids being displayed (the last slider), draw on your notebook the points where constructive and destructive interference happens.
+    \item Increase the number of harmonics (that is, how many high-frequency sinusoids are being added) iteratively and observe the behavior of the summed-up sinusoids near the discontinuities. What do you observe? This is called the Gibbs Phenomenon.
+    \item What happens to the error energy as you increase the number of harmonics?
+    \item Recall that an impulse is a signal with infinite height, zero width, and unit area. Can you explain how the sum of sinusoids is able to approximate such a signal?
+\end{itemize}
+
+\section{Parseval's Theorem}
+As briefly discussed earlier, Fourier series gives us the optimal approximation of a periodic signal in terms of minimizing the error energy. This is formalized by Parseval's theorem, which states that the total energy of a periodic signal over one period is equal to the sum of the squares of its Fourier coefficients multiplied by the period. To prove this relation mathematically, we start with the FS synthesis equation and compute the signal energy over one period:
+\[
+E = \int_{t_0}^{t_0+T} |x(t)|^2 dt
+\]
+Substituting the FS synthesis equation into this integral, we have:
+\[
+E = \int_{t_0}^{t_0+T} \left| \sum_{k=-\infty}^{\infty} a_k e^{j k \omega_0 t} \right|^2 dt
+\]
+Expanding the square using the definition of magnitude squared of a complex number \(z\) as \(z z^*\), we get:
+\[
+E = \int_{t_0}^{t_0+T} \left( \sum_{k=-\infty}^{\infty} a_k e^{j k \omega_0 t} \right) \left( \sum_{m=-\infty}^{\infty} a_m^* e^{-j m \omega_0 t} \right) dt
+\]
+Bring the sums outside the integral:
+\[
+E = \sum_{k=-\infty}^{\infty} \sum_{m=-\infty}^{\infty} a_k a_m^* \int_{t_0}^{t_0+T} e^{j (k - m) \omega_0 t} dt
+\]
+The integral evaluates to \(T\) when \(k = m\) and \(0\) otherwise, due to the orthogonality of the complex exponentials (the area under curve cancels out for sinusoids over one period). Therefore, we have:
+\[
+E = \sum_{k=-\infty}^{\infty} |a_k|^2 T
+\]
+Dividing both sides by \(T\), we arrive at Parseval's theorem:
+\[
+\frac{1}{T} \int_{t_0}^{t_0+T} |x(t)|^2 dt = \sum_{k=-\infty}^{\infty} |a_k|^2
+\]
+
+Interpretations:
+
+\paragraph{Energy conservation:} 
+
+The total energy of the signal over one period is equal to the sum of the energies of its frequency components. Also, the energy in the time domain is equal to the energy in the frequency domain.
+
+\paragraph{Ease of computation of energy:} Parseval's theorem provides a convenient way to compute the energy of a signal in the frequency domain, which can be easier than computing it directly in the time domain (in some cases).
+
+\section{Recommended Practice Problems}
+
+\begin{itemize}
+    \item Drill 3.10 (on rectifier) in Lathi. This problem is very similar to your HW \#7 problem (not identical).
+    \item Example 3.14 in Lathi. Note that this is an advanced problem so you may want to read through it first.
+    \item Table 3.1 in Oppenheim and Willsky and Table 3.1 in Lathi are both handy tables to screenshot and keep close!
+\end{itemize}
+
+\end{document}
