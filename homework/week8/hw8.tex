@@ -7,7 +7,7 @@
 \input{preamble.tex}
 
 % Assignment info
-\author{Ayush Pandey}
+\author{\rule{3cm}{0.4pt}} % Name placeholder
 \submitdate{\rule{3cm}{0.4pt}} % Submission date placeholder
 \problemset{Homework \#8: Practice midterm 2 and study guide}
 % renew instructor to be empty
@@ -16,15 +16,30 @@
 \shorttitle{Homework \#8}
 
 \begin{document}
-\problem{1}
-Convolution 
-\problem{2}
-Fourier series 
-\problem{3}
-More general, fourier transform / filtering / freq. response 
 
+\problem{1}
+
+\problempart [5 points] In previous homework assignments, you have derived the impulse response of an RC circuit. Look up your previous solutions/lecture notes and write down the impulse response of an RC circuit.
+
+\problempart [20 points] By following the approach we used to derive the impulse response of an RC circuit, derive the impulse response of an RL circuit. An RL circuit consists of a resistor and an inductor in series. Note that the voltage across the inductor is given by $v_L(t) = L \frac{di(t)}{dt}$, where $L$ is the inductance of the inductor and $i(t)$ is the current flowing through the inductor.
+
+\problempart [20 points] For a step input voltage signal $v_{\text{in}}(t) = V_0 u(t)$, derive the output voltage across the inductor $v_{\text{out}}(t)$ for the RL circuit. Compare this answer to the output voltage across the capacitor $v_{\text{out}}(t)$ for the RC circuit with the same step input voltage signal.
+
+\problempart [25 points] For a square wave input voltage signal (use the square wave from HW \#6 Problem 1b), derive the output voltage across the inductor $v_{\text{out}}(t)$ for the RL circuit. If the square wave input is applied to the RC circuit instead, find the output voltage across the capacitor $v_{\text{out}}(t)$.
+
+For this problem, start by writing down the Fourier series representation of the square wave input signal. Then, find out the response of the RC and the RL circuits to a complex exponential input signal of the form $e^{j \omega t}$ using the convolution integral (look up the eigenfunction property of LTI systems in the lecture notes, if needed). Finally, use the Fourier series representation of the square wave and the responses to complex exponentials to find the output voltage signals for both circuits by using the principle of superposition for the LTI systems.
+
+\problem{2} 
+[10 points] Which signal is the biggest in your EE 101 class? 
+
+In your circuits lab (EE 101), you are using signal generators to generate different types of signals. List at least three signals that you can generate using a typical signal generator. For each signal, write down its mathematical expression. Then, report the Fourier series representation of each signal (no need to derive; just find the answer from books/other resources/compute using programs).
+
+Using Parseval's theorem, compute the total power of each signal and report the comparison of the total power of these signals. Which signal has the highest power?
+
+\problem{3}
+[10 points] The impulse response of the RC circuit is an aperiodic signal. So, we cannot apply Fourier series analysis to this signal. However, we can use the Fourier transform to analyze this signal in the frequency domain. Compute the Fourier transform of the impulse response of the RC circuit. Comment on the constituent frequencies present in this signal based on the Fourier transform you computed.
 \problem{4} 
-Implement p1, p2, and p3 in code. 
+[10 points] Write Python/MATLAB code to validate all your answers and derivations for both problems above. Plot the output signals in graphs.  
 
 {\color{red}Note that this programming problem only appears on the homework so that you can practice these concepts using computer programs. This type of problem will not appear on the exam.}
 
