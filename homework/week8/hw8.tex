@@ -21,7 +21,11 @@
 
 \problempart [5 points] In previous homework assignments, you have derived the impulse response of an RC circuit. Look up your previous solutions/lecture notes and write down the impulse response of an RC circuit.
 
+
+
 \problempart [20 points] By following the approach we used to derive the impulse response of an RC circuit, derive the impulse response of an RL circuit. An RL circuit consists of a resistor and an inductor in series. Note that the voltage across the inductor is given by $v_L(t) = L \frac{di(t)}{dt}$, where $L$ is the inductance of the inductor and $i(t)$ is the current flowing through the inductor.
+
+{\color{blue} Note on both problems above: In the exam, you will not be expected to memorize the impulse response of a system. The main idea is that you should be familiar with concept and the approach: (1) Impulse response is the output of the system for an impulse input, and (2) Circuits can be solved by writing KVL/KCL equations, like in circuit theory (ENGR 065).}
 
 \problempart [20 points] For a step input voltage signal $v_{\text{in}}(t) = V_0 u(t)$, derive the output voltage across the inductor $v_{\text{out}}(t)$ for the RL circuit. Compare this answer to the output voltage across the capacitor $v_{\text{out}}(t)$ for the RC circuit with the same step input voltage signal.
 
@@ -36,6 +40,7 @@ In your circuits lab (EE 101), you are using signal generators to generate diffe
 
 Using Parseval's theorem, compute the average energy of each signal over one time period and report the comparison of these signals in terms of their average energy. Which signal has the highest average energy?
 
+{\color{blue}
 Hints:
 
 Note that the average energy of a continuous-time signal $x(t)$ over one period $T$ (same as its power) is given by:
@@ -49,13 +54,17 @@ But you don't need to solve this integration directly. Instead, by applying Pars
 where $a_k$ are the Fourier series coefficients of the signal.
 
 You may compute the sum of only the first few squared magnitudes of the Fourier series coefficients to get an approximate comparison of the average energies of the signals. 
+}
 
 \problem{3}
 [10 points] The impulse response of the RC circuit is an aperiodic signal. So, we cannot apply Fourier series analysis to this signal. However, we can use the Fourier transform to analyze this signal in the frequency domain. Compute the Fourier transform of the impulse response of the RC circuit. Comment on the constituent frequencies present in this signal based on the Fourier transform you computed.
+
+{\color{blue} Hint: Example 4.1 in Oppenheim and Willsky (2nd edition) solves this problem.}
+
 \problem{4} 
 [10 points] Write Python/MATLAB code to validate all your answers and derivations for both problems above. Plot the output signals in graphs.  
 
-{\color{red}Note that this programming problem only appears on the homework so that you can practice these concepts using computer programs. This type of problem will not appear on the exam.}
+{\color{blue}Note that this programming problem only appears on the homework so that you can practice these concepts using computer programs. This type of problem will not appear on the exam.}
 
 
 \end{document}
