@@ -25,13 +25,15 @@
 
 \problempart [20 points] By following the approach we used to derive the impulse response of an RC circuit, derive the impulse response of an RL circuit. An RL circuit consists of a resistor and an inductor in series. Note that the voltage across the inductor is given by $v_L(t) = L \frac{di(t)}{dt}$, where $L$ is the inductance of the inductor and $i(t)$ is the current flowing through the inductor.
 
-{\color{blue} Note on both problems above: In the exam, you will not be expected to memorize the impulse response of a system. The main idea is that you should be familiar with concept and the approach: (1) Impulse response is the output of the system for an impulse input, and (2) Circuits can be solved by writing KVL/KCL equations, like in circuit theory (ENGR 065).}
+{\color{blue} Note on both problems above: In the exam, you will not be expected to remember the impulse response of a system. But, you should be familiar with the concept and the approach: (1) Impulse response is the output of the system for an impulse input, and (2) Circuits can be solved by writing KVL/KCL equations, like in circuit theory (ENGR 065). That is, you should be able to write the output voltage of a circuit as a function of the input.}
 
 \problempart [20 points] For a step input voltage signal $v_{\text{in}}(t) = V_0 u(t)$, derive the output voltage across the inductor $v_{\text{out}}(t)$ for the RL circuit. Compare this answer to the output voltage across the capacitor $v_{\text{out}}(t)$ for the RC circuit with the same step input voltage signal.
 
+{\color{blue} Hint: Use convolution!}
+
 \problempart [25 points] For a square wave input voltage signal (use the square wave from HW \#6 Problem 1b), derive the output voltage across the inductor $v_{\text{out}}(t)$ for the RL circuit. If the square wave input is applied to the RC circuit instead, find the output voltage across the capacitor $v_{\text{out}}(t)$.
 
-For this problem, start by writing down the Fourier series representation of the square wave input signal. Then, find out the response of the RC and the RL circuits to a complex exponential input signal of the form $e^{j \omega t}$ using the convolution integral (look up the eigenfunction property of LTI systems in the lecture notes, if needed). Finally, use the Fourier series representation of the square wave and the responses to complex exponentials to find the output voltage signals for both circuits by using the principle of superposition for the LTI systems.
+{\color{blue} Hint: Start by writing down the Fourier series representation of the square wave input signal. Then, find out the response of the RC and the RL circuits to a complex exponential input signal of the form $e^{j \omega t}$ using the convolution integral (look up the eigenfunction property of LTI systems in the lecture notes, if needed). Finally, use the Fourier series representation of the square wave and the responses to complex exponentials to find the output voltage signals for both circuits by using the principle of superposition for the LTI systems.}
 
 \problem{2} 
 [10 points] Which signal is the biggest in your EE 101 class? 
