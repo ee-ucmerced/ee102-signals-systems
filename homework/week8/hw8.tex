@@ -32,9 +32,23 @@ For this problem, start by writing down the Fourier series representation of the
 \problem{2} 
 [10 points] Which signal is the biggest in your EE 101 class? 
 
-In your circuits lab (EE 101), you are using signal generators to generate different types of signals. List at least three signals that you can generate using a typical signal generator. For each signal, write down its mathematical expression. Then, report the Fourier series representation of each signal (no need to derive; just find the answer from books/other resources/compute using programs).
+In your circuits lab (EE 101), you are using signal generators to generate different types of signals. List at least three signals that you can generate using a typical signal generator. For each signal, write down its mathematical expression. Then, find the Fourier series representation of each signal.
 
-Using Parseval's theorem, compute the total power of each signal and report the comparison of the total power of these signals. Which signal has the highest power?
+Using Parseval's theorem, compute the average energy of each signal over one time period and report the comparison of these signals in terms of their average energy. Which signal has the highest average energy?
+
+Hints:
+
+Note that the average energy of a continuous-time signal $x(t)$ over one period $T$ (same as its power) is given by:
+\[
+E_T = \frac{1}{T} \int_{T} |x(t)|^2 dt.
+\]
+But you don't need to solve this integration directly. Instead, by applying Parseval's theorem, you can compute the power using the Fourier series coefficients of the signal:
+\[
+\frac{1}{T} \int_{0}^{T} |x(t)|^2 dt = \sum_{k=-\infty}^{\infty} |a_k|^2,
+\]
+where $a_k$ are the Fourier series coefficients of the signal.
+
+You may compute the sum of only the first few squared magnitudes of the Fourier series coefficients to get an approximate comparison of the average energies of the signals. 
 
 \problem{3}
 [10 points] The impulse response of the RC circuit is an aperiodic signal. So, we cannot apply Fourier series analysis to this signal. However, we can use the Fourier transform to analyze this signal in the frequency domain. Compute the Fourier transform of the impulse response of the RC circuit. Comment on the constituent frequencies present in this signal based on the Fourier transform you computed.
