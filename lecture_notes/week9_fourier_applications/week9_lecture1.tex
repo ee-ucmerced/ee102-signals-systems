@@ -1,0 +1,253 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\input{preamble.tex}
+\renewcommand{\releasedate}{October 27, 2025}
+\newcommand{\Eblank}{\rule{3cm}{0.4pt}}
+\newcommand{\Rankblank}{\rule{3cm}{0.4pt}}
+
+\begin{document}
+\section*{EE 102 Week 9, Lecture 1 (Fall 2025)}
+\subsection*{Instructor: \instructor}
+\subsection*{Date: \releasedate}
+\section{Announcements}
+\begin{itemize}
+    \item HW \#8 is due on Mon Oct 27. This is also your practice for the midterm exam \#2 as the problems cover the material that will be on the exam.
+    \item Midterm exam \#2 will be held on Wed Oct 29 during regular class time (4.30pm - 5.45pm) in our usual classroom (COB2 175).
+    \item HW \#9 will be due AFTER A WEEK's break on Nov 10.
+\end{itemize}
+\section{Goals}
+
+By the end of this lecture, you should be able to connect Fourier Transforms to at least one real-world application. 
+\section{Quiz: Knowledge check (so far)}
+
+\begin{popquiz}
+    If the impulse response of a LTI system is h(t). What is the output of the system to a step input u(t)?
+    \begin{itemize}
+        \item $\int_{-\infty}^{\infty} h(\tau) d\tau$
+        \item $\int_{-\infty}^{t} h(\tau) d\tau$
+        \item $\frac{d}{dt} h(t)$
+        \item $\int_{0}^{t} h(\tau) d\tau$
+    \end{itemize}
+    \popqsplit
+    The output of a LTI system to an input $x(t)$ is given by the convolution of the input with the impulse response $h(t)$:
+    \[
+    y(t) = x(t) * h(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau.
+    \]
+    For a step input $u(t)$, we have:
+    \[
+    y(t) = u(t) * h(t) = \int_{-\infty}^{\infty} u(\tau) h(t - \tau) d\tau.
+    \]
+    Since $u(\tau) = 0$ for $\tau < 0$ and $u(\tau) = 1$ for $\tau \geq 0$, the limits of integration change to:
+    \[
+    y(t) = \int_{0}^{\infty} h(t - \tau) d\tau.
+    \]
+    By changing the variable of integration, $s = t - \tau$, we have $ds = -d\tau$. The limits change accordingly: when $\tau = 0, s = t;$ and when $\tau = \infty, s = -\infty$. Thus, we get:
+    \[
+    y(t) = \int_{t}^{-\infty} h(s) (-ds) = \int_{-\infty}^{t} h(s) ds.
+    \]
+
+\end{popquiz}
+\begin{popquiz}
+    What is $2 [\cos(t) + \sin(t)]$ in complex exponential notation?
+    \begin{itemize}
+      \item $(-1 + j)e^{jt} + (1 + j)e^{-jt}$
+      \item $(1 + j)e^{jt} + (-1 + j)e^{-jt}$
+      \item $(1 + j)e^{jt} + (1 - j)e^{-jt}$
+      \item $(1 - j)e^{jt} + (1 + j)e^{-jt}$
+    \end{itemize}
+    \popqsplit
+    We can use Euler's formula to express cosine and sine in terms of complex exponentials:
+    \[
+    \cos(t) = \frac{e^{j t} + e^{-j t}}{2}, \quad \sin(t) = \frac{e^{j t} - e^{-j t}}{2j}.
+    \]
+    Therefore,
+    \[
+    2 [\cos(t) + \sin(t)] = 2 \left[ \frac{e^{j t} + e^{-j t}}{2} + \frac{e^{j t} - e^{-j t}}{2j} \right].
+    \]
+    Simplifying this expression, we get:
+    \[
+    2 [\cos(t) + \sin(t)] = e^{j t} + e^{-j t} + \frac{1}{j} [e^{j t} - e^{-j t}].
+    \]
+    Since $\frac{1}{j} = -j$, we have:
+    \[
+    2 [\cos(t) + \sin(t)] = (1 - j)e^{j t} + (1 + j)e^{-j t}.
+    \]
+\end{popquiz}
+
+\begin{popquiz}
+    What is the DC term in the Fourier Series ($a_0$) for the signal: $1 + \cos(2t)$?
+    \begin{itemize}
+        \item 0
+        \item 1
+        \item $\frac{1}{2j}$
+        \item -1
+    \end{itemize}
+    \popqsplit
+    The DC term in the Fourier Series, denoted as $a_0$, represents the average value of the signal over one period. For the signal $x(t) = 1 + \cos(2t)$, we can calculate $a_0$ as follows:
+    \[
+    a_0 = \frac{1}{T} \int_{0}^{T} x(t) dt,
+    \]
+    where $T$ is the period of the signal. The period of $\cos(2t)$ is $\frac{2\pi}{2} = \pi$. Therefore, we have:
+    \[
+    a_0 = \frac{1}{\pi} \int_{0}^{\pi} (1 + \cos(2t)) dt.
+    \]
+    Evaluating the integral:
+    \[
+    \int_{0}^{\pi} (1 + \cos(2t)) dt = \int_{0}^{\pi} 1 dt + \int_{0}^{\pi} \cos(2t) dt = \pi + 0 = \pi.
+    \]
+    Thus,
+    \[
+    a_0 = \frac{1}{\pi} \cdot \pi = 1.
+    \]
+\end{popquiz}
+
+\begin{popquiz}
+    For $\omega_0 = 1$, what are the non-zero complex Fourier Series coefficients ($a_k$) of the signal: $1 + \cos(t) + \sin(2t)$? That is, find the values for $a_{-2}$, $a_{-1}$, $a_0$, $a_1$, and $a_2$.
+    \begin{itemize}
+        \item $1/2j, 1/2, 0, 1/2, 1/2j$
+        \item $-1/2j, 1/2, 1, 1/2, 1/2j$
+        \item $1/2, 1/2, 0, 1/2, 1/2$
+        \item $1/2, 1/2, 1, 1/2, 1/2$
+    \end{itemize}
+
+    \popqsplit
+    The complex Fourier Series coefficients $a_k$ for a periodic signal $x(t)$ with fundamental frequency $\omega_0$ are given by:
+    \[
+    a_k = \frac{1}{T} \int_{0}^{T} x(t) e^{-j k \omega_0 t} dt,
+    \]
+    where $T = \frac{2\pi}{\omega_0}$ is the period of the signal. For $\omega_0 = 1$, we have $T = 2\pi$. The signal is $x(t) = 1 + \cos(t) + \sin(2t)$.
+    We can express $\cos(t)$ and $\sin(2t)$ in terms of complex exponentials:
+    \[
+    \cos(t) = \frac{e^{j t} + e^{-j t}}{2}, \quad \sin(2t) = \frac{e^{j 2t} - e^{-j 2t}}{2j}.
+    \]
+    Therefore, the signal can be rewritten as:
+    \[
+    x(t) = 1 + \frac{e^{j t} + e^{-j t}}{2} + \frac{e^{j 2t} - e^{-j 2t}}{2j}.
+    \]
+    This gives us the following non-zero coefficients:
+    \[ 
+    a_0 = 1, \quad a_1 = \frac{1}{2}, \quad a_{-1} = \frac{1}{2}, \quad a_2 = \frac{1}{2j}, \quad a_{-2} = -\frac{1}{2j}.
+    \]
+\end{popquiz}
+\section{Review: Fourier analysis of aperiodic signals}
+For any\footnote{Under suitable conditions on the signal that we are not explicitly discussing in this course} aperiodic signal $x(t)$, we can represent it as a superposition of complex exponentials using the Fourier Transform:
+\[
+X(\omega) = \int_{-\infty}^{\infty} x(t) e^{-j \omega t} dt, \: \omega \in \mathbb{R}
+\]
+where $X(\omega)$ is the Fourier Transform of $x(t)$. This is a function of frequency. So, the idea is that we are able to represent the original signal $x(t)$ into a new dimension where X-axis is the frequency $\omega$ instead of time $t$. What is this frequency? Whose frequency?
+
+Since we are representing each signal as a combination of complex exponentials of the form $e^{j \omega t}$, we are implicitly saying that the signal is made up of sines and cosines. There is only one parameter that defines a sine or cosine wave: its frequency. So, instead of repeating sine and cosine, we start referring to their frequency (a number). So, for example, we might say that $1 + \cos(2t)$ is made up of a frequency 0 component and a frequency 2 component. That's it --- two numbers define the signal. This is the idea of frequency domain representation of signals.
+
+\subsection{What is so special about sinusoids?}
+Nothing other than the fact that it is our choice of basis functions to represent signals that are commonly found in engineering. You may relate the concept of basis functions to the concept of basis vectors that you work with in your linear algebra and vector calculus class. Just like any vector in 3D space can be represented as a linear combination of the basis vectors $[1, 0, 0]$, $[0, 1, 0]$, and $[0, 0, 1]$, any signal can be represented as a linear combination of sinusoids of different frequencies.
+
+Similar to vector spaces, the choice of basis functions is not unique. Indeed, quantum physicists use other basis functions that are useful for their applications. Like, wavelet functions are used in describing atoms and molecules. The math behind the Fourier transform still plays out in the same way --- that is the beauty and the brilliance of this mathematical tool developed by Fourier.
+\subsection{Fourier transform of real and even signals}
+We will prove the following:
+
+\begin{proposition}
+    For a real and even signal $x(t)$, its Fourier Transform $X(\omega)$ is also real and even.
+    \end{proposition}
+\begin{proof}
+    Since $x(t)$ is real and even, we have:
+    \[
+    x(t) = x(-t), \quad x(t) \in \mathbb{R}.
+    \]
+    The Fourier Transform of $x(t)$ is given by:
+    \[
+    X(\omega) = \int_{-\infty}^{\infty} x(t) e^{-j \omega t} dt.
+    \]
+    To show that $X(\omega)$ is even, we compute $X(-\omega)$:
+    \[
+    X(-\omega) = \int_{-\infty}^{\infty} x(t) e^{j \omega t} dt.
+    \]
+    By changing the variable of integration, let $u = -t$, so $dt = -du$. The limits of integration change accordingly: when $t = -\infty, u = \infty;$ and when $t = \infty, u = -\infty$. Thus, we have:
+    \[
+    X(-\omega) = \int_{\infty}^{-\infty} x(-u) e^{-j \omega u} (-du) = \int_{-\infty}^{\infty} x(u) e^{-j \omega u} du = X(\omega).
+    \]
+    Therefore, $X(\omega)$ is even.
+    To show that $X(\omega)$ is real, we compute the complex conjugate of $X(\omega)$:
+    \[
+    X^*(\omega) = \left( \int_{-\infty}^{\infty} x(t) e^{-j \omega t} dt \right)^* = \int_{-\infty}^{\infty} x(t) e^{j \omega t} dt = X(-\omega).
+    \]
+    Since we have already shown that $X(-\omega) = X(\omega)$, it follows that:
+    \[
+    X^*(\omega) = X(\omega).
+    \]
+    Therefore, $X(\omega)$ is real.
+    \end{proof}
+
+\begin{proposition}
+For a real and even signal $x(t)$, its Fourier Transform $X(\omega)$ can be rewritten as a Fourier Cosine Transform.
+\end{proposition}
+\begin{proof}
+Write $X(\omega)$ as:
+\[
+X(\omega) = \int_{-\infty}^{\infty} x(t) e^{-j \omega t} dt.
+\]
+Using Euler's formula, we can express the complex exponential as:
+\[
+e^{-j \omega t} = \cos(\omega t) - j \sin(\omega t).
+\]
+Substituting this into the expression for $X(\omega)$, we get:
+\[
+X(\omega) = \int_{-\infty}^{\infty} x(t) [\cos(\omega t) - j \sin(\omega t)] dt.
+\]
+Since the function is even, let us break down the integral into two parts: $-\infty$ to $0$ and $0$ to $\infty$:
+\[
+X(\omega) = \int_{-\infty}^{0} x(t) [\cos(\omega t) - j \sin(\omega t)] dt + \int_{0}^{\infty} x(t) [\cos(\omega t) - j \sin(\omega t)] dt.
+\]
+By changing the variable of integration in the first integral, let $u = -t$, so $dt = -du$. The limits of integration change accordingly: when $t = -\infty, u = \infty;$ and when $t = 0, u = 0$. Thus, we have:
+\[
+X(\omega) = \int_{\infty}^{0} x(-u) [\cos(-\omega u) - j \sin(-\omega u)] (-du) + \int_{0}^{\infty} x(t) [\cos(\omega t) - j \sin(\omega t)] dt.
+\]
+Using the evenness of $x(t)$, we have $x(-u) = x(u)$. Also, $\cos(-\theta) = \cos(\theta)$ and $\sin(-\theta) = -\sin(\theta)$. Therefore, the first integral becomes:
+\[
+X(\omega) = \int_{0}^{\infty} x(u) [\cos(\omega u) + j \sin(\omega u)] du + \int_{0}^{\infty} x(t) [\cos(\omega t) - j \sin(\omega t)] dt.
+\]
+Combining the two integrals, we get:
+\[
+X(\omega) = \int_{0}^{\infty} x(t) [\cos(\omega t) + j \sin(\omega t) + \cos(\omega t) - j \sin(\omega t)] dt = 2 \int_{0}^{\infty} x(t) \cos(\omega t) dt.
+\]
+Thus, we have shown that for a real and even signal $x(t)$, its Fourier Transform $X(\omega)$ can be expressed as:
+\[
+X(\omega) = 2 \int_{0}^{\infty} x(t) \cos(\omega t) dt.
+\]
+\end{proof}
+\section{Properties of Fourier Transform}
+\subsection{Time shifting property}
+If $x(t)$ has the Fourier Transform $X(\omega)$, then the Fourier Transform of the time-shifted signal $x(t - t_0)$ is given by:
+\[
+X_{\text{shifted}}(\omega) = X(\omega) e^{-j \omega t_0}.
+\]
+\begin{proof}
+The Fourier Transform of the time-shifted signal $x(t - t_0)$ is given by:
+\[
+X_{\text{shifted}}(\omega) = \int_{-\infty}^{\infty} x(t - t_0) e^{-j \omega t} dt.
+\]
+By changing the variable of integration, let $u = t - t_0$, so $dt = du$. The limits of integration remain the same: when $t = -\infty, u = -\infty;$ and when $t = \infty, u = \infty$. Thus, we have:
+\[
+X_{\text{shifted}}(\omega) = \int_{-\infty}^{\infty} x(u) e^{-j \omega (u + t_0)} du = e^{-j \omega t_0} \int_{-\infty}^{\infty} x(u) e^{-j \omega u} du.
+\]
+Recognizing that the integral is the Fourier Transform of $x(t)$, we get:
+\[
+X_{\text{shifted}}(\omega) = X(\omega) e^{-j \omega t_0}.
+\]
+\end{proof}
+All other properties of the Fourier transform are listed and proved in the textbooks: Section 4.6 in Oppenheim and Willsky, "Signals and Systems", 2nd edition and Table 4.2 in Lathi. 
+\section{Looking forward to the applications of Fourier Transform}
+Take this fact to be true for now: We will be ``multiplying'' filters to our signals to achieve desired effects. That is, if in the frequency domain, you have a signal with a ``value'' of 0.5 at 100 Hz. Now, if you multiple this signal by a frequency domain signal (the filter) that is 0 all across but has a value of 10 at 100Hz. Then, your original signal becomes 5 at 100Hz. This is the idea of filtering signals in the frequency domain.
+
+With this broad idea, draw your concept of the following filters:
+
+\begin{itemize}
+    \item Design the $H(\omega)$ for a filter that passes all frequencies that lie between 50 Hz to 500 Hz. Remember that $\omega = 2 \pi f$.
+    \item Design a personalized filter that only allows your personal voice notes (voice frequencies) to pass through and blocks all other sounds.
+\end{itemize}
+\section{Recommended reading and practice problems}
+To study for the midterm exam \#2, please work on the EE 102 pre-midterm MCQ on CatCourses and HW \#8.
+
+\end{document}
