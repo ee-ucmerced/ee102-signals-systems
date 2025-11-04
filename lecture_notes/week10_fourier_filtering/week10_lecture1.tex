@@ -1,0 +1,189 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\input{preamble.tex}
+\renewcommand{\releasedate}{November 3, 2025}
+\newcommand{\Eblank}{\rule{3cm}{0.4pt}}
+\newcommand{\Rankblank}{\rule{3cm}{0.4pt}}
+
+\begin{document}
+\section*{EE 102 Week 10, Lecture 1 (Fall 2025)}
+\subsection*{Instructor: \instructor}
+\subsection*{Date: \releasedate}
+\section{Announcements}
+\begin{itemize}
+    \item HW \#9 is due on Mon Nov 10.
+    \item Midterm exam \#2 take-home version is due Nov 3 at midnight. The midterm score $s_m$ will be computed as follows:
+    \[ s_m = \frac{s_i + \max(s_i, s_t)}{2} \]
+    where $s_i$ is the in-class midterm score and $s_t$ is the take-home midterm score. So, you won't lose any points on the exam if you choose to not submit the take-home version.
+\end{itemize}
+\section{Goals}
+
+By the end of this lecture, you will be able to compute the output of an LTI system to any input signal...in frequency domain.
+
+This goal has two parts: you already know how to achieve the first part --- the convolution integral gives you the output of an LTI system to any input signal if you know the impulse response of the system. The second part is what we will focus on in this lecture: how to compute the output of an LTI system in frequency domain, and how that might be useful in engineering.
+
+\section{Review: Output of LTI systems using convolution}
+Consider a system $H$ shown in the block diagram below:
+\begin{center}
+\begin{tikzpicture}[scale=1, every node/.style={transform shape}]
+    \node[gain] (H) {$H$};
+    \node[left of=H, node distance=3cm] (x) {$x(t)$};
+    \node[right of=H, node distance=3cm] (y) {$y(t)$};
+    \draw[conn] (x) -- (H);
+    \draw[conn] (H) -- (y);
+\end{tikzpicture}
+\end{center}
+Note that $H$ is a notation we are using for the system. It is not a function, or a signal. It is the abstract representation of the system itself. We usually model the system using its impulse response $h(t)$. That is, the response (output) of the system when the input is $\delta(t)$ is $h(t)$. For the input $x(t)$, what is the output $y(t)$ of the system? The answer is given by the convolution integral:
+\[
+y(t) = x(t) * h(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau.
+\]
+This is the time-domain representation of the output of an LTI system. 
+\section{Review: Breaking down signals}
+We have seen many ways of breaking down signals into simpler components in this class: breaking down a signal into shifted and scaled impulses using the sifting property of the delta function, breaking down a signal into step functions, breaking down a signal into complex exponentials using Fourier series and Fourier transforms, etc. We review the last two methods below.
+\subsection{Periodic signals can be broken down using Fourier series}
+For a periodic signal $x(t)$ with period $T$, we can write:
+\begin{equation}
+    \label{eq:fourier_synthesis}
+x(t) = \sum_{k=-\infty}^{\infty} a_k e^{j k \omega_0 t}, \end{equation}
+where $\omega_0 = \frac{2\pi}{T}$ and 
+\begin{equation}
+    \label{eq:fourier_analysis}
+    a_k = \frac{1}{T} \int_{T} x(t) e^{-j k \omega_0 t} dt.
+\end{equation}
+
+\subsection{Aperiodic signals can be broken down using Fourier transforms}
+If a signal $x(t)$ is aperiodic, we can break it down into complex exponentials using the Fourier transform. The Fourier transform is also a representation of the signal $x(t)$ in the frequency domain (with frequency variable $\omega$ as the X-axis). We have
+\begin{equation}
+    \label{eq:fourier_analysis}
+X(\omega) = \int_{-\infty}^{\infty} x(t) e^{-j \omega t} dt,
+\end{equation}
+and the inverse Fourier transform (Fourier synthesis) is given by
+\begin{equation}
+    \label{eq:fourier_synthesis}
+x(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} X(\omega) e^{j \omega t} d\omega.
+\end{equation}
+
+\section{Computing the output of LTI systems}
+We start this section with a pop-quiz where you will be asked to apply your knowledge of LTI systems (superposition) and Fourier series to compute the output of an LTI system to a periodic input signal.
+\begin{popquiz}
+For an LTI system, we know that the output of the system to an input $e^{j \omega t}$ is given by $H(j \omega) e^{j \omega t}$, where $H(j \omega)$ is the frequency response of the system (observe the eigenfunction property as the input appears again in the output). Using the Fourier series representation of a periodic signal, compute the output of an LTI system to a periodic input signal $x(t)$ with period $T$.
+\popqsplit 
+Using the Fourier series representation of $x(t)$ from \eqref{eq:fourier_synthesis}, we have
+\[
+x(t) = \sum_{k=-\infty}^{\infty} a_k e^{j k \omega_0 t},
+\]
+where $\omega_0 = \frac{2\pi}{T}$. Using the superposition property of LTI systems, the output of the system to the input $x(t)$ is given by
+\[
+y(t) = \sum_{k=-\infty}^{\infty} a_k H(j k \omega_0) e^{j k \omega_0 t}.
+\]
+The Fourier series coefficients of the output signal $y(t)$ are given by $b_k = a_k H(j k \omega_0)$.
+\end{popquiz}
+For a periodic signal $x(t)$ with period $T$, the output of an LTI system to the input $x(t)$ is given by
+\[
+y(t) = \sum_{k=-\infty}^{\infty} a_k H(j k \omega_0) e^{j k \omega_0 t},
+\]
+where $a_k$ are the Fourier series coefficients of $x(t)$ and $\omega_0 = \frac{2\pi}{T}$.
+The Fourier series coefficients of the output signal $y(t)$ are given by
+\[
+b_k = a_k H(j k \omega_0).
+\]
+Observe how the Fourier Series coefficients of the output signal (this is the frequency domain representation of the periodic output signal) are obtained by multiplying the Fourier series coefficients of the input signal with the frequency response of the system evaluated at discrete frequencies $k \omega_0$.
+\subsection{Output of LTI systems to aperiodic signals in the frequency domain}
+Now, we move on to finding the output of an LTI system to aperiodic input signals. But before we jump into it, it is important to remind ourselves of the time-shifting property of the Fourier transform.
+\begin{popquiz}
+If the Fourier transform of a signal $x(t)$ is $X(\omega)$, prove that the Fourier transform of the time-shifted signal $x(t - t_0)$ is given by $X(\omega) e^{-j \omega t_0}$.
+\popqsplit
+Using the definition of the Fourier transform, we have
+\[
+\begin{aligned}
+\mathcal{F}\{x(t - t_0)\} &= \int_{-\infty}^{\infty} x(t - t_0) e^{-j \omega t} dt.
+\end{aligned}
+\]
+Apply the most common integration solving trick: change of variables (colloquially known as $u$-sub). Let $u = t - t_0$. Then, $du = dt$, and $t = u + t_0$. Substituting these in the integral, we get
+\[
+\begin{aligned}
+\mathcal{F}\{x(t - t_0)\} &= \int_{-\infty}^{\infty} x(u) e^{-j \omega (u + t_0)} du \\
+&= e^{-j \omega t_0} \int_{-\infty}^{\infty} x(u) e^{-j \omega u} du \\
+&= e^{-j \omega t_0} X(\omega).
+\end{aligned}
+\]
+\end{popquiz}
+To write the output of an LTI system to an aperiodic input signal, we start with the convolution equation
+\[
+y(t) = x(t) * h(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau.
+\]
+The Fourier transform of the output signal $y(t)$ is given by using the Fourier transform equation~\eqref{eq:fourier_analysis}:
+\[
+\begin{aligned}
+Y(\omega) &= \int_{-\infty}^{\infty} y(t) e^{-j \omega t} dt \\
+&= \int_{-\infty}^{\infty} \left( \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau \right) e^{-j \omega t} dt \\
+&= \int_{-\infty}^{\infty} x(\tau) \left( \int_{-\infty}^{\infty} h(t - \tau) e^{-j \omega t} dt \right) d\tau
+\end{aligned}
+\]
+where we wrote the last step by interchanging the order of integration: we brought the $d\tau$ integral outside and kept all the terms involving $\tau$ inside. We kept the $t$ terms where they were and we will now integrate over $t$ first. From the previous pop-quiz, we know that
+\[
+\int_{-\infty}^{\infty} h(t - \tau) e^{-j \omega t} dt = H(\omega) e^{-j \omega \tau}.
+\]
+Substituting this in the previous equation, we get
+\[
+\begin{aligned}
+Y(\omega) &= \int_{-\infty}^{\infty} x(\tau) H(\omega) e^{-j \omega \tau} d\tau \\
+&= H(\omega) \int_{-\infty}^{\infty} x(\tau) e^{-j \omega \tau} d\tau \\
+&= H(\omega) X(\omega).
+\end{aligned}
+\]
+Thus, we have shown that the output signal (in frequency domain) is given by
+\[
+Y(\omega) = H(\omega) X(\omega)
+\]
+the product of the frequency response of the system and the Fourier transform of the input signal. Just the multiplication! No integration!
+
+This is a VERY IMPORTANT result. For starters, it lets us compute the output of an LTI system to any input signal using simple multiplication in frequency domain. Second, it gives us insights into how different frequency components of the input signal are affected by the system. For example, if $H(\omega)$ is small for large values of $\omega$, then we know that high-frequency components of the input signal will be attenuated in the output signal. It allows us to \emph{design} systems with a desired $H(\omega)$. For example, if there are two (or however many) frequencies that I absolutely dislike (my ears hurt when I hear the screeching sound of a chalk on a blackboard of frequency $\omega_1$!). Then, I can design a system such that the frequency response $H(\omega)$ has very small values at $\omega_1$: $H(\omega_1) \approx 0$. This system will attenuate the frequency component $\omega_1$ in the output signal. Such systems are called notch filters. 
+
+The fundamental concept we have derived above is called the Convolution Theorem (or the convolution property of Fourier transforms).
+
+\section{Example: First-order decay systems}
+A lot of things in real-life respond with a first-order decay to an impulse input. That is, if you suddenly push someone (an impulse input), they might be affected at $t=0$ but then they will slowly come to rest (decay) over time. Mathematically, the impulse response of such a system is given by
+\[
+h(t) = e^{-a t} u(t),
+\]
+where $a > 0$ is a constant that determines how fast the system decays. The unit step function $u(t)$ ensures that the impulse response is causal (the output cannot start before the input is applied at $t=0$). 
+
+Now, what if there is a new input from a particularly annoying classmate who pushes you for a while but slowly decays their push. The input signal can be modeled as
+\[
+x(t) = e^{-b t} u(t),
+\]
+where $b > 0$ is another constant. What is the output of the system to this input signal?
+
+To compute the output of the system to this input signal, we first compute the Fourier transforms of the input signal and the impulse response.
+\[
+\begin{aligned}
+X(\omega) &= \int_{0}^{\infty} e^{-b t} e^{-j \omega t} dt \\
+&= \int_{0}^{\infty} e^{-(b + j \omega) t} dt \\
+&= \left[ \frac{e^{-(b + j \omega) t}}{-(b + j \omega)} \right]_{0}^{\infty} \\
+&= \frac{1}{b + j \omega},
+\end{aligned}
+\]
+and
+\[
+\begin{aligned}
+H(\omega) &= \int_{0}^{\infty} e^{-a t} e^{-j \omega t} dt \\
+&= \int_{0}^{\infty} e^{-(a + j \omega) t} dt \\
+&= \left[ \frac{e^{-(a + j \omega) t}}{-(a + j \omega)} \right]_{0}^{\infty} \\
+&= \frac{1}{a + j \omega}.
+\end{aligned}
+\]
+Using the convolution theorem, the output of the system in frequency domain is given by
+\[
+Y(\omega) = H(\omega) X(\omega) = \frac{1}{(a + j \omega)(b + j \omega)}.
+\]
+It's that easy! Now, we can already analyze the frequency properties of the output without bothering to apply the convolution integral or the inverse Fourier transform. For example, we can see that as $\omega \to \infty$, $Y(\omega) \to 0$. Thus, high-frequency components of the input signal are attenuated in the output signal.
+
+With the convolution theorem at hand, we can now study many many kinds of engineering systems because this is what enables many areas of electrical engineering: frequency modulation, amplitude modulation, communication systems, control systems, signal processing, image filtering, audio processing, and more! Soon\dots
+\section{Recommended reading and practice problems}
+Section 4.5.1 in Oppenheim and Willsky, 2nd edition is an interesting section to read to learn more about the applications of Fourier transforms in communication.
+
+\end{document}
