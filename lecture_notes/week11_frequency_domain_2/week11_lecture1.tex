@@ -1,0 +1,170 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\input{preamble.tex}
+\renewcommand{\releasedate}{November 10, 2025}
+\newcommand{\Eblank}{\rule{3cm}{0.4pt}}
+\newcommand{\Rankblank}{\rule{3cm}{0.4pt}}
+
+\begin{document}
+\section*{EE 102 Week 11, Lecture 1 (Fall 2025)}
+\subsection*{Instructor: \instructor}
+\subsection*{Date: \releasedate}
+\section{Announcements}
+\begin{itemize}
+    \item HW \#9 is due on Mon Nov 10.
+    \item HW \#10 will be due on Mon Nov 17.
+    \item Rest of the semester: HW \#11 on Mon Nov 24, HW \#12 on Dec 8, Final exam on Dec 16 (Tue) from 9am to 11am.
+\end{itemize}
+\section{Review: Fourier Transform (FT), Inverse FT (IFT)}
+Let $x(t)\in\mathbb{C}$ be absolutely integrable. We use the continuous-time Fourier transform (CTFT)
+\[
+X(\omega)=\int_{-\infty}^{\infty} x(t)\,e^{-j\omega t}\,dt,
+\qquad
+x(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty} X(\omega)\,e^{j\omega t}\,d\omega .
+\]
+Basic properties we will use/have proved before:
+\[
+\mathcal{F}\{x^\ast(t)\}=X^\ast(-\omega),\quad
+\mathcal{F}\{x(t-t_0)\}=e^{-j\omega t_0}X(\omega),\quad
+\mathcal{F}\{x(at)\}=\tfrac{1}{|a|}X(\tfrac{\omega}{a}).
+\]
+
+\section{Quantifying Signal Energy}
+We have defined the energy of a signal, $x(t)$, using an $L2$ norm metric (that is, squared magnitude integrated over time):
+\[
+E_x = \int_{-\infty}^{\infty} |x(t)|^2\,dt.
+\]
+Remember that this is a metric of how ``big'' a signal is in time domain. It does not correspnd, necessarily, to the physical energy of a system. To compute the physical energy you would usually need to ensure that the units of $x(t)$ match up with the units of the system you are analyzing. The importance of the formula above is that it lets us ``give a number'' associated with the signal that defines how big it is so that multiple signals can be compared. Otherwise, it is hard to say if one signal is bigger than another. But the problem with the above formula is that it requires you to integrate for all time and often signals can be quite complicated, which makes the integration hard to compute. So, we propose that we can compute the energy of a signal in the frequency domain instead. Why? Because usually what we will find is that signals in the frequency domain are much simpler to analyze. For example, many signals have energy concentrated in a few frequencies, which makes it easy to compute the energy just for the most dominant frequencies rather than the entire signal in time-domain. 
+
+To formalize the above, we build the equivalent of Parseval's theorem for CTFT next.
+\subsection{Parseval's Theorem for CTFT}
+Apply the inverse Fourier Transform equation, to manipulate $E_x$ to derive the Parseval's theorem for CTFT. Note that the general identity that connects the energy ($L2$ norm) of a signal in time domain to the energy of the signal in frequency domain is called Plancherel-Parseval identity, to give credit to both mathematicians who contributed to its development. For our setting, we start to prove this by starting with the computation for $E_x$ by substitution the inverse FT expression for $x(t)$ so that we can find out the energy as a function of $X(\omega)$:
+\begin{align*}
+E_x &= \int_{-\infty}^{\infty} |x(t)|^2\,dt\\
+&= \int_{-\infty}^{\infty} x(t)\,x^\ast(t)\,dt \\
+&= \int_{-\infty}^{\infty} \left(\frac{1}{2\pi}\int_{-\infty}^{\infty} X(\omega)\,e^{j\omega t}\,d\omega\right)
+\left(\frac{1}{2\pi}\int_{-\infty}^{\infty} X^\ast(u)\,e^{-j u t}\,du\right) dt
+\end{align*}
+where we used two key steps: (i) the definition of squared magnitude of a complex number is equal to the number times its complex conjugate. For signals, we have $|x(t)|^2 = x(t)\,x^\ast(t)$; (ii) we substituted the inverse FT expression for both $x(t)$ and $x^\ast(t)$, where we used a dummy variable $u$ for the second integral to avoid confusing it with $\omega$, the first dummy variable for integration. Now, we can rearrange the above expression as
+\begin{align*}
+E_x &= \frac{1}{(2\pi)^2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} X(\omega)\,X^\ast(u) \left(\int_{-\infty}^{\infty} e^{j(\omega - u) t}\,dt\right) d\omega\,du \\
+&= \frac{1}{(2\pi)^2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} X(\omega)\,X^\ast(u) \cdot 2\pi \delta(\omega - u) \,d\omega\,du
+\end{align*}
+How did we write the last step? Let's work on it step by step. The inner integral is
+\[\int_{-\infty}^{\infty} e^{j(\omega - u) t}\,dt.\]
+This integration is not convergent in the usual sense. But using our knowledge of Fourier analysis, we can recognize that this is the Fourier transform of a delta function. Let's build that step-by-step. Start by answering the following pop-quiz:
+
+\begin{popquiz}
+What is the inverse Fourier transform of a delta function $2\pi \delta(\omega - \omega_0)$? How do you interpret it?
+\popqsplit 
+If in the frequency domain, we have a delta function $2\pi \delta(\omega - \omega_0)$, then we only have a non-zero value at frequency $\omega_0$. This means that in time domain, we have a complex exponential signal $e^{j\omega_0 t}$. We can show this formally:
+\[
+x(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} 2\pi \delta(\omega - \omega_0) e^{j\omega t}\,d\omega = e^{j\omega_0 t}.
+\]
+\end{popquiz}
+
+So, from the pop-quiz above, we can see that the Fourier transform of $e^{j\omega_0 t}$ is $2\pi \delta(\omega - \omega_0)$. Let's write this out explicitly using the equation for the continuous-timeFourier transform:
+\[
+2\pi \delta(\omega - \omega_0) = \int_{-\infty}^{\infty} e^{j\omega_0 t} e^{-j\omega t}\,dt = \int_{-\infty}^{\infty} e^{j(\omega_0 - \omega) t}\,dt.
+\]
+Notice how similar this is to our inner integral above! So, we can write
+\[
+\int_{-\infty}^{\infty} e^{j(\omega - u) t}\,dt = 2\pi \delta(\omega - u).
+\]
+Using this result, we can continue our derivation of $E_x$:
+\begin{align*}
+E_x &= \frac{1}{(2\pi)^2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} X(\omega)\,X^\ast(u) \cdot 2\pi \delta(\omega - u) \,d\omega\,du \\
+&= \frac{1}{2\pi} \int_{-\infty}^{\infty} X(\omega) \left(\int_{-\infty}^{\infty} X^\ast(u) \delta(\omega - u)\,du\right) d\omega \\
+\intertext{Using the sifting property of delta function, we have}
+&= \frac{1}{2\pi} \int_{-\infty}^{\infty} X(\omega) X^\ast(\omega)\,d\omega \\
+&= \frac{1}{2\pi} \int_{-\infty}^{\infty} |X(\omega)|^2\,d\omega.
+\end{align*}
+This is the Parseval's theorem for CTFT. It tells us that we can compute the energy of a signal by simply integrating the squared magnitude of its Fourier transform over frequency, scaled by a factor of $\frac{1}{2\pi}$. 
+
+You may wonder that nothing much changed -- it is still an integration with limits going from $-\infty$ to $\infty$. But the key point is that in many practical scenarios, $X(\omega)$ only has significant values over a small range of frequencies and is usually zero for most other frequencies. So, in practice, you end up integrating over just the range of frequencies that are most dominant / you are interested in. This type of modular analysis was not possible in the time-domain.
+
+
+% What the top plot shows
+\section{Understanding Power Spectral Density (PSD)}
+For signals that are random processes (like EEG)\footnote{Don't worry if you are not comfortable yet / do not understand what random processes are. Think of this as a signal for this class.}, we define a quantity that is an extension of the energy computation in the previous section, called the \emph{power spectral density} (PSD). The PSD tells us how the power of a signal is distributed across different frequencies. In fact, whenever you see the word ``spectrum'' in engineering, it is likely referring to some kind of frequency-domain representation of a signal! So, Fourier transforms are more common around you than you think.
+
+We now extend our previous discussion to an application example of EEG.
+\subsection{What is EEG?}
+EEG stands for electroencephalogram. It is a recording of the electrical activity of the brain, typically measured using electrodes placed on the scalp. EEG signals are used in various applications, including medical diagnosis (e.g., epilepsy), sleep studies, brain-computer interfaces, and cognitive research. Fourier transforms (specifically, PSD analysis) is one of the main tools used by doctors all around the world to study the properties of the EEG signal! Fourier transform is far reaching!
+\subsection{EEG Signal Model and PSD}
+We model the EEG signal \(x(t)\) as a wide-sense stationary (WSS) random process modeled as an autocorrelation function \(R_{xx}(\tau)\):
+\[
+R_{xx}(\tau) = \mathbb{E}(x(t)x(t+\tau))
+\]
+where \(\mathbb{E}(\cdot)\) is the expectation operator (average over many realizations of the random process). 
+\begin{popquiz}
+From a quick overview of EEG signals using the simulator at \url{https://bionichaos.com/EEGSynth/}, what are the main frequency bands present in an EEG signal? What brain activities do they correspond to?
+\popqsplit 
+An EEG signal is typically composed of multiple frequency bands, each associated with different brain activities, plus artifacts from eye blinks (EOG) and muscle activity (EMG). The main EEG bands are:
+\begin{itemize}
+  \item Delta (0.5-4 Hz): deep sleep.
+  \item Theta (4-8 Hz): drowsiness.
+  \item Alpha (8-13 Hz): relaxed, eyes closed.
+  \item Beta (13-30 Hz): alert, task engagement.
+  \item Artifacts: EOG (eye blinks) and EMG (muscle activity).
+  \item Higher frequencies (>30 Hz) are often considered noise.
+\end{itemize}
+\end{popquiz}
+
+\subsection{How to quantify EEG signals?}
+For doctors, the most important task is to always compare the data of their patient to the data of a healthy subject. In the case of EEG signal (which looks quite complicated in time domain), a comparison is not easy because the doctor would have to carefully monitor many peaks, valleys, and all other features and compare them to a healthy subject. This is not practical. So, engineers have come to the rescue (as always :)! Specifically, electrical engineers have built methods that can quantify the EEG signal in a way that is easy to compare. This is done using the \emph{power spectral density} (PSD) of the EEG signal. 
+
+This is so popular that MATLAB has a built-in function to compute the PSD of a signal\footnote{See the periodogram function \href{https://www.mathworks.com/help/signal/ref/periodogram.html}{periodogram} and another related tutorial \href{https://www.mathworks.com/help/signal/ug/power-spectral-density-estimates-using-fft.html}{PSD with FFT} for more details}. The advantage of learning signal processing is that you become one of the few people in the world who can understand what is going on under the hood of such computations so that you can innovate the design of these systems and change the healthcare world for the better!
+
+To formally write the PSD, we start with the Fourier transform of the EEG signal autocorrelation model \(R_{xx}(\tau)\):
+\[
+S_{xx}(\omega) = \int_{-\infty}^{\infty} R_{xx}(\tau)\,e^{-j\omega \tau}\,d\tau.
+\]
+The $S_{xx}(\omega)$ is called the \emph{power spectral density} (PSD) of the EEG signal \(x(t)\) -- as simple as the Fourier transform of the autocorrelation model of the EEG signal. The PSD tells us how the power of the EEG signal is distributed across different frequencies. Computing it is a different issue --- you need to do it in discrete-time domain because computers are discrete (refer to Week 10 Lecture 2 for more details).
+
+
+\subsection{Applying Parseval's Theorem to EEG PSD}
+From Parseval's theorem for CTFT, we can see that the energy of a signal can be computed in frequency domain as
+\[
+\int_{-\infty}^{\infty} |x(t)|^2\,dt
+= \frac{1}{2\pi}\int_{-\infty}^{\infty} |X(\omega)|^2\,d\omega .
+\]
+
+Since we can only compute for finite-time, we define a time window of duration \(T\). This is a rectangular window on \([0,T)\)) so our limits of the integration change accordingly. We define the finite-time Fourier transform (still in continuous-time) as
+\[
+X_T(\omega)=\int_{0}^{T} x(t)\,e^{-j\omega t}\,dt,
+\qquad
+\widehat{S}_{xx}(\omega)=\frac{1}{2\pi T}\,|X_T(\omega)|^2
+\quad[\text{power/Hz}],
+\]
+so that
+\(
+\frac{1}{2\pi}\int \widehat{S}_{xx}(\omega)\,d\omega
+\approx \frac{1}{T}\int_0^T |x(t)|^2 dt
+\)
+the time-average power over \([0,T)\). Now, in our computers, we need to implement this in discrete-time. So, we sample at \(F_s\) Hz over duration \(T\), giving \(N=F_s T\) samples (recall DFT from Week 10). The discrete Fourier transform (DFT) is
+\[
+X[k]=\sum_{n=0}^{N-1} x[n]\,e^{-j2\pi kn/N},\qquad
+f_k=\frac{kF_s}{N},\quad \Delta f=\frac{F_s}{N},\quad k=0,\dots,N-1.
+\]
+The Parseval's theorem for DFT changes to be 
+\[
+\sum_{n=0}^{N-1}|x[n]|^2=\frac{1}{N}\sum_{k=0}^{N-1}|X[k]|^2.
+\]
+
+Therefore, the final quantity that gets computed usually is the \emph{periodogram} estimate of the PSD:
+\[
+\widehat{S}_{xx}^{(2)}(f_k)=\frac{1}{N F_s}\,|X[k]|^2,
+\]
+so that
+\(
+\sum_{k=0}^{N-1} \widehat{S}_{xx}^{(2)}(f_k)\,\Delta f
+= \frac{1}{N}\sum_{n=0}^{N-1}|x[n]|^2
+\)
+(the average power).
+
+On the EEG simulator page, you see the \(\widehat{S}_{xx}(f)\) versus \(f\) (Hz) where peaks indicate frequencies with high power. So, all you do when you are asked to compare a diseased brain with a healthy brain is to compare the powers for your frequencies of interest: does the diseased brain have the same ``power'' during deep sleep and full concentration modes as a healthy brain? If not, doctors then prescribe treatments and drugs to help the patient recover --- further away the patients PSD is from ideal the doctor might prescribe stronger drugs!
+\end{document}
