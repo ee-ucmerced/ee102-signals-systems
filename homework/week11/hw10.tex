@@ -17,11 +17,100 @@
 
 \begin{document}
 
-\problem{1}
-Low-pass filter: h(t) impulse response, compute convolution. Plot.
-Low-pass filter: H(w) design. Apply multiplication. Plot.
-Observe that both give you the same thing.
+\problem{1} An underdamped series RLC circuit is excited by an input at time \(t_0\). The circuit outputs a voltage that is a damped oscillation at its natural frequency. This output signal is modeled as
+\[
+x(t)=A\,e^{-\alpha\,(t-t_0)}\cos\!\big(\omega_0\,(t-t_0)\big)\,u(t-t_0),
+\qquad
+\alpha>0,\ \omega_0>0,
+\]
+where \(u(\cdot)\) is the unit step. 
 
-\problem{2}
-Filter design to meet specs given by the user. 
+\problempart \textbf{(6 points)}
+Write two time-domain properties of \(x(t)\) that you can observe directly from the signal equation or by graphing it. 
+
+\problempart \textbf{(2 points)} Write a signal $\bar{x}(t)$ that when shifted by \(t_0\) gives \(x(t)\).
+
+\problempart \textbf{(10 points)}
+Compute the Fourier transform \(X(\omega)\) of \(x(t)\).
+
+Hint: Use Euler's formula to express the cosine as a sum of complex exponentials --- don't solve integration by parts!
+
+\problempart \textbf{(5 points)} Compute the Fourier transform $\bar X(\omega)$ of $\bar x(t)$. Using the time-shift property, prove that \(X(\omega) = e^{-j\omega t_0} \bar{X}(\omega)\) to verify your result.
+
+
+% \[ X(\omega)=\frac{A}{2}\,e^{-j\omega t_0}\!\left(\frac{1}{\alpha+j(\omega-\omega_0)}+\frac{1}{\alpha+j(\omega+\omega_0)}\right).
+% \]
+
+\problempart \textbf{(5 points)} Sketch \(|X(\omega)|\). Indicate the spectral peaks (the frequency peaks) at \(\pm\omega_0\).
+
+\problempart \textbf{(6 points)}
+Define an ideal low-pass filter as follows:
+\[
+H_{\mathrm{LP}}(\omega)=
+\begin{cases}
+1,& |\omega|\le \Omega_c,\\
+0,& |\omega|>\Omega_c.
+\end{cases}
+\]
+Sketch \(H_{\mathrm{LP}}(\omega)\) for positive and negative \(\omega\). Label \(\pm\Omega_c\) on your graph.
+
+\problempart \textbf{(8 points)}
+By using the inverse Fourier transform, compute the impulse response of the low-pass filter
+
+% \[
+% h_{\mathrm{LP}}(t)=\frac{1}{2\pi}\!\int_{-\Omega_c}^{\Omega_c} e^{j\omega t}\,d\omega
+% =\frac{\sin(\Omega_c t)}{\pi t}.
+% \]
+
+\textbf{Hint:} use even symmetry of \(H_{\mathrm{LP}}(\omega)\). Solved example 4.5 in Oppenheim \& Willsky 2nd Edition has the answer. 
+
+\problempart \textbf{(10 points)}
+We know that if we `apply' the filter system to the input. That is, if there is a system with impulse response \(h_{\mathrm{LP}}(t)\), and we apply an input $x(t)$ to this system to obtain an output $y(t)$. Using the convolution theorem, we know that in the frequency domain, we have that \(Y(\omega)=X(\omega)\,H_{\mathrm{LP}}(\omega)\). Compute $Y(\omega)$ and discuss the properties of $Y(\omega)$. 
+
+\problempart \textbf{(10 points)}
+Now, let's do the same in time-domain. Write the convolution integral
+\[
+y(t)=(x*h_{\mathrm{LP}})(t)=\int_{-\infty}^{\infty} x(\tau)\,h_{\mathrm{LP}}(t-\tau)\,d\tau.
+\]
+Solve the convolution integral to compute $y(t)$ in time-domain.
+Compute the inverse Fourier transform of \(Y(\omega)\) to obtain \(y(t)\) and verify your result. 
+
+\textbf{\color{blue}Important:} You will not be able to solve the convolution integral in closed-form. Instead, express your answer as an integral expression that can be evaluated numerically. Things can be quite difficult in time-domain!
+\problempart \textbf{(10 points)}
+Using Parseval's theorem, we can define a new type of energy in the frequency domain that is band-limited to \(|\omega|\le \Omega_c\):
+\[
+E_{\mathrm{LP}}=\frac{1}{2\pi}\int_{-\Omega_c}^{\Omega_c} |X(\omega)|^2\,d\omega,
+\]
+this is the energy contained in the signal \(x(t)\) that lies within the passband of the low-pass filter.
+
+Compute \(E_{\mathrm{LP}}\) in terms of \(\alpha,\omega_0,\Omega_c\). 
+
+\textbf{Hint:} use \(\big|\alpha+j(\omega-\omega_0)\big|^{-2}=\frac{1}{\alpha^2+(\omega-\omega_0)^2}\) and \(\int \frac{d\omega}{a^2+(\omega-b)^2}=\frac{1}{a}\arctan\!\frac{\omega-b}{a}\). You may find it useful to ignore cross terms if \(\alpha\ll \omega_0\). How do you justify this approximation physically?
+
+\problempart \textbf{(10 points)}
+Explore other possible filters in frequency domain: low-pass, band-pass, and high-pass. Comment on which one might better isolate the ring-down mode in the RLC circuit. Refer to sketches, \(h(t)\), and band-energy calculations. You don't need to solve it out completely but make convincing arguments using Fourier analysis properties.
+
+
+\problem{2} Validate Problem 1 using computer programs. You may start on the coding problem before finishing Problem 1. It is \textbf{highly recommended that you start early with the homework so that you can get help during TA's Friday office hour}.
+
+With a sampling rate \(F_s\) Hz, we have a time interval of \(\Delta t=1/F_s\) and we can write the continuous-time signal above by substituting \(t=n\Delta t\) as a discrete-time signal:
+\[
+x[n]=A\,e^{-\alpha(n-n_0)\Delta t}\cos\!\big(\omega_0 (n-n_0)\Delta t\big)\,u[n-n_0].
+\]
+
+\problempart \textbf{(6 points)}
+Choose parameters \((A,\alpha,\omega_0,t_0)\) and \(F_s\). Implement the equation above in a function. Then, plot \(x[n]\) versus \(n\Delta t\). Label your graph.
+
+\problempart \textbf{(8 points)}
+Re-use the previous homework assignment code for DFT implementation to compute the DFT with length \(N\) for the signal above. Plot \(|X[k]|\) versus discrete frequency. Indicate indices corresponding to \(\pm\omega_0\). You may need to center the spectrum for better visualization.
+
+\problempart \textbf{(8 points)}
+Implement the ideal low-pass filter by masking \(|\omega|\le \Omega_c\) in the DFT domain. Compute \(y[n]\) by inverse DFT. Plot the filtered signal \(y[n]\) and comment on the filter's operation.
+
+\problempart \textbf{(10 points)}
+Implement at least one other filter type (high-pass or band-pass, or something else of your choice). Provide the DFT mask, impulse response, and plot the filtered signal. Comment on how well the filter isolates the ring-down mode in the RLC circuit.
+
+\problempart \textbf{(10 points)}
+Estimate band-limited input energy by summing \(|X[k]|^2\) over passband indices to verify your answer in Problem 1. Find out how well your filter isolates the ringing mode for your chosen parameters. Experiment with different parameters.
+
 \end{document}
