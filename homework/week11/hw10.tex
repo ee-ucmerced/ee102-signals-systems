@@ -92,7 +92,7 @@ Compute \(E_{\mathrm{LP}}\) in terms of \(\alpha,\omega_0,\Omega_c\).
 Explore other possible filters in frequency domain: low-pass, band-pass, and high-pass. Comment on which one might better isolate the ring-down mode in the RLC circuit. Refer to sketches, \(h(t)\), and band-energy calculations. You don't need to solve it out completely but make convincing arguments using Fourier analysis properties.
 
 
-\problem{2} Validate Problem 1 using computer programs. You may start on the coding problem before finishing Problem 1. It is \textbf{highly recommended that you start early with the homework so that you can get help during TA's Friday office hour}.
+\problem{2} Validate Problem 1 using computer programs. It is \textbf{highly recommended that you start early with the homework so that you can get help during TA's Friday office hour}.
 
 With a sampling rate \(F_s\) Hz, we have a time interval of \(\Delta t=1/F_s\) and we can write the continuous-time signal above by substituting \(t=n\Delta t\) as a discrete-time signal:
 \[
@@ -101,12 +101,39 @@ x[n]=A\,e^{-\alpha(n-n_0)\Delta t}\cos\!\big(\omega_0 (n-n_0)\Delta t\big)\,u[n-
 
 \problempart \textbf{(5 points)}
 Choose parameters \((A,\alpha,\omega_0,t_0)\) and \(F_s\). Implement the equation above in a function. Then, plot \(x[n]\) versus \(n\Delta t\). Label your graph.
+Make sure to choose $F_s$ to be greater than \(2 \cdot \frac{\omega_0}{2\pi}\). You will learn why this is important next week. 
+
+For a simple start, set $F_s = 2000$ Hz and ensure that the condition above is satisfied.
 
 \problempart \textbf{(10 points)}
-Re-use the previous homework assignment code for DFT implementation to compute the DFT with length \(N\) for the signal above. Plot \(|X[k]|\) versus discrete frequency. Indicate indices corresponding to \(\pm\omega_0\). You may need to center the spectrum for better visualization.
+Re-use the previous homework assignment code for DFT implementation to compute the DFT with length \(N\) for the signal above (it is also OK to use FFT libraries). 
+
+Helpful starting point:
+
+Set $N = 2048$ and $L = 8192$. If your generated \(x[n]\) has length \(<N\), zero-pad it to length \(N\). If it is longer, keep the first \(N\) samples. Then zero-pad from \(N\) to \(L\) before taking the DFT. Remember that with DFT, the frequency is sampled at discrete frequencies. Use the following frequency grid:
+\[
+\omega_k=\frac{2\pi k F_s}{L},\quad k=0,1,\dots,L-1.
+\]
+The index corresponding to \(\omega_0\) will be 
+\[
+k_0=\operatorname{round}\!\left(\frac{\omega_0\,L}{2\pi F_s}\right).
+\]
+
+Plot \(|X[k]|\) versus discrete frequency. Indicate indices corresponding to \(\pm\omega_0\). You may need to center the spectrum for better visualization (using \texttt{fftshift}).
 
 \problempart \textbf{(10 points)}
-Implement the ideal low-pass filter by masking \(|\omega|\le \Omega_c\) in the DFT domain. Compute \(y[n]\) by inverse DFT. Plot the filtered signal \(y[n]\) and comment on the filter's operation.
+Implement the ideal low-pass filter $H[k]$. Compute \(y[n]\) using inverse DFT. Plot the filtered signal \(y[n]\).
+
+The discrete-time DFT mask is
+\[
+H[k]=\begin{cases}
+1,& |\omega_k|\le \Omega_c,\\
+0,& \text{otherwise}.
+\end{cases}
+\]
+You may start by setting \(\Omega_c = 0.8\,\omega_0\).
+
+Compute \(Y[k]=X[k]\cdot H[k]\). Compute \(y[n]\) by the \(L\)-point inverse DFT. Plot \(\operatorname{Re}\{y[n]\}\) versus \(n\Delta t\).
 
 \textbf{\color{blue}Optional exploration (not graded):}
 
@@ -116,3 +143,70 @@ Implement the ideal low-pass filter by masking \(|\omega|\le \Omega_c\) in the D
 \problempart Estimate band-limited input energy by summing \(|X[k]|^2\) over passband indices to verify your answer in Problem 1. Find out how well your filter isolates the ringing mode for your chosen parameters. Experiment with different parameters.
 
 \end{document}
+
+
+% Replace your Problem 2 block with this fully specified version.
+
+\problem{2} Validate Problem 1 using computer programs. You may start on the coding problem before finishing Problem 1.
+
+With a sampling rate \(F_s\) Hz, we have \(\Delta t=1/F_s\) and the discrete-time signal
+\[
+x[n]=A\,e^{-\alpha(n-n_0)\Delta t}\cos\!\big(\omega_0 (n-n_0)\Delta t\big)\,u[n-n_0].
+\]
+
+\problempart \textbf{(5 points)}
+Choose \(A,\alpha,\omega_0,t_0\) and \(F_s\). Plot \(x[n]\) versus \(n\Delta t\). 
+\textbf{Use exactly:} \(F_s=2000~\text{Hz}\). Ensure \(F_s>2\cdot \frac{\omega_0}{2\pi}\) (Nyquist).
+
+\problempart \textbf{(10 points)}
+Compute the DFT of \(x[n]\) with \textbf{fixed} sizes and padding.
+
+\textbf{Use these exact sizes:}
+\[
+N=2048,\qquad L=8192.
+\]
+If your generated \(x[n]\) has length \(<N\), zero-pad it to length \(N\). If it is longer, keep the first \(N\) samples. Then zero-pad from \(N\) to \(L\) before taking the DFT.
+
+\textbf{Frequency grid (use exactly this):}
+\[
+\omega_k=\frac{2\pi k F_s}{L},\quad k=0,1,\dots,L-1.
+\]
+Index corresponding to \(\omega_0\):
+\[
+k_0=\operatorname{round}\!\left(\frac{\omega_0\,L}{2\pi F_s}\right).
+\]
+
+Plot \(|X[k]|\) versus \(\omega_k\). For visualization only, you may apply \texttt{fftshift} to both \(X\) and \(\omega_k\) before plotting. Clearly mark the bins nearest \(\pm\omega_0\).
+
+\problempart \textbf{(10 points)}
+Implement an \textbf{ideal low-pass} in the DFT domain with a \textbf{fixed} cutoff tied to your \(\omega_0\).
+
+\textbf{Use exactly:} \(\Omega_c = 0.8\,\omega_0\).
+
+Form the mask
+\[
+H[k]=\begin{cases}
+1,& |\omega_k|\le \Omega_c,\\
+0,& \text{otherwise}.
+\end{cases}
+\]
+Compute \(Y[k]=X[k]\cdot H[k]\). Compute \(y[n]\) by the \(L\)-point inverse DFT. Plot \(\operatorname{Re}\{y[n]\}\) versus \(n\Delta t\). In one sentence, state what the filter kept and what it removed.
+
+\textbf{\color{blue}Optional (not graded):}
+\problempart Implement a band-pass with \(\Omega_1=0.9\,\omega_0\), \(\Omega_2=1.1\,\omega_0\) using the same \(L\) and grid. Plot the result.
+
+\problempart Numerically estimate band-limited energy (no algebra):
+\[
+E_{\mathrm{LP}} \approx \frac{1}{2\pi}\sum_{\{k:\,|\omega_k|\le \Omega_c\}} |X[k]|^2\,\Delta\omega,
+\qquad \Delta\omega=\frac{2\pi F_s}{L}.
+\]
+Report the value. Compare to the band-pass value if you did the optional part.
+
+% --- One-line, working convolution-theorem check (keep it short) ---
+\textbf{DFT check (time filtering = frequency multiplication).}
+Use the same \(L=8192\). Let \(h[n]\) be any FIR of length \(\mathbf{M=129}\) (e.g., your ideal LP impulse windowed to 129 taps). Zero-pad \(x[n]\) to length \(L\) and \(h[n]\) to length \(L\). Compute
+\[
+X=\mathrm{DFT}_L(x),\quad H=\mathrm{DFT}_L(h),\quad Y=X\cdot H,\quad y_{\text{fft}}=\mathrm{IDFT}_L(Y).
+\]
+Compute the linear convolution \(y_{\text{lin}}=x*h\) and keep the first \(N+M-1=2176\) samples. 
+\textbf{Instruction:} Compare \(y_{\text{fft}}[0:2176]\) with \(y_{\text{lin}}[0:2176]\). They should match to within numerical precision. Do \emph{not} use \texttt{fftshift} for this check.
