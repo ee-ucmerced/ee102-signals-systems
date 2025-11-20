@@ -52,6 +52,7 @@ __pycache__/
 # --- EE102 pop-quiz generated files (tcolorbox) ---
 # Recorded solution snippets saved by \savelowerto
 **/popquiz-*.tex
+**/guitar_clean.wav
 
 # The tcolorbox record index written by \tcbstartrecording
 **/*.records
