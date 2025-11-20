@@ -11,13 +11,14 @@
 \begin{document}
 
 \section*{EE 102 Week 11, Lecture 1 (Fall 2025)}
-Note: The last two sections of this document will be covered in lecture 2.
 \subsection*{Instructor: \instructor}
 \subsection*{Date: \releasedate}
+{\color{blue} Note: Week 12 Lecture 1 and Lecture 2 have the ``mostly'' the same set of lecture notes. The last section in lecture 2 is the only extra section.}
+
 \section{Announcements}
 \begin{itemize}
     \item HW \#10 is due on Mon Nov 17.
-    \item HW \#11 will be released Tue Nov 18 and due on Mon Nov 24.
+    \item HW \#11 will be released Tue Nov 18 and due on Mon Nov 25.
 \end{itemize}
 \section{Goals}
 By the end of this lecture, you should be able to understand the process of sampling a continuous-time signal and how the original signal can be reconstructed from the discrete samples. You will learn to distinguish between the sampling rate, the frequency of the original signal, and the frequencies in the sampled signal. Finally, you will be able to understand that if you keep on increasing the number of samples for a signal, your reconstructed signal will get closer and closer to the original signal. The lower number of samples you take, the more distorted your reconstructed signal will be. But there is a minimum number of samples you must take in order to capture all frequency information of the original signal without distortion. This minimum sampling rate is called the Nyquist rate.
@@ -293,7 +294,7 @@ The original two impulses at $\pm\omega_0$ are now repeated (copied) at integer 
 of the sampling frequency $\omega_s$!!! This is not great, because now the sampled
 signal contains many more frequency components than the original signal (these are the distortions that you hear when you don't sample correctly!). How can we remove these additional impulses and recover the original cosine frequency $\omega_0$? Low pass filtering! We will discuss this in more detail next time. 
 
-\subsection*{Next class: Filtering to remove distortions}
+\subsection*{Filtering to remove distortions}
 
 The original continuous-time cosine only had two impulses 
 at $\omega = \pm\omega_0$. After sampling, $X_s(\omega)$ contains infinitely
@@ -363,4 +364,21 @@ If we sample \emph{above} this Nyquist rate, we can in principle use an ideal
 low-pass filter to remove the extra copies in $X_s(\omega)$ and reconstruct the
 original cosine exactly from its samples. This is the key result of this week's theoretical topics.
 
+\section{Nyquist Sampling Theorem}
+We end with the formal statement of the Nyquist Sampling Theorem for general bandlimited signals (not just a single cosine).
+\begin{theorem}[Nyquist Sampling Theorem]
+If a continuous-time signal $x(t)$ contains no frequencies higher than
+$B$ Hz, that is, if its Fourier transform $X(\omega)$ is zero for
+$|\omega| > 2\pi B$, then $x(t)$ is completely determined by its samples
+taken at a sampling frequency $F_s$ greater than $2B$ Hz. In this case,
+$x(t)$ can be reconstructed from its samples using an ideal low-pass filter. 
+\end{theorem}
+
+\section{Recommended Reading}
+Run \href{https://github.com/ee-ucmerced/ee102-signals-systems/blob/main/lecture_notes/week12_sampling/VM_aliasing.ipynb}{\texttt{VM\_aliasing.ipynb}} notebook that is available on course GitHub. Try to achieve the following using the code:
+\begin{itemize}
+    \item Visualize aliasing with $x(t) = \sin(2\pi f_0 t)$ for different values of $f_0$ and different sampling frequencies $F_s$.
+    \item Observe how increasing the number of samples improves the reconstruction of the original signal for the sine wave.
+    \item Apply the sampling theorem to adequately sample and reconstruct your recorded voice from Homework \#10.
+\end{itemize}
 \end{document}
