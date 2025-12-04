@@ -1,0 +1,334 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\input{preamble.tex}
+\renewcommand{\releasedate}{November 24, 2025}
+\newcommand{\Eblank}{\rule{3cm}{0.4pt}}
+\newcommand{\Rankblank}{\rule{3cm}{0.4pt}}
+
+\begin{document}
+
+\section*{EE 102 Week 13, Lecture 1 (Fall 2025)}
+\subsection*{Instructor: \instructor}
+\subsection*{Date: \releasedate}
+
+\section{Announcements}
+\begin{itemize}
+    \item HW \#11 is due on Tue Nov 25. Use your free extension if you need it.
+    \item HW \#12 (final exam practice) will be due Dec 08.
+    \item Final exam will be on Dec 16 (Tuesday) from 9am to 11am.
+\end{itemize}
+\section{Goals}
+By the end of this lecture, you should be able to apply the concepts of sampling to a communication system example and understand the fundamental trade-offs involved between time and frequency domain representations of signals, as seen in communication applications.
+
+\section{Review: Fourier Transform and Sampling Theorem}
+For any signal \( x(t) \), the Fourier Transform gives us the frequency-domain representation of the signal (also called the spectrum):
+\[
+X(\omega) = \int_{-\infty}^{\infty} x(t) e^{-j \omega t} dt.
+\]
+The Inverse Fourier Transform allows us to reconstruct the time-domain signal from its frequency-domain representation:
+\[
+x(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} X(\omega) e^{j \omega t} d\omega.
+\]
+The inverse Fourier transform sets the intuition more directly. The frequency domain representation stems from the fact that we are trying to represent our signal $x(t)$ as a linear combination of complex exponentials $e^{j \omega t}$ at different frequencies $\omega$. The Fourier transform $X(\omega)$ tells us how much of each frequency component is present in the signal.
+
+When working with signals, we are often interested in ensuring that no frequency component of a signal is \emph{lost}. So, when we store a signal digitally, we want to sample it such that we do not lose any frequency component. The Sampling Theorem helps us do this precisely. It states that a continuous-time signal \( x(t) \) can be perfectly reconstructed from its samples \( x(nT) \) if the sampling frequency \( f_s = \frac{1}{T} \) is greater than twice the maximum frequency component present in the signal (the Nyquist rate):
+\[
+f_s > 2 f_{max}.
+\]
+
+\section{Communication Over a Noisy Channel}
+\section{Tone Plus Additive White Gaussian Noise}
+
+We start with the basic additive noise model
+\[
+y(t) = x(t) + n(t),
+\]
+where $x(t)$ is a deterministic signal and $n(t)$ is additive white Gaussian noise (AWGN).
+
+\subsection{Pop Quiz: What Does White Noise Look Like?}
+
+\textbf{Pop Quiz.} Ask students to think about the following:
+
+\begin{itemize}
+  \item \emph{Time domain:} What does $n(t)$ look like as a function of time?
+  \item \emph{Frequency domain:} What does the spectrum $N(\omega)$, or the power spectral density $S_n(\omega)$, look like?
+  \item \emph{Real-life example:} Where have you \emph{heard} or \emph{seen} white noise in real life? (Example: TV ``static'' or FM radio between stations.)
+\end{itemize}
+
+We model AWGN as a zero-mean Gaussian random process with a flat power spectral density (PSD)
+\[
+S_n(\omega) = \frac{N_0}{2}, \quad -\infty < \omega < \infty,
+\]
+so the noise is \emph{not} bandlimited.
+
+\subsection{Bandlimited Signal and Sampling Review}
+
+Assume $x(t)$ is bandlimited to $|\omega| \le \Omega_B$:
+\[
+X(\omega) = \mathcal{F}\{x(t)\}, \qquad
+X(\omega) = 0 \quad \text{for } |\omega| > \Omega_B.
+\]
+
+A simple schematic of $|X(\omega)|$ can be drawn as a lobe concentrated in a finite band.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=0.9]
+  % axes
+  \draw[->] (-4,0) -- (4,0) node[right] {$\omega$};
+  \draw[->] (0,0) -- (0,2.2) node[above] {$|X(\omega)|$};
+  % band edges
+  \draw[dashed] (1.8,0) -- (1.8,1.8) node[above] {$\Omega_B$};
+  \draw[dashed] (-1.8,0) -- (-1.8,1.8) node[above] {$-\Omega_B$};
+  % lobe
+  \draw[thick] (-1.8,0) -- (-1.0,1.5) -- (1.0,1.5) -- (1.8,0);
+\end{tikzpicture}
+\caption{Example of a bandlimited spectrum $X(\omega)$ with support $|\omega| \le \Omega_B$.}
+\end{figure}
+
+We sample $x(t)$ with sampling period $T_s$ and sampling frequency $F_s = 1/T_s$. The continuous-time model of sampling is
+\[
+x_s(t) = \sum_{n=-\infty}^{\infty} x(nT_s)\,\delta(t - nT_s).
+\]
+Its Fourier transform is
+\[
+X_s(\omega) 
+= \frac{1}{T_s} \sum_{k=-\infty}^{\infty} X(\omega - k\omega_s),
+\qquad \omega_s = \frac{2\pi}{T_s},
+\]
+so the spectrum of the sampled signal is a periodic replication of $X(\omega)$ with period $\omega_s$.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=0.9]
+  % axes
+  \draw[->] (-6,0) -- (6,0) node[right] {$\omega$};
+  \draw[->] (0,0) -- (0,2.2) node[above] {$|X_s(\omega)|$};
+  % one main lobe at 0
+  \draw[thick] (-1.2,0) -- (-0.6,1.5) -- (0.6,1.5) -- (1.2,0);
+  % replicas at +/- ws
+  \draw[thick] (-1.2-3,0) -- (-0.6-3,1.0) -- (0.6-3,1.0) -- (1.2-3,0);
+  \draw[thick] (-1.2+3,0) -- (-0.6+3,1.0) -- (0.6+3,1.0) -- (1.2+3,0);
+  % ws labels
+  \node at (3,-0.3) {$\omega_s$};
+  \node at (-3,-0.3) {$-\omega_s$};
+\end{tikzpicture}
+\caption{Sampled spectrum $X_s(\omega)$ showing periodic replicas of $X(\omega)$ spaced by $\omega_s$.}
+\end{figure}
+
+\subsection{Adding AWGN and the Effect on Sampling}
+
+Now consider the received continuous-time signal
+\[
+y(t) = x(t) + n(t).
+\]
+In the frequency domain, by linearity,
+\[
+Y(\omega) = X(\omega) + N(\omega).
+\]
+For power spectral densities we have
+\[
+S_y(\omega) = S_x(\omega) + S_n(\omega).
+\]
+
+Because $S_n(\omega) = N_0/2$ for all $\omega$, $y(t)$ is \emph{not} bandlimited, even though $x(t)$ is.
+
+Sampling $y(t)$ gives
+\[
+y_s(t) = \sum_{n=-\infty}^{\infty} y(nT_s)\,\delta(t - nT_s)
+      = \sum_{n=-\infty}^{\infty} \bigl(x(nT_s) + n(nT_s)\bigr)\,\delta(t - nT_s).
+\]
+
+The spectrum of the sampled noisy signal is
+\[
+Y_s(\omega) 
+= \frac{1}{T_s} \sum_{k=-\infty}^{\infty} Y(\omega - k\omega_s)
+= \frac{1}{T_s} \sum_{k=-\infty}^{\infty} \bigl[ X(\omega - k\omega_s) + N(\omega - k\omega_s) \bigr].
+\]
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=0.9]
+  % axes
+  \draw[->] (-6,0) -- (6,0) node[right] {$\omega$};
+  \draw[->] (0,0) -- (0,2.2) node[above] {$S_y(\omega)$};
+  % bandlimited Sx
+  \draw[thick] (-1.5,0) -- (-0.7,1.5) -- (0.7,1.5) -- (1.5,0);
+  % noise floor
+  \draw[thick,dashed] (-6,0.5) -- (6,0.5);
+  \node[right] at (6,0.5) {$S_n(\omega)$};
+\end{tikzpicture}
+\caption{PSD $S_y(\omega) = S_x(\omega) + S_n(\omega)$: bandlimited signal plus flat noise floor.}
+\end{figure}
+
+After sampling, the flat noise PSD is also replicated and aliased into every frequency band. Thus, even if $F_s$ is very large, the \emph{noise process itself} is non-bandlimited, and its continuous-time waveform cannot be perfectly reconstructed from samples.
+
+We can still reconstruct the \emph{bandlimited part} $x(t)$ as well as possible by filtering, but there will always be residual noise in any finite band.
+
+\subsection{Filtering and Signal-to-Noise Ratio (SNR)}
+
+We now introduce the ``best we can do'' idea: pass the noisy signal through a linear time-invariant (LTI) filter to maximize SNR in the band of interest.
+
+Consider the block diagram:
+\[
+y(t) \;\xrightarrow{\;h(t)\;}\; z(t).
+\]
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  % blocks
+  \node[draw, minimum width=1.6cm, minimum height=0.9cm] (sum) at (0,0) {$y(t)$};
+  \node[draw, minimum width=2.0cm, minimum height=0.9cm, right=1.8cm of sum] (filt) {$h(t)$};
+  \node[right=2.0cm of filt] (out) {$z(t)$};
+  % arrows
+  \draw[->] (sum) -- (filt);
+  \draw[->] (filt) -- (out);
+\end{tikzpicture}
+\caption{Filtering the noisy signal $y(t)$ with impulse response $h(t)$ to obtain $z(t)$.}
+\end{figure}
+
+We can write
+\[
+z(t) = (h * y)(t) = (h * x)(t) + (h * n)(t).
+\]
+In the frequency domain,
+\[
+Z(\omega) = H(\omega)Y(\omega)
+           = H(\omega)X(\omega) + H(\omega)N(\omega).
+\]
+
+Define the signal and noise components at the filter output:
+\[
+Z_x(\omega) = H(\omega) X(\omega), \qquad
+Z_n(\omega) = H(\omega) N(\omega).
+\]
+Their PSDs are
+\[
+S_{z,x}(\omega) = |H(\omega)|^2 S_x(\omega), \qquad
+S_{z,n}(\omega) = |H(\omega)|^2 S_n(\omega).
+\]
+
+The average signal power at the output is
+\[
+P_{\text{sig,out}} 
+= \frac{1}{2\pi} \int_{-\infty}^{\infty} S_{z,x}(\omega)\,d\omega
+= \frac{1}{2\pi} \int_{-\infty}^{\infty} |H(\omega)|^2 S_x(\omega)\,d\omega,
+\]
+and the average noise power at the output is
+\[
+P_{\text{noise,out}} 
+= \frac{1}{2\pi} \int_{-\infty}^{\infty} S_{z,n}(\omega)\,d\omega
+= \frac{1}{2\pi} \int_{-\infty}^{\infty} |H(\omega)|^2 S_n(\omega)\,d\omega.
+\]
+
+We define the output SNR as
+\[
+\text{SNR}_{\text{out}}
+= \frac{P_{\text{sig,out}}}{P_{\text{noise,out}}}
+= \frac{\displaystyle \int_{-\infty}^{\infty} |H(\omega)|^2 S_x(\omega)\,d\omega}
+       {\displaystyle \int_{-\infty}^{\infty} |H(\omega)|^2 S_n(\omega)\,d\omega}.
+\]
+
+If $S_n(\omega) = N_0/2$ is white and $x(t)$ is concentrated around some band (e.g., around a tone frequency), then choosing $H(\omega)$ to pass only that band suppresses noise outside that band. However, some noise in the passband always remains, and this sets a lower bound on the achievable SNR.
+
+\subsection{Amplitude Estimation and MSE (Sketch)}
+
+As a concrete example, suppose
+\[
+x(t) = A \cos(\omega_0 t), \qquad y(t) = A \cos(\omega_0 t) + n(t),
+\]
+and we observe $y(t)$ over a finite time interval $0 \le t \le T$.
+
+A natural estimator for $A$ is the correlation with $\cos(\omega_0 t)$:
+\[
+\hat{A} = \frac{2}{T} \int_0^T y(t) \cos(\omega_0 t)\,dt.
+\]
+Under AWGN with PSD $N_0/2$, one can show (without proof here) that
+\[
+\mathbb{E}[\hat{A}] = A,
+\]
+and the mean-square error (MSE) is
+\[
+\text{MSE} = \mathbb{E}\bigl[(\hat{A} - A)^2\bigr] = \text{Var}(\hat{A})
+= \frac{2N_0}{T}.
+\]
+This formula captures the key tradeoff: longer observation time $T$ or smaller noise level $N_0$ leads to lower MSE, but the MSE cannot be made exactly zero in the presence of AWGN.
+
+\section{Bandpass / Pseudo-Random Noise as a ``Useful'' Component}
+
+Instead of uncontrolled static, we can add a \emph{structured}, bandpass or pseudo-random noise component that the receiver \emph{knows} how to handle.
+
+Let $x(t)$ be our information-bearing signal, bandlimited to $|\omega| \le \Omega_s$. Let $n_{\text{bp}}(t)$ be a bandpass noise-like signal such that its spectrum lies in a disjoint band:
+\[
+N_{\text{bp}}(\omega) = 0 \quad \text{for } |\omega| < \Omega_1,
+\]
+and
+\[
+N_{\text{bp}}(\omega) \neq 0 \quad \text{only for } \Omega_1 \le |\omega| \le \Omega_2,
+\]
+with $\Omega_1 > \Omega_s$.
+
+We transmit
+\[
+y(t) = x(t) + n_{\text{bp}}(t).
+\]
+In the frequency domain,
+\[
+Y(\omega) = X(\omega) + N_{\text{bp}}(\omega),
+\]
+with disjoint supports.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=0.9]
+  % axes
+  \draw[->] (-6,0) -- (6,0) node[right] {$\omega$};
+  \draw[->] (0,0) -- (0,2.4) node[above] {$|Y(\omega)|$};
+  % low-frequency signal band
+  \draw[thick] (-1.5,0) -- (-0.8,1.6) -- (0.8,1.6) -- (1.5,0);
+  \node at (0,1.9) {$|X(\omega)|$};
+  % high-frequency bandpass noise
+  \draw[thick,dashed] (3.0,0) -- (3.4,1.2) -- (4.4,1.2) -- (4.8,0);
+  \draw[thick,dashed] (-3.0,0) -- (-3.4,1.2) -- (-4.4,1.2) -- (-4.8,0);
+  \node at (4.0,1.5) {$|N_{\text{bp}}(\omega)|$};
+\end{tikzpicture}
+\caption{Disjoint spectral support: the information signal $X(\omega)$ and the bandpass noise-like component $N_{\text{bp}}(\omega)$.}
+\end{figure}
+
+At the receiver, we can apply a low-pass filter $H_{\text{LP}}(\omega)$ that passes only the signal band:
+\[
+H_{\text{LP}}(\omega) =
+\begin{cases}
+1, & |\omega| \le \Omega_s, \\
+0, & |\omega| \ge \Omega_1.
+\end{cases}
+\]
+Then
+\[
+Z(\omega) = H_{\text{LP}}(\omega)Y(\omega)
+= H_{\text{LP}}(\omega)X(\omega) + H_{\text{LP}}(\omega)N_{\text{bp}}(\omega)
+= X(\omega),
+\]
+because $N_{\text{bp}}(\omega)$ is zero in the passband of $H_{\text{LP}}(\omega)$. Thus, in principle,
+\[
+z(t) = x(t)
+\]
+is recovered \emph{perfectly}, despite the presence of a large ``noise-like'' component in another band.
+
+If $n_{\text{bp}}(t)$ is pseudo-random but known statistically or deterministically at the receiver, it can be:
+\begin{itemize}
+  \item a pilot or control signal in a different band;
+  \item a spread-spectrum carrier that can be despread;
+  \item a comfort-noise or masking signal that is shaped to lie outside the sensitive band for reconstruction.
+\end{itemize}
+This structured, bandpass noise is fundamentally different from uncontrolled static: it is placed in a known spectral region and/or designed so that the receiver can remove or exploit it, rather than having it alias into the signal band.
+
+\section{Time--Frequency and Noise--Performance Tradeoffs}
+
+In practice, designing $H(\omega)$ and placing bandpass or pseudo-random noise involves several tradeoffs. Narrowing the filter passband reduces the integrated noise power (since noise power is proportional to the integral of its PSD over frequency), improving SNR, but also makes $h(t)$ more spread out in time, which can introduce delay and ringing. Conversely, using a wider passband yields a shorter, more localized $h(t)$ with less temporal distortion but higher noise power and poorer SNR. Similarly, placing structured bandpass or pseudo-random noise in a separate spectral region (and designing the receiver to know its structure) allows us to preserve or even enhance communication performance, while naive reconstruction in the presence of uncontrolled white noise leads to unavoidable aliasing and irreducible error.
+
+\end{document}

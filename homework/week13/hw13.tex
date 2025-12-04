@@ -1,0 +1,74 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+
+
+\documentclass{ee102_pset}
+\input{macros.tex}
+\input{preamble.tex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[american]{circuitikz}
+
+% Assignment info
+\author{\rule{3cm}{0.4pt}} % Name placeholder
+\submitdate{\rule{3cm}{0.4pt}} % Submission date placeholder
+
+% \submitdate{60 minutes} % Submission date placeholder
+\problemset{Homework \#13: Practice Final Exam}
+\renewcommand{\instructor}{}
+\renewcommand{\duedate}{Dec 10, 2025\:}
+\shorttitle{Homework \#13}
+
+\begin{document}
+Note: This is a practice exam. The questions on this homework do not reflect the amount of time it will take to complete the actual final exam, instead, the purpose of this homework is to help you practice the concepts that will be tested on the final exam. Further, this is a homework so you are allowed to use books and collaborate with peers on understanding the concepts/problems. You must (as always) complete your own work. On the final exam, formula and hints will be provided to you as needed so you don't need to depend on your memory of a formula. 
+
+\problem{1}
+A standard voltmeter measures a voltage $x(t)$ of an RC circuit but the measurement is corrupted by a strange noise signal $n(t)$. The measured voltage signal is given by:
+\[
+x(t) = v_{s0}e^{-t/RC} + n(t)
+\]
+where $v_{s0}, R, C$ are constants and $n(t)$ is the noise signal. 
+\problempart \textbf{[10 points]}
+If the noise acts at discrete time points, then the signal is a train of impulses:
+\[
+n(t) = \sum_{k=-\infty}^{\infty} A \delta(t - kT)
+\]
+where $A$ is the amplitude of each impulse and $T$ is the time period between impulses. Answer the following questions:
+\begin{itemize}
+    \item Using the relationship between impulse signals and the unit step signal, write the signal $x(t)$ only using step signals.
+    \item Write the signal $x(t)$ only using complex exponentials and impulse signals.
+    \item From time $t = 0$ to time $t = 2$, how much noise is added to the measured voltage (that is, compute the total area under the noise signal $n(t)$ from $t = 0$ to $t = 2$).
+    \item Compute the Fourier transform of the signal $x(t)$ and sketch $X(\omega)$.
+\end{itemize}
+
+\problempart \textbf{[30 points]}
+A train of infinite impulses was too much to handle! So, you get a new voltmeter but this one has a that noise acts by mimicking the signal but a bit delayed. So, you find that $n(t) = v_n e^{-(t-t_d)/RC} $. Your task is to design a voltage filtering system that takes $x(t)$ as input and produces a signal $y(t)$ as output such that $y(t)$ has reduced noise level. Include the following in your answer:
+\begin{itemize}
+    \item The frequency response $H(\omega)$ of your system
+    \item The output signal in the frequency domain, $Y(\omega)$
+    \item  The output signal in the time domain, $y(t)$
+    \item The ratio of energy of the output signal over time period $t = 0$ to $t = 5$ to the energy of the input signal over the same time period.
+\end{itemize}
+
+\problem{2}
+Solve Example 3.9 in Oppenheim and Willsky (2nd edition). In addition to the solved example, answer the following questions:
+
+\begin{enumerate}
+    \item  \textbf{[10 points]} What is the value of the Fourier series coefficient $a_0$?
+    \item  \textbf{[10 points]} What signal $x(t)$ satisfies all the properties listed above? 
+    \item  \textbf{[10 points]} Suggest a sampling frequency for this signal to store it in a way that it can be perfectly reconstructed back. Justify your answer.
+\end{enumerate}
+
+\problem{3}
+If a signal $x(t)$ has a Nyquist rate of $\omega_0$, then state (with justification) which statements below are true or false.
+
+\problempart \textbf{[5 points]} The signal \(x(t) = x(t + T_0) - x(t)\) has a Nyquist rate of $\omega_0$.
+\problempart \textbf{[5 points]} The signal \(x(t)\) with Fourier transform
+  \(X(\omega) = X(\omega + \omega_0) - X(\omega)\)
+   has a Nyquist rate of $\omega_0$.
+\problem{4} [\textbf{5 points}]
+Solve Problem 4.40 in Oppenheim and Willsky (2nd edition) on using Fourier transform properties and induction to find the Fourier transform of a given signal.
+\end{document}
