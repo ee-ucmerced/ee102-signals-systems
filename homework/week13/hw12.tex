@@ -28,7 +28,7 @@ Note: This is a practice exam. The questions on this homework do not reflect the
 \problem{1}
 A standard voltmeter measures a voltage $x(t)$ of an RC circuit but the measurement is corrupted by a strange noise signal $n(t)$. The measured voltage signal is given by:
 \[
-x(t) = v_{s0}e^{-t/RC} + n(t)
+x(t) = v_{s0}e^{-t/RC}u(t) + n(t)
 \]
 where $v_{s0}, R, C$ are constants and $n(t)$ is the noise signal. 
 \problempart \textbf{[10 points]}
@@ -38,18 +38,18 @@ n(t) = \sum_{k=-\infty}^{\infty} A \delta(t - kT)
 \]
 where $A$ is the amplitude of each impulse and $T$ is the time period between impulses. Answer the following questions:
 \begin{itemize}
-    \item Using the relationship between impulse signals and the unit step signal, write the signal $x(t)$ only using step signals.
-    \item Write the signal $x(t)$ only using complex exponentials and impulse signals.
+    \item Using the relationship between impulse signals and the unit step signal, write the signal $x(t)$ only using step signals (leaving your answer in derivatives and integrals is OK).
+    \item Write the signal $x(t)$ only using the general complex exponential function discussed in class and impulse signals.
     \item From time $t = 0$ to time $t = 2$, how much noise is added to the measured voltage (that is, compute the total area under the noise signal $n(t)$ from $t = 0$ to $t = 2$).
     \item Compute the Fourier transform of the signal $x(t)$ and sketch $X(\omega)$.
 \end{itemize}
 
 \problempart \textbf{[30 points]}
-A train of infinite impulses was too much to handle! So, you get a new voltmeter but this one has a that noise acts by mimicking the signal but a bit delayed. So, you find that $n(t) = v_n e^{-(t-t_d)/RC} $. Your task is to design a voltage filtering system that takes $x(t)$ as input and produces a signal $y(t)$ as output such that $y(t)$ has reduced noise level. Include the following in your answer:
+A train of infinite impulses was too much to handle! So, you get a new voltmeter but this one has a sinusoidal noise: $n(t) = A \cos(\omega_n t) u(t)$ with $\omega_n \gg 1/RC$. Your task is to design a voltage filtering system that takes $x(t)$ as input and produces a signal $y(t)$ as output such that $y(t)$ has reduced noise level. Include the following in your answer:
 \begin{itemize}
     \item The frequency response $H(\omega)$ of your system
     \item The output signal in the frequency domain, $Y(\omega)$
-    \item  The output signal in the time domain, $y(t)$
+    \item  The output signal in the time domain, $y(t)$ (closed form not required)
     \item The ratio of energy of the output signal over time period $t = 0$ to $t = 5$ to the energy of the input signal over the same time period.
 \end{itemize}
 
