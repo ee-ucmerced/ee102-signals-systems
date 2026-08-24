@@ -54,12 +54,14 @@ __pycache__/
 **/popquiz-*.tex
 **/guitar_clean.wav
 
-# The tcolorbox record index written by \tcbstartrecording
 **/*.records
 
-# If you ever use a solutions directory variant, ignore it too:
 **/solutions/
 **/solutions/*.tex
 
 # (legacy/defensive) if a macro-named dir slipped in:
 **/@@pq@solutionsdir/
+
+admin/*
+.env
+
