@@ -1,4 +1,5 @@
 # Ignore LaTeX build files
+*.tex
 *.aux
 *.log
 *.out
