@@ -149,27 +149,61 @@ Prove/disprove the following:
 % Problem 4
 % =========================================================
 \problem{4}
-% \; LTI with internal modes and direct feedthrough (modified P1.7-11)}
-[Adapted from Lathi 1.7-11]
-For a certain LTI system, the output $y(t)$ depends on the input $x(t)$ and two internal modes parameterized by initial conditions $q_1(0)$ and $q_2(0)$. The following observations were made (all signals are right-sided, that is, defined for $t\geq 0$, due to an implicit unit step $u(t)$):
+[Adapted from Lathi 1.7-11]: A challenging problem, but one that will solidify your understanding!
+
+For a certain LTI system, the output $y(t)$ depends on the input $x(t)$
+and on the initial states of the system, specified by two values
+$q_1(0)$ and $q_2(0)$. The following experiments are performed:
 
 \begin{center}
 \begin{tabular}{c c c c}
 \hline
 $x(t)$ & $q_1(0)$ & $q_2(0)$ & $y(t)$ \\
 \hline
-$0$ & $1$ & $-1$ & $e^{-t}u(t)$ \\
-$0$ & $2$ & $\ \,1$ & $e^{-t}(3t+2)u(t)$ \\
-$u(t)$ & $-1$ & $-1$ & $2\,u(t)$ \\
+$0$    & $1$  & $-1$ & $e^{-t}u(t)$ \\
+$0$    & $2$  & $1$  & $e^{-t}(3t+2)u(t)$ \\
+$u(t)$ & $-1$ & $-1$ & $2u(t)$ \\
 \hline
 \end{tabular}
 \end{center}
 
-For $q_1(0)=q_2(0)=0$ and the pulse input
+The input $x(t)$ is an externally applied signal. The values
+$q_1(0)$ and $q_2(0)$ describe the state in which the system begins.
+
+\problempart \textbf{[6 points]} Note that for the first two experiments (the first two rows), the input is zero, so we have $x(t)=0$.
+Using linearity, determine the output of the system for 
 \[
-x(t)=\;u(t+5)-u(t-5).
+(q_1(0),q_2(0))=(1,0)
+\] 
+
+Hint: Recall the pre-requisites! Can you express $(1,0)$ as a linear combination of the initial states in the first two experiments? 
+
+\problempart \textbf{[6 points]} Determine the output that would result from
+\[
+q_1(0)=q_2(0)=-1
 \]
-Find $y(t)$ and sketch it \textbf{[20 points]}.
+when $x(t)=0$ 
+
+Use this result together with the third experiment to determine the
+output produced by the input $x(t)=u(t)$ when
+\[
+q_1(0)=q_2(0)=0.
+\]
+
+
+\problempart \textbf{[8 points]} Now let
+\(
+q_1(0)=q_2(0)=0
+\)
+and apply a pulse signal as the input, that is, 
+\(
+x(t)=u(t)-u(t-10).
+\)
+
+Using linearity and time invariance, find $y(t)$.
+
+
+
 
 \vspace*{\fill}
 \begin{center}
