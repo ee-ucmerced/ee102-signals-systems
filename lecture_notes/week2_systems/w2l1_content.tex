@@ -1,0 +1,189 @@
+
+\section{Learning outcomes}
+\begin{itemize}
+    \item A reminder of circuits and their relevance to signal processing
+    \item Properties of signals: A reminder of time scaling and shifting.
+    \item Properties of systems: Linearity and time invariance.
+    \item Discuss energy and power signals as metrics to quantify signals
+    % \item Understand periodic signals using time shifting operations
+    % \item Derive the fundamental period of a signal
+    % \item Understand even and odd signals and their properties   
+    % \item Apply signal operations to real-world signals using a guitar audio distortion example
+    % \item Next class: A trio of special EE 102 signals
+\end{itemize}
+
+\section{A reminder: Circuits}
+Without going into the specific details about various electrical circuits, this section will briefly discuss the fundamental concepts of circuits that are relevant to signal processing. In signal processing, we will use circuits only as examples. In fact, equivalent examples can be devised that are relevant for other disciplines. For example, in circuit theory, Kirchoff's voltage and current laws are essential tools that are commonly used to analyze currents and voltages. These laws frame the conservation of energy for an electrical circuit setting. An equivalent mechanical engineering example is the analysis of forces in a static system (such as a spring-mass damper system), where conservation of energy provides a similar framework for understanding the system's behavior. 
+
+Historically, signal processing has been a field that has drawn heavily from electrical engineering concepts, particularly in the analysis and manipulation of signals. The design of the feedback amplifier in the 1920s is the prime example. Scientists and engineers were interested in maximizing the signal to noise ratio for amplifier circuits, which led to the use of many of the foundational mathematical theory that existed at the time. The formalization of these mathematical tools for electrical engineering applications led to the development of the field of signal processing. Since then, these tools have found applications in many other disciplines, including mechanical engineering, civil engineering, computer science, biomedical engineering, and more. But for better or for worse, the pedagogy of signal processing has remained set in that historical context. So, without challenging the years of history too much, we will continue to use circuit examples in this course. However, wherever possible, we will try to incorporate broader application examples too. 
+\begin{popquiz}
+Give three non-electrical examples of signals and three non-electrical examples of systems. We have discussed plenty of these in-class! Make sure to describe the physical quantities associated with each.
+\popqsplit
+Examples could be diverse and include anything from a suspension bridge, to a harmonic oscillator, to the stock market!
+\end{popquiz}
+
+\section{Properties of systems}
+
+\subsection{Linearity of systems}
+A system $H$ is \emph{linear} if it satisfies additivity and homogeneity:
+\[
+H\{x_1+x_2\}=H\{x_1\}+H\{x_2\},\qquad H\{k\,x\}=k\,H\{x\}\quad(\forall k\in\mathbb{C}).
+\]
+\textit{Example:} the exponential-weighting system $y(t)=e^{-a t}x(t)$ is linear since
+\[
+H\{x_1+x_2\}=e^{-a t}(x_1+x_2)=e^{-a t}x_1+e^{-a t}x_2=H\{x_1\}+H\{x_2\}.
+\]
+\textbf{Remark:} ``Linear system'' is a property of the \emph{mapping}, not of the input/output signals. You should not confuse it with a straight-line graph of a scalar function, which you are used to thinking about when thinking about ''linearity''.
+
+\textbf{Hint for Problem Set 1:} In a particular problem, you are asked to prove whether a signal is time-invariant! This is a trick question --- it is a property of systems not of signals.  
+
+\subsection{Time invariance of systems}
+A system $H$ is \emph{time invariant} if delaying the input by $T$ produces the same delay at the output:
+\[
+\text{If }y(t)=H\{x\}(t),\ \text{ then }H\{x(t-T)\}=y(t-T),\quad\forall T\in\mathbb{R}.
+\]
+Intuition: If your opinion of a friend is dependent on the input about the friend, let's say that input is $x(t)$ (the friend descriptor signal), and seeing that input, you decide your opinion of your friend with an opinion signal called $y(t)$. Then, if your opinion about your friend does not change with time, that is, if you have the same opinion about your friend in the morning, in the evening (and even as the day changes), then your ``opinion-defining'' system (the one that outputs $y(t)$) is time-invariant! However, if your opinion of your friend keeps changing based on the time that you're meeting your friend, then you have a time-varying system of opinion generation (probably not a good trait!). Note that for time-invariant systems, the output is the ``same response'' delivered at the new time. It should not become, e.g., $k\,y(t)$ or $k\,y(t-T)$ depending on $T$.
+
+\subsection{Principle of superposition}
+A system is linear if and only if it satisfies the principle of superposition. For a system, $H$, the principle of superposition states that for any two inputs $x_1(t)$ and $x_2(t)$, and any two scalars $a$ and $b$, the output of the system when the input is a linear combination of the two inputs is equal to the linear combination of the outputs corresponding to each input:
+\[
+H\{a x_1(t) + b x_2(t)\} = a H\{x_1(t)\} + b H\{x_2(t)\}.
+\]
+To prove the above, you can use the homogeneity and additivity properties of linear systems. Consider $H(x_1(t)) = y_1(t)$ and $H(x_2(t)) = y_2(t)$. Then, by the homogeneity property, we have:
+\[
+H\{a x_1(t)\} =  a y_1(t)
+\]
+and
+\[
+H\{b x_2(t)\} =  b y_2(t).
+\]
+Now, to use the additivity property, define $z(t) = a x_1(t)$ and $w(t) = b x_2(t)$. Then, by the additivity property, we have:
+\[
+H\{z(t) + w(t)\} = H(z(t)) + H(w(t)) = a y_1(t) + b y_2(t).
+\]
+Therefore, we have shown that
+\[
+H\{a x_1(t) + b x_2(t)\} = a H\{x_1(t)\} + b H\{x_2(t)\},
+\]
+which proves the principle of superposition for linear systems. Conversely, if a system satisfies the principle of superposition, it must also satisfy the properties of homogeneity and additivity, and thus is linear. Therefore, the principle of superposition is both a necessary and sufficient condition for a system to be linear.
+
+
+
+
+\section{Review: transforming signals}
+\begin{popquiz}
+For a signal $x(t)$, write the mathematical notation for each of the following operations:
+\begin{enumerate}
+    \item Reversal 
+    \item Compression
+    \item Expansion
+    \item Delay
+    \item Advance
+\end{enumerate}
+\popqsplit
+
+\begin{enumerate}
+    \item Reversal: $x(-t)$
+    \item Compression: $x(2t)$, in general, $x(at)$ for $|a|>1$
+    \item Expansion: $x\!\left(\tfrac{t}{2}\right)$, in general, $x(at)$ for $0<|a|<1$
+    \item Delay: $x(t-6)$, in general, $x(t-T)$ for $T>0$
+    \item Advance: $x(t+6)$, in general, $x(t+T)$ for $T>0$
+\end{enumerate}
+\end{popquiz}
+
+
+\subsection{How to sketch signal transformations?} 
+To sketch signal transformations, first note down the key points on the X-axis (the time axis for time-domain signals). Then evaluate the value at the new domain (the shifted/scaled time) by looking at the values of the original signal at the corresponding time.
+
+A quick summary: keep the vertical axis unchanged; apply horizontal changes only. For $x(at)$, compress if $|a|>1$ and expand if $0<|a|<1$; for $x(t\pm T)$, shift right by $T$ for $x(t-T)$ and left by $T$ for $x(t+T)$; for $x(-t)$, reflect across the vertical axis.
+
+\subsection*{Example: scaling and shifting a sinusoidal signal}
+Consider a sinusoidal signal $x(t) = \sin(t)$. A time-shifting transformation of $x(t)$ is given by
+\[
+y(t) = x(t + t_0) = \sin(t + t_0)
+\]
+where $t_0 \in \mathbb{R}$. For $t_0 > 0$, the signal is shifted to the left by $t_0$ while for $t_0 < 0$, the signal is shifted to the right by $|t_0|$. Similarly, a time-scaling transformation of $x(t)$ is given by
+\[
+y(t) = x(\alpha t) = \sin(\alpha t)
+\]
+where $\alpha \in \mathbb{R}$. For $|\alpha| > 1$, the signal is compressed by a factor of $\alpha$ while for $0 < |\alpha| < 1$, the signal is expanded by a factor of $\frac{1}{\alpha}$. If $\alpha < 0$, the signal is also reflected across the vertical axis.
+
+Let us look at some specific values of $t_0$ and $\alpha$ to see how the signal is transformed.Figure~\ref{fig:week2_sin} shows the original signal $x(t) = \sin(t)$ along with its time-shifted and time-scaled versions for different values of $t_0$ and $\alpha$.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figs/signal_transformations.png}
+    \caption{Time-shifting and time-scaling transformations of the signal $x(t) = \sin(t)$.}
+    \label{fig:week2_sin}
+\end{figure}
+Note that for $\alpha = -1$, we get a reflection of the original signal across the vertical axis. Expanding on this example, we can also combine time-shifting and time-scaling operations to get more complex transformations. For instance, consider the transformation
+\[
+y(t) = x(\alpha t + t_0)
+\]
+where both $\alpha$ and $t_0$ are non-zero. This transformation first scales the time by $\alpha$ and then shifts it by $t_0$. The order of operations matters here --- if we were to shift first and then scale, we would have
+\[
+y(t) = x(\alpha (t + t_0)) = x(\alpha t + \alpha t_0)
+\]
+which is different from the previous transformation unless $\alpha = 1$.
+
+If you intend to reverse the order of operations, you can redefine the shift parameter accordingly. For example, to achieve the same effect as $x(\alpha t + t_0)$ by shifting first and then scaling, you would need to use $x(\alpha (t + \frac{t_0}{\alpha}))$. Similarly, for the second combined transformation, you would need to use $x(\alpha t + \alpha t_0)$ to achieve the same effect as shifting first and then scaling by $\alpha$ next. Python code for generating signal transformations is available on Github\footnote{\href{https://github.com/ee-ucmerced/ee102-signals-systems/tree/main/lecture\_notes/week2/transformations.ipynb}{github.com/ee-ucmerced/ee102-signals-systems}}.
+
+
+
+\section{Energy and power of signals}
+We quantify the ``size'' of signals using energy and (time-averaged) power.
+For continuous-time signals, we define
+\[
+E_{\infty} \triangleq \int_{-\infty}^{+\infty}\! |x(t)|^{2}\,dt,\qquad
+P_{\infty} \triangleq \lim_{T\to\infty} \frac{1}{2T}\int_{-T}^{T}\! |x(t)|^{2}\,dt.
+\]
+For discrete-time signals:
+\[
+E_{\infty} \triangleq \sum_{n=-\infty}^{+\infty} |x[n]|^{2},\qquad
+P_{\infty} \triangleq \lim_{N\to\infty} \frac{1}{2N+1}\sum_{n=-N}^{+N} |x[n]|^{2}.
+\]
+
+With a desired signal $s$ and noise $n$, one practical signal-to-noise ratio is
+\[
+\mathrm{SNR}=\frac{E_\infty(s)}{E_\infty(n)}\quad \text{(or }P_\infty\text{ for power signals)}.
+\]
+
+
+\subsection{Measuring the energy and power of signals}
+We define the energy as the integral of the squared magnitude of a signal over all time:
+\[E_\infty(x) = \int_{-\infty}^{\infty} |x(t)|^2 dt
+\]
+and power as the time-averaged measure for a time period $[-T, T]$:
+\[
+P_\infty(x) = \lim_{T \to \infty} \frac{1}{2T} \int_{-T}^{T} |x(t)|^2 dt.
+\]
+
+It is natural to wonder how we ended up with those specific definitions. You can build the intuition behind these definitions in two ways: (a) by considering an electrical signal $x(t)$ as a voltage across a 1-ohm resistor, and (b) by considering the mathematical convenience that these definitions provide. For (a), it is pretty clear that the energy dissipated in a resistor is given by the integral of the square of the voltage over time divided by the value of the resistor (in this case, 1 ohm). To fully appreciate the mathematical meaning of these definitions, consider the following alternate definition of energy as the integral of the absolute value of the signal over all time:
+\[
+E'_\infty(x) = \int_{-\infty}^{\infty} |x(t)| dt.
+\]
+This would be a valid way to quantify the ``energy'' of a signal as well. Note that our goal is to not physically define ``energy'', the electrical engineering concept, rather we are interested in coming up with measures of signals that we can use to compare two different signals. Note that taking absolute value is \textit{atleast} required to prevent the integral from being zero for signals that oscillate between positive and negative values. Despite this, the integral of the square of the absolute value ($E$) is preferred over just the integral of the absolute value ($E'$) because it is the metric that lets us compare signals in the $L^2$ space, which is a Hilbert space\footnote{Read more on Hilbert spaces here: \url{https://en.wikipedia.org/wiki/Hilbert_space}}. Simply stated, this means that the space of signals with finite energy (i.e., $E_\infty(x) < \infty$) has mathematical properties that enable better analysis and manipulation of signals. For example, we can define an inner product between two signals as a metric that quantifies the similarity between two signals $x(t)$ and $y(t)$ as \[
+\langle x, y \rangle = \int_{-\infty}^{\infty} x(t) y^*(t) dt,
+\]
+where $y^*(t)$ is the complex conjugate of $y(t)$. This inner product allows us to define concepts like orthogonality and projection in the space of signals. \ul{Remember that} being able to represent complex signals as linear combinations of standard signals is the core concept in signal processing --- this is not possible without a clear notion of orthogonality! In fact, the definition of $E$ above is simply the inner product of a signal with itself, i.e., $E_\infty(x) = \langle x, x \rangle$. The $L^1$ space (signals with finite $E'$) does not have these properties, which is why we prefer to use $E$ as our measure of energy. Power can then be defined as the time-averaged energy over a time period.
+
+\section{Special signals}
+A few signals help us analyze other signals. In this course, we will encounter a few of these. To distinguish these from all the rest, we use a special term for them --- special signals (excuse the lack of creativity!). Hopefully the name will help you remember what these are. Today, we talk about first of these, the step signal.
+\subsection{A special signal --- the unit step function}
+A unit step function is defined as
+\[
+u(t) = \begin{cases}
+0, & t < 0 \\
+1, & t \geq 0
+\end{cases}
+\]
+
+It is a special signal because it models the ''start'' of something, or an ''onset'' of an event, or more simply, a ''switching on'' of a process. You can shift the time to $t - T$ to delay the start by $T$ seconds, so it's a very versatile signal. Therefore, the unit step function finds use in various applications. 
+
+\begin{popquiz} 
+    Is the \emph{unit step} $u(t)$ time-invariant?
+    \popqsplit
+     Trick question: time invariance is a \emph{system} property, not a signal property.
+\end{popquiz}
+
+
+

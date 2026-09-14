@@ -1,0 +1,30 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{tikz}
+\usetikzlibrary{calc,angles,quotes,arrows.meta}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+    pdftitle={week0_notes},
+    pdfpagemode=FullScreen,
+}
+% \includeonly{}
+
+\renewcommand{\releasedate}{August 26, 2026} 
+% Updated: August 27, 2025}
+\begin{document}
+\tableofcontents
+\include{week0_content}
+\end{document}

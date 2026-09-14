@@ -1,0 +1,66 @@
+
+\section{Continuous-time and discrete-time signals}
+Continuous-time domain is $\mathbb{R}$, and we write continuous-time signals as $x(t)$, if they are continuous functions of time (recall: continuous functions from your math classes). On the other hand, discrete-time domain is $\mathbb{Z}$, and a discrete-time signal is written as $x[n]$, where $n \in \mathbb{Z}$. This means that discrete-time signals are defined only at integer time indices.
+\subsection{Sketching signals}
+To sketch, draw and label axes, mark key values (peaks, zeros, discontinuities), and indicate any symmetry, periodicity, decay/growth, or piecewise structure (try to identify as many properties as you can before starting to sketch). The best way to start your sketch is to compute the values of the signal at ``easy'' points like, zero, the max time, etc.  
+
+\section{Properties of signals}
+\subsection{Scaling}
+Time scaling changes the horizontal axis by a constant $\alpha$:
+\[
+x_s(t)=x(\alpha t).
+\]
+If $0<\alpha<1$, the signal expands in time whereas if $\alpha>1$, it compresses the signal in time.
+
+\subsection{Offset}
+Time shifting offsets the horizontal axis by a constant $T$.  A (right) delay of $T$ seconds is defined by
+\[
+x_d(t)=x(t-T).
+\]
+Equivalently, $x_d(t_1+T)=x(t_1)$ for every $t_1$.
+
+\newpage
+\begin{landscape}
+\begin{figure}[p]
+\centering
+\caption*{\centering Worksheet \#2: Transforming Signals (Part 2) — Groups of 2.\\
+{\small Each pair of students should scale and shift a signal of their choice. Agree as a pair what scaling and shifting would mean and then draw it out. Clearly show the parameters and the transformed axes.}}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[x=2cm,y=2cm]
+  \def\W{54}   % width before resize (cm units relative to x,y scale)
+  \def\H{42}   % height
+  \def\pad{1.0}  % inner padding for axes inside each pane
+
+  % Outer frame and dividers
+  \draw[line width=1pt] (0,0) rectangle (\W,\H);
+  \draw[line width=.8pt] (\W/2,0) -- (\W/2,\H);
+  \draw[line width=.8pt] (0,\H/2) -- (\W,\H/2);
+
+  % Titles
+  \node at (\W/4,\H-1.5)         {\Huge \textbf{Scale $(\alpha)$: expand}};
+  \node at (3*\W/4,\H-1.5)       {\Huge \textbf{Shift $(T)$: delay}};
+  \node at (\W/4,\H/2-1.5)       {\Huge \textbf{Scale $(\alpha)$: compress}};
+  \node at (3*\W/4,\H/2-1.5)     {\Huge \textbf{Shift $(T)$: advance}};
+
+  % Axes inside each pane (shorter than pane size)
+  % Top-left pane
+  \draw[gray!55] (\pad, 3*\H/4) -- (\W/2-\pad, 3*\H/4);
+  \draw[gray!55] (\W/4, \H/2+\pad) -- (\W/4, \H-\pad);
+  % Top-right pane
+  \draw[gray!55] (\W/2+\pad, 3*\H/4) -- (\W-\pad, 3*\H/4);
+  \draw[gray!55] (3*\W/4, \H/2+\pad) -- (3*\W/4, \H-\pad);
+  % Bottom-left pane
+  \draw[gray!55] (\pad, \H/4) -- (\W/2-\pad, \H/4);
+  \draw[gray!55] (\W/4, \pad) -- (\W/4, \H/2-\pad);
+  % Bottom-right pane
+  \draw[gray!55] (\W/2+\pad, \H/4) -- (\W-\pad, \H/4);
+  \draw[gray!55] (3*\W/4, \pad) -- (3*\W/4, \H/2-\pad);
+
+  % Hints (subtle)
+  \node[align=center, gray!60] at (\W/4, 3*\H/4-3)   {\Large $x_s(t)=x(\alpha t)$};
+  \node[align=center, gray!60] at (\W/4, \H/4-3)     {\Large $x_s(t)=x(\alpha t)$};
+  \node[align=center, gray!60] at (3*\W/4, 3*\H/4-3) {\Large $x_d(t)=x(t-T)$};
+  \node[align=center, gray!60] at (3*\W/4, \H/4-3)   {\Large $x_a(t)=x(t+T)$};
+\end{tikzpicture}}
+\end{figure}
+\end{landscape}

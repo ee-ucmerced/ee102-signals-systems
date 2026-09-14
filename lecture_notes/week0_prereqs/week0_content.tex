@@ -1,0 +1,123 @@
+\section*{EE102 W0 L1 --- Course Logistics and Prerequisites}
+\subsection*{Date: \releasedate}
+\section{Goals}
+\begin{itemize}
+  \item Logistics, grading, extensions, expectations
+  \item Motivation to study signal processing
+  \item Pre-requisites to signal processing: vectors and complex numbers
+\end{itemize}
+
+\section{Why study signal processing?}
+Signal processing and linear systems theory is foundational in engineering. It has revolutionized engineering in more ways than we realize --- machine learning/AI, RF amplifiers, satellite communications, airplanes, medical devices, automotive vehicles, MRI scans, and pretty much every other engineering and science discipline out there \emph{directly} uses concepts from this course. This is fantastic but there is also a downside! Learning signal processing is dependent on many prerequisites as it builds on various other fundamental courses in engineering. As electrical engineers, you are required to learn signal processing and linear systems theory. Other engineering disciplines typically do not require such a course. This gives electrical engineers an edge because what you learn in this course is not just applicable to EE but also to all other areas. So, despite many pre-requisite requirements, I hope that you will be motivated to cross the technical barriers  in learning signal processing.
+\section{Course flow}
+\section{Motivation to study signal processing}
+\subsection{Real-world significance}
+Count the number of questions you answer ``yes'' to from the list below:
+\begin{itemize}
+  \item Do you enjoy music? Did you ever find songs that sounded very similar to each other? Would you like to be able to explain why that's the case (mathematically)?
+  \item Would you like design your own electrical circuits that are able to meet performance specifications of your (future) clients?
+  \item Do you anticipate that you will be working on radio frequency circuits in your career where you need to design circuits and systems that communicate at specific frequencies?
+  \item Are you attracted to the rigor of electrical engineering? Or perhaps, put another way, are you looking forward to setting aside time to learn the mathematical underpinnings of electrical engineering?
+  \item Would you like to gain a better understanding of how various ``scanners'' scan our body parts to provide useful medical information (like X-rays, MRI, CT scans, etc.)?
+  \item Do you want to be able to explain to others how images and colors on any digital display are created and manipulated?
+  \item Would you like to \emph{mathematically} create new music that takes the best parts of some of the songs that you like? Or perhaps, create entirely new sounds that have never been heard before? By doing it mathematically, you will be making the process general, easily customizable, and reproducible.
+  \item Do you anticipate that your career choice after graduation will involve image processing / machine learning / artificial intelligence?
+  \item Are you interested in understanding the underpinnings of the controllers that are used in automotive vehicles, or robotics, or even in the design of precise drugs that target pathogens in the human body?
+  \item Noise canceling in audio tech is a huge industry! Are you someone who fancies designing / understanding these systems?
+  \item Do you want to understand how Shazam (or other apps that can recognize a song just based on a few beats) work?
+\end{itemize}
+If you counted more than a few ``yes'' answers, you are in the right place! This course will help you understand the mathematical underpinnings of many of these applications. Of course, this course will not go into the technical specifics of any of the applications. There won't be enough time for it. Other courses exist for such details. See below for what this course is not.
+\subsection{What signal processing is not?}
+In signal processing, you will \textbf{not} learn the fundamentals of circuit analysis, AC analysis, transistors, communication algorithms, design of RF circuits, or controller design. Most of those topics are already assigned to other specific courses. In signal processing and linear systems course, we will focus on the mathematical tools and techniques used to analyze and process signals and systems.
+
+With that motivation, let us jump into a discussion about various pre-requisites that you will need to be familiar with to succeed in this course.
+\section{Pre-requisite \#1: Vectors}
+When studying problems with many entities/observations, we structure our variables into vectors.
+
+An $n$-dimensional vector $\mathbf{x}$ can be written as
+\[
+\mathbf{x}=[\,x_1,\;x_2,\;\ldots,\;x_n\,], \qquad \mathbf{x}\in\mathbb{R}^n .
+\]
+
+\subsection{Matrices are transformations}
+If you transform a vector $\mathbf{x}$ to a new vector $\mathbf{y}$ such that all elements in $\mathbf{y}$ are linear combinations of elements in $\mathbf{x}$, then the transformation is called a matrix.
+
+\[
+\mathbf{x}=
+\begin{bmatrix}
+x_1\\ x_2\\ \vdots\\ x_n
+\end{bmatrix}
+\;\longmapsto\;
+\mathbf{y}=
+\begin{bmatrix}
+y_1\\ y_2\\ \vdots\\ y_m
+\end{bmatrix}
+\]
+such that
+\[
+y_1=\sum_{i=1}^{n}\alpha_{1i}x_i,\qquad
+y_2=\sum_{i=1}^{n}\alpha_{2i}x_i,\quad \ldots,\quad
+y_m=\sum_{i=1}^{n}\alpha_{mi}x_i .
+\]
+Then $A\mathbf{x}=\mathbf{y}$, where
+\[
+A\in\mathbb{R}^{m\times n}, \qquad
+A=
+\begin{bmatrix}
+\alpha_{11} & \alpha_{12} & \cdots & \alpha_{1n}\\
+\alpha_{21} & \alpha_{22} & \cdots & \alpha_{2n}\\
+\vdots      & \vdots      & \ddots & \vdots\\
+\alpha_{m1} & \alpha_{m2} & \cdots & \alpha_{mn}
+\end{bmatrix}.
+\]
+
+We write
+\[
+A:\; X \to Y,
+\]
+where $X$ is the vector space in $\mathbb{R}^n$ where $\mathbf{x}$ lies and $Y$ is the vector space in $\mathbb{R}^m$ where $\mathbf{y}$ lies.
+
+\paragraph{Recall}
+\begin{itemize}
+  \item Diagonal matrix
+  \item Identity matrix
+  \item Symmetric matrix
+  \item Zero matrix
+  \item Matrix transpose
+  \item Matrix algebra ($+$, $-$, $\times$, inverse)
+\end{itemize}
+\subsection{Real-world significance}
+Note that a transformation is called an ``affine'' transformation if it is linear
+\[
+\mathbf{y} = A\mathbf{x} + \mathbf{b},
+\]
+where $A$ is a linear transformation (matrix) and $\mathbf{b}$ is a translation vector. Affine transformations are common in many practical applications such as image processing, computer-aided design in engineering, medical imaging, graphic design, and many more. On a lighter note, check this fun meme template out which uses matrix transformations at its core --- the \href{https://www.youtube.com/watch?v=hYdmPw-SrMQ}{content aware scale gif} and some \href{https://www.reddit.com/r/davinciresolve/comments/1780z24/how\_to\_do\_content\_aware\_scale\_meme\_effect\_for/}{related Reddit discussion} on it. Creating memes often requires very specific image transforms (such as the Wide Keanu or the general Stretched Resolution meme)! On a more technical note, you can check out the Adobe Photoshop tool called ``Transform'' (or the equivalent rotate, scale, and skew tools in Microsoft Paint) --- these tools allow users to manipulate images using affine transformations. The same concepts are at the core of many research-grade affine transform tools. Some examples are \href{https://affine.readthedocs.io/en/latest/index.html#}{rasterio} for geographical applications, \href{https://open.win.ox.ac.uk/pages/fsl/fslpy/_modules/fsl/transform/flirt.html}{flirt} for affine transformations of MRI images and the \href{https://pytorch.org/vision/stable/transforms.html#torchvision.transforms.RandomAffine}{RandomAffine} tool for affine transformations in image augmentation used in machine learning applications.
+
+In summary, vector and matrix algebra is the centerpiece in signal processing and you will see the mathematical preliminaries being used throughout the course.
+\section{Pre-requisite \#2: Complex numbers}
+
+Although the usual way we learn about the complex unit ``$\mathrm{j}$'' is as
+a convenient notation for a solution of
+\[
+x^{2}+1=0 \;\;\Rightarrow\;\; x=\sqrt{-1}:=\mathrm{j},
+\]
+it is useful to recognize other places where this convenience is beneficial.
+In signal processing we are often looking for easy ways to analyze physical
+signals, not only to solve algebraic equations.
+
+\subsection{From vectors to a complex scalar.}
+Given a vector
+\[
+\mathbf{x}=\begin{bmatrix}x_1\\ x_2\end{bmatrix},
+\]
+define the (complex) scalar
+\[
+z_{\mathbf{x}}=x_1+\mathrm{j}x_2.
+\]
+The entries $x_1$ and $x_2$ are not ``added'' in $\mathbb{R}$; they are bound
+only because they are components of the same vector. Writing $z_{\mathbf{x}}$
+lets us treat the vector like a single scalar living in $\mathbb{C}$.
+
+\section{Next lecture}
+We will talk about how complex numbers simplify the analysis of how similar two vectors are to each other. Additionally, we will review circuits-related pre-requisites.
+ 
