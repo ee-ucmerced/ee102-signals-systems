@@ -35,7 +35,15 @@ Recall that a mathematical function is called even if $f(-t)=f(t)$ for all $t$ a
     \]
     The left side is even (difference of two even functions), and the right side is odd (difference of two odd functions). The only function that is both even and odd is the zero function. Therefore, we have $x_e(t) - x'_e(t) = 0$ and $x'_o(t) - x_o(t) = 0$, which implies that $x_e(t) = x'_e(t)$ and $x_o(t) = x'_o(t)$. Hence, the decomposition is unique.
 \end{proof}
-
+\begin{popquiz}
+Find if the following signals are even, odd, or neither:
+\begin{enumerate}
+    \item \(x(t) = \sin(t)\)
+    \item \(x(t) = \cos(t)\)
+\end{enumerate}
+\popqsplit
+For \(x(t) = \sin(t)\), we have \(x(-t) = \sin(-t) = -\sin(t) = -x(t)\). Therefore, \(x(t)\) is odd, and for \(x(t) = \cos(t)\), we have \(x(-t) = \cos(-t) = \cos(t) = x(t)\). Therefore, \(x(t)\) is even.
+\end{popquiz}
 
 \section{Periodic signals}
 \begin{definition}
@@ -48,13 +56,16 @@ In more verbose language, we say that a signal is a periodic signal if we can fi
 \subsection{Periodic extensions} 
 When a signal is defined on a finite interval (e.g., a single cycle), it is often useful to \emph{periodically extend} it by repeating that interval end-to-end. This makes the time-averaged power well defined and makes symmetries/harmonics easier to see. 
 
-\subsection{Example: Periodic or not?}
-Consider the following three signals. Our goal is to find out whether they are periodic or not. If they are periodic, we will report the fundamental period of these signals.
+\begin{popquiz}
+Consider the following three signals. Find out whether they are periodic or not. If they are periodic, find the fundamental period of these signals.
 \begin{enumerate}
     \item $x(t) = \cos(t)$
     \item $x(t) = \cos(t)$ for $ t \geq 0$ and $x(t) = -sin(t) $ for $t < 0$
     \item $x(t) = e^{j\omega t}$ where $\omega \neq 0$
 \end{enumerate}
+\popqsplit
+Answer in notes. Read on!
+\end{popquiz}
 
 \textbf{How to prove periodicity?} We can simply \emph{propose a $T_0$ and check} if the periodicity condition is satisfied. If you cannot find a $T_0$, that does not mean that the signal is aperiodic --- it just means that you have not found the right $T_0$ yet! To prove aperiodicity, you have to show that no such $T_0$ exists. This is often done by contradiction. Proofs by contradiction is an important mathematical trick where you assume that the statement you want to prove is false and then show that this assumption leads to a contradiction (something that will be \emph{obviously} incorrect). This implies that the original statement must be true. You will find the signal transformation properties useful in proving (a)periodicity. Finally, if you can exploit the properties of the given signal, then you will find a much easier path to the proof.
 
@@ -80,6 +91,11 @@ If $x(t)$ is periodic with fundamental period $T_0$, then $y_d(t)$ is also perio
 E_\infty(y_d)=\int_{-\infty}^{\infty}\!|y_d(t)|^2\,dt=\infty,\qquad
 P_\infty(y_d)=\frac{1}{T_0}\int_{t_0}^{t_0+T_0}\!|y_d(t)|^2\,dt\ \text{(finite)}.
 \]
+\begin{popquiz}
+  If periodic signals are power signals, are all non-periodic signals energy signals?
+  \popqsplit
+  No. Can you give a counter example?
+\end{popquiz}
 
 \section{The unit step function}
 When we defined signals informally, we discussed how any mathematical function from your calculus class could be a signal as long as it represents something physical. Then it will not come as a surprise that for physical system applications, we would usually be interested only in positive values of time and we would want our signal to take the value of zero for all $t < 0$. Since we are extending the general concept of mathematical functions (which are defined for all $t$), it is important to have a mathematical way to write signals that are zero for $t < 0$. The unit step function does exactly that! Formally, we define the unit step function as
@@ -144,6 +160,17 @@ A \sin(\omega t + \phi), & t \geq 0
 \end{cases}.
 \]
 We would prefer $x(t) = A \sin(\omega t + \phi) u(t)$ over the piecewise definition so that we can work with just a single expression. 
+\begin{popquiz}
+  For each of the following step signals, state when does it ``turn on'' and when does it ``turn off'' (if ever).
+  \begin{enumerate}
+      \item $x(t) = u(t - 2)$
+      \item $x(t) = u(t - T + 1)$
+      \item $x(t) = u(t - (10 + 5))$
+      \item $x(t) = u(t - 3) - u(t - 5)$
+  \end{enumerate}
+  \popqsplit
+  Solve this by setting the argument of the unit step function to zero. For example, for $x(t) = u(t - 2)$, we have $t - 2 = 0 \implies t = 2$. Therefore, the signal turns on at $t = 2$. To find out the values of time at which the step signal is equal to 1, yo ucan instead solve the inequality $t - 2 \geq 0 \implies t \geq 2$. Therefore, the signal is equal to 1 for all $t \geq 2$. Similarly, for $x(t) = u(t - T + 1)$, we have $t - T + 1 = 0 \implies t = T - 1$. Therefore, the signal turns on at $t = T - 1$ and is equal to 1 for all $t \geq T - 1$. For $x(t) = u(t - (10 + 5))$, we have $t - (10 + 5) = 0 \implies t = 15$. Therefore, the signal turns on at $t = 15$ and is equal to 1 for all $t \geq 15$. Finally, for $x(t) = u(t - 3) - u(t - 5)$, we have two unit step functions. The first one turns on at $t = 3$ and the second one turns on at $t = 5$. Therefore, the signal is equal to 1 for $3 \leq t < 5$ and is equal to zero otherwise.
+\end{popquiz}
 \subsection{Unit step as a general switch}
 Beyond the switching behavior of unit step, we can also use it to define arbitrary ``pulse'' signals and also other piecewise continuous signals. For example, we can define a rectangular pulse of width $\tau$ as
 \[
