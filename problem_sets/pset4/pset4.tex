@@ -1,0 +1,211 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+
+
+\documentclass{ee102_pset}
+\input{macros.tex}
+\input{preamble.tex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[american]{circuitikz}
+
+% Assignment info
+\author{\rule{3cm}{0.4pt}} % Name placeholder
+\submitdate{\rule{3cm}{0.4pt}} % Submission date placeholder
+\problemset{Problem Set \#4: Practice and Study Guide for Midterm Exam \#1}
+\renewcommand{\duedate}{September 30, 2026}
+\shorttitle{Problem Set \#4}
+
+\begin{document}
+This problem set is intentionally longer than usual to provide you with more practice problems before the exam. The exam will not be as long as this problem set. 
+% Problem 1
+\problem{1}
+For each question, select the best answer or all correct answers, as directed.
+Briefly justify your answer.
+
+\problempart{[3 points]} \textbf{Select one.} Which expression defines a
+discrete-time signal?
+\begin{enumerate}
+    \item $x(t)=e^{-t}u(t)$
+    \item $x[n]=\cos(\pi n/4)$
+    \item $y(t)=x(t-3)$
+    \item $\mathcal{H}\{x(t)\}=x(t)+x(t-2)$
+\end{enumerate}
+
+\problempart{[3 points]} \textbf{True/False.} The signal $u(t+2)$ turns on at
+$t=-2$.
+
+\problempart{[3 points]} \textbf{Select all correct answers.} Relative to
+$x(t)$, the signal
+\[
+y(t)=-4x\big(3(t+2)\big)
+\]
+has undergone which transformations?
+\begin{enumerate}
+    \item Amplitude scaling by $4$
+    \item Amplitude inversion
+    \item Time compression by a factor of $3$
+    \item A shift to the left by $2$
+    \item Time reversal
+\end{enumerate}
+
+\problempart{[3 points]} \textbf{Select one.} What is the energy of
+$x(t)=2[u(t)-u(t-3)]$?
+\begin{enumerate}
+    \item $3$
+    \item $4$
+    \item $6$
+    \item $12$
+\end{enumerate}
+
+\problempart{[3 points]} \textbf{True/False.} The system
+$y(t)=2x(t)+1$ is linear.
+
+\problempart{[3 points]} \textbf{Select all correct answers.} Which of the
+following systems are linear and time-invariant?
+\begin{enumerate}
+    \item $y(t)=x(t-2)$
+    \item $y(t)=t\,x(t)$
+    \item $y(t)=|x(t)|$
+    \item $y(t)=x(t)+x(t-3)$
+\end{enumerate}
+
+\problempart{[3 points]} \textbf{Select one.} Evaluate
+\[
+\int_{-\infty}^{\infty}(\tau^2+1)\delta(\tau-3)\,d\tau.
+\]
+\begin{enumerate}
+    \item $0$
+    \item $3$
+    \item $9$
+    \item $10$
+\end{enumerate}
+
+\problempart{[3 points]} \textbf{True/False.} For $t\geq 0$, the real part of
+$e^{(-2+j4)t}$ is an oscillating signal whose amplitude decays toward zero.
+
+\problempart{[6 points]} For an LTI system, what is
+$x(t)*2\delta(t+1)$?
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+% Problem 2
+\problem{2} [Adapted from last year's midterm problem]
+Consider a bacterial cell that divides into two cells every 30 minutes. You
+start with one cell at $t=0$. An antibiotic dose is taken every two hours and
+instantaneously reduces the population to one cell. If a cell division and an
+antibiotic dose occur at the same time, assume that the antibiotic reset takes
+priority. Use hours as the time unit.
+
+\problempart{[5 points]} Describe the bacterial population $x(t)$ as a function
+of time for $t\geq 0$.
+
+\problempart{[5 points]} Sketch $x(t)$ over $0\leq t\leq 8$. Clearly label the
+times at which the population changes and the population levels.
+
+\problempart{[5 points]} Extend the same idealized growth-and-reset pattern to
+all $t\in(-\infty,\infty)$. Is the resulting signal periodic? If it is, find
+its fundamental period.
+
+\problempart{[5 points]} Write the equation of $x(t)$ over one period using only
+constants and shifted unit step functions. Do not use ramps, exponentials, or
+sinusoids.
+
+\problempart{[5 points]} Compute the energy of $x(t)$ over one period using the
+definition of energy for a continuous-time signal.
+
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+% Problem 3
+\problem{3}
+Consider the following three continuous-time systems:
+\[
+\begin{aligned}
+\mathcal{H}_1\{x(t)\}&=x(t-2),\\
+\mathcal{H}_2\{x(t)\}&=t\,x(t),\\
+\mathcal{H}_3\{x(t)\}&=x(t)+1.
+\end{aligned}
+\]
+
+\problempart{[5 points]} Determine which systems are linear. Prove linearity or
+give a counterexample for each system.
+
+\problempart{[5 points]} Determine which systems are time-invariant. Prove time
+invariance or give a counterexample for each system.
+
+\problempart{[5 points]} For every system above that is LTI, draw a system block
+diagram and find its impulse response.
+
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+% Problem 4
+\problem{4}
+An LTI system has input
+\[
+x(t)=u(t)-u(t-3)
+\]
+and impulse response
+\[
+h(t)=2\delta(t)+\delta(t-2)-\delta(t-4).
+\]
+
+\problempart{[3 points]} Sketch $x(t)$ and $h(t)$. Represent each impulse in
+$h(t)$ with an arrow whose height is its weight.
+
+\problempart{[5 points]} Write the convolution integral for
+$y(t)=x(t)*h(t)$ and use the sifting property to express $y(t)$ in terms of
+shifted copies of $x(t)$.
+
+\problempart{[4 points]} Write $y(t)$ explicitly using only shifted unit step
+functions and constants.
+
+\problempart{[3 points]} Sketch $y(t)$ and clearly label every time at which its
+value changes.
+
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+% Problem 5
+\problem{5}
+Recall that a generalized complex exponential can be written as
+\[
+x_c(t)=A e^{st},
+\]
+where both constants may be complex. Write
+\[
+A=a_1+ja_2, \qquad s=\sigma+j\omega,
+\]
+where $a_1$, $a_2$, $\sigma$, and $\omega$ are real numbers.
+
+\problempart{[5 points]} Find constants $a_1$, $a_2$, $\sigma$, and $\omega$ to express
+\(
+B e^{\sigma t}\cos(\omega t+\phi)
+\)
+in the form $x_c(t)=A e^{st}$.
+
+\problempart{[10 points]} Consider the real-valued signal
+\[
+x_1(t)=6e^{-2t}\cos\left(4t+\frac{\pi}{3}\right)u(t).
+\]
+Write $x_1(t)=\operatorname{Re}\{A e^{st}\}u(t)$ and find the corresponding
+values of $a_1$, $a_2$, $\sigma$, and $\omega$.
+
+\vspace*{\fill}
+\begin{center}
+[use more pages if needed]
+\end{center}
+
+\end{document}
