@@ -1,0 +1,25 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+\documentclass{ee102_notes}
+\input{macros.tex}
+\input{preamble.tex}
+\renewcommand{\releasedate}{October 5, 2026}
+
+\newcommand{\Eblank}{\rule{3cm}{0.4pt}}
+\newcommand{\Rankblank}{\rule{3cm}{0.4pt}}
+\newcommand{\uof}[1]{u\!\left[#1\right]} % discrete-time unit step
+
+\hypersetup{pdftitle={EE 102 Week 6, Lecture 1 (Fall 2026)}}
+
+% Build the full notes with the next line commented, allowing the TOC and
+% references to settle, then save the PDF as w6l1_fourier_analysis_instructor.pdf.
+% Uncomment the next line and rebuild for the student TOC-only PDF.
+% After the lecture, comment it again and rebuild to publish the full notes.
+\begin{document}
+
+\section*{EE 102 Week 6, Lecture 1 (Fall 2026)}
+\subsection*{Date: \releasedate}
+\tableofcontents
+\include{w6l1_content}
+\end{document}

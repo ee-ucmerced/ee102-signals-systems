@@ -1,0 +1,329 @@
+% Adapted from the existing week6_lecture1.tex lecture.
+% The graphical convolution panels continue the Week 5 echo-system example.
+
+\section{Goals}
+We will review Midterm 1, finish the graphical convolution of discrete-time
+signals from last time, and connect convolution to the frequency-domain
+description of LTI systems. The main new idea is that complex exponentials
+are eigenfunctions of LTI systems. This will motivate representing periodic
+signals as linear combinations of sinusoids using Fourier series.
+
+\section{Continuation: Graphical D-T convolution}
+Continue the
+\href{../week5_convolution/in-class-activity-graphical-conv.pdf}{Week 5
+graphical convolution activity}. We use the same echo-system example:
+\[
+x[n]=u[n]-u[n-3]=
+\begin{cases}
+1, & n=0,1,2,\\
+0, & \text{otherwise,}
+\end{cases}
+\qquad
+h[n]=
+\begin{cases}
+\left(\tfrac12\right)^n, & 0\le n\le5,\\
+0, & \text{otherwise.}
+\end{cases}
+\]
+The output is
+\[
+y[n]=\sum_{k=-\infty}^{\infty}x[k]h[n-k].
+\]
+Work through any unfinished rows from last time. Hold $n$ fixed within
+each row; $k$ is the index along each graph.
+
+\subsection{Flip, shift, multiply, and sum}
+\begin{enumerate}
+  \item Draw $x[k]$, which is nonzero for $0\le k\le2$.
+  \item Flip $h[k]$ to obtain $h[-k]$, then shift it by $n$ to obtain
+  $h[n-k]$. Its support is $n-5\le k\le n$.
+  \item Multiply the overlapping samples to form $x[k]h[n-k]$.
+  \item Add the product samples to obtain the single output sample $y[n]$.
+\end{enumerate}
+The overlap indices satisfy
+\[
+\max(0,n-5)\le k\le\min(2,n).
+\]
+If there is no overlap, $y[n]=0$. The first overlap occurs at $n=0$ and
+the last at $n=7$, so the output has eight samples in its nonzero support:
+\[
+y[0..7]=
+\left[1,\tfrac32,\tfrac74,\tfrac78,\tfrac7{16},\tfrac7{32},
+\tfrac3{32},\tfrac1{32}\right].
+\]
+The panels below show $x[k]$, $h[n-k]$, and their pointwise product for
+each $n$. Compare them with your activity sheet and assemble the output
+plot from the resulting sums.
+
+\def\Alpha{0.5}
+\def\HLen{5}
+\def\kmin{-2}
+\def\kmax{10}
+
+\newcommand{\EchoSampleLabel}[1]{%
+  \pgfmathtruncatemacro{\EchoDenominator}{pow(2,#1)}%
+  \ifnum\EchoDenominator=1
+    $1$%
+  \else
+    $\frac{1}{\EchoDenominator}$%
+  \fi
+}
+
+\newcommand{\ConvPanel}[1]{%
+  \def\n{#1}%
+  \begin{tikzpicture}[x=0.75cm,y=1.35cm]
+
+    % ===== Panel: x[k] =====
+    \begin{scope}
+      \draw[->] (\kmin-0.6,0) -- (\kmax+0.6,0) node[below] {$k$};
+      \draw[->] (0,-0.02) -- (0,1.05);
+      \node[above left] at (0,1.05) {$x[k]$};
+
+      % stems (blue) with values on top; NO y-axis tick labels
+      \foreach \k in {\kmin,...,\kmax}{
+        \pgfmathparse{(\k>=0 && \k<=2) ? 1 : 0}
+        \let\vx\pgfmathresult
+        \ifdim \vx pt>0pt
+          \draw[very thick,blue] (\k,0) -- (\k,\vx);
+          \fill[blue] (\k,\vx) circle (1.4pt);
+          \node[above=3pt] at (\k,\vx) {\scriptsize \pgfmathprintnumber[precision=1]{\vx}};
+        \fi
+        \node[below=1pt] at (\k,0) {\scriptsize \k};
+      }
+    \end{scope}
+
+    % ===== Panel: h[n-k] =====
+    \begin{scope}[shift={(0,-2.0)}]
+      % FORCE axis to -6..10
+      \draw[->] (-6.6,0) -- (10.6,0) node[below] {$k$};
+      \draw[->] (0,-0.02) -- (0,1.05);
+      \node[left] at (0,1.05) {$h[n-k],\ n=\n$};
+
+      % stems (blue) with values on top; NO y-axis tick labels
+      \foreach \k in {-6,...,10}{
+        % support: 0 <= n-k <= HLen  <=> n-HLen <= k <= n
+        \pgfmathparse{(\k>=\n-\HLen && \k<=\n) ? pow(\Alpha,\n-\k) : 0}
+        \let\vhnk\pgfmathresult
+        \ifdim \vhnk pt>0pt
+          \draw[very thick,blue,opacity=0.95] (\k,0) -- (\k,\vhnk);
+          \fill[blue] (\k,\vhnk) circle (1.4pt);
+          \ifnum\k=0
+            \node[right=4pt] at (\k,\vhnk) {\scriptsize \EchoSampleLabel{\n-\k}};
+          \else
+            \node[above=5pt] at (\k,\vhnk) {\scriptsize \EchoSampleLabel{\n-\k}};
+          \fi
+        \fi
+        \node[below=3pt] at (\k,0) {\scriptsize \k};
+      }
+    \end{scope}
+
+    % ===== Panel: x[k]h[n-k] =====
+    \begin{scope}[shift={(0,-4.6)}]
+      \draw[->] (-6.6,0) -- (10.6,0) node[below] {$k$};
+      \draw[->] (0,-0.02) -- (0,1.05);
+      \node[left] at (0,1.05) {$x[k]h[\n-k]$};
+
+      % y[n] = h[n]+h[n-1]+h[n-2] with truncation to 0..HLen
+      \pgfmathparse{(\n>=0   && \n<=\HLen)   ? pow(\Alpha,\n)   : 0} \let\yA\pgfmathresult
+      \pgfmathparse{(\n-1>=0 && \n-1<=\HLen) ? pow(\Alpha,\n-1) : 0} \let\yB\pgfmathresult
+      \pgfmathparse{(\n-2>=0 && \n-2<=\HLen) ? pow(\Alpha,\n-2) : 0} \let\yC\pgfmathresult
+      \pgfmathparse{\yA+\yB+\yC} \let\yval\pgfmathresult
+
+      % Pointwise product: nonzero only where x[k] and h[n-k] overlap
+      \foreach \k in {-6,...,10}{
+        \pgfmathparse{(\k>=0 && \k<=2 && \k>=\n-\HLen && \k<=\n) ? pow(\Alpha,\n-\k) : 0}
+        \let\vprod\pgfmathresult
+        \ifdim \vprod pt>0pt
+          \draw[very thick,blue] (\k,0) -- (\k,\vprod);
+          \fill[blue] (\k,\vprod) circle (1.4pt);
+          \ifnum\k=0
+            \node[right=4pt] at (\k,\vprod) {\scriptsize \EchoSampleLabel{\n-\k}};
+          \else
+            \node[above=5pt] at (\k,\vprod) {\scriptsize \EchoSampleLabel{\n-\k}};
+          \fi
+        \fi
+        \node[below=3pt] at (\k,0) {\scriptsize \k};
+      }
+
+      \node[anchor=west] at (-6,1.45) {$y[\n]=\displaystyle\sum_k x[k]h[\n-k]
+      =\pgfmathprintnumber[precision=5]{\yval}$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\begin{figure}[htbp]
+  \centering
+  \ConvPanel{0}
+  \caption{Graphical D-T convolution for $n=0$.}
+  \label{fig:w6_conv_n0}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \ConvPanel{1}
+  \caption{Graphical D-T convolution for $n=1$.}
+  \label{fig:w6_conv_n1}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \ConvPanel{2}
+  \caption{Graphical D-T convolution for $n=2$.}
+  \label{fig:w6_conv_n2}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \ConvPanel{3}
+  \caption{Graphical D-T convolution for $n=3$.}
+  \label{fig:w6_conv_n3}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \ConvPanel{4}
+  \caption{Graphical D-T convolution for $n=4$.}
+  \label{fig:w6_conv_n4}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \ConvPanel{5}
+  \caption{Graphical D-T convolution for $n=5$.}
+  \label{fig:w6_conv_n5}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \ConvPanel{6}
+  \caption{Graphical D-T convolution for $n=6$.}
+  \label{fig:w6_conv_n6}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \ConvPanel{7}
+  \caption{Graphical D-T convolution for $n=7$.}
+  \label{fig:w6_conv_n7}
+\end{figure}
+
+\clearpage
+\section{CatCourses in-class quiz: Properties of convolution}
+Pause after graphical convolution and work on the CatCourses quiz named
+\textbf{Properties of convolution}. Use the flip-and-slide interpretation
+and the convolution sum to justify your answers. We will discuss the
+reasoning before continuing to the frequency-domain material.
+
+\section{Recap: The convolution integral}
+Recall that for a continuous-time LTI system with impulse response \(h(t)\), the output \(y(t)\) to an input \(x(t)\) is given by the convolution integral:
+\[
+y(t) = x(t) * h(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau.
+\]
+In discrete-time, we have an equivalent expression for the convolution sum. Here, for an input $x[n]$ and impulse response \(h[n]\), the output \(y[n]\) is given by:
+\[
+y[n] = x[n] * h[n] = \sum_{k=-\infty}^{\infty} x[k] h[n - k].
+\]
+\begin{popquiz}
+  Suppose $x[n]$ is supported on $0\le n\le M-1$ and $h[n]$ is supported
+  on $0\le n\le N-1$. What is the possible support range of
+  $y[n]=x[n]*h[n]$, and what is its maximum possible number of nonzero samples?
+
+  \popqsplit
+  The output is zero outside $0\le n\le M+N-2$, so it has at most
+  $M+N-1$ nonzero samples. Can you prove why?
+\end{popquiz}
+\section{The importance of sinusoids}
+Historically, sinusoids have been very important in engineering and science. This is because many natural phenomena are periodic (for example, sound waves, light waves, etc.).  In engineering, the motion of rotation objects (for example, wheels, gears, etc.), the alternating current (AC) in power systems, and the oscillations in electrical circuits are all periodic. Therefore, we focus our attention to this most fundamental class of periodic signals: sinusoids.
+
+In defining convolution, the key idea was to express any given signal as a linear combination of shifted impulses. Similarly, we pose the following question: can we express any given periodic signal as a linear combination of sinusoids? The answer is yes, as you will see in the next few lectures.
+
+\subsection{Sinusoids are a special case of the general complex exponential}
+Recall that the general complex exponential is given by:
+\[
+x_g(t) = A_z e^{st},
+\]
+where \(A_z\) and \(s\) are complex numbers. We can write \(A_z\) and \(s\) in terms of their real and imaginary parts as:
+\[
+A_z = a_1 + j b_1, \quad s = \sigma + j\omega,
+\]
+where \(a_1, b_1, \sigma, \omega\) are real numbers. Substituting these into the expression for \(x(t)\), we have:
+\[
+x(t) = (a_1 + j b_1) e^{(\sigma + j\omega)t} = (a_1 + j b_1) e^{\sigma t} e^{j\omega t}.
+\]
+The general complex exponential can be used to represent a wide variety of signals by choosing special case values of \(A_z\) and \(s\) and then taking the real or the imaginary part, as needed.
+
+\begin{popquiz}
+  For what values of \(A_z\) and \(s\) do we get a sinusoidal signal $x(t) = A\sin(\omega t)$?
+  \popqsplit
+  For $A_z = A$ (a real number) and $s = j\omega$, that is, $\sigma = 0$, we have
+  \[
+  x(t) = A e^{j\omega t} = A \cos(\omega t) + j A \sin(\omega t).
+  \]
+  Taking the imaginary part, we get $x(t) = \Im(x_g(t)) = A \sin(\omega t)$.
+\end{popquiz}
+Note that for nonzero \(\omega\), the sinusoidal signal is periodic with period \(T_0 = \frac{2\pi}{|\omega|}\). A simple way to denote a sinusoidal signal is to use the complex exponential notation: $A e^{j\omega t}$, and then take the real or imaginary part as needed. With the exponential function, we avoid the possibility of integration by parts (and we will be able to see more advantages next).
+
+\section{The eigenfunction of LTI systems}
+Let us consider an LTI system with impulse response \(h(t)\) and an input $x(t) = Ae^{j\omega t}$. The output of the system is given by the convolution integral:
+\begin{align*}
+y(t) &= x(t) * h(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau \\
+\intertext{by commutativity of convolution, we can also write:}
+&= \int_{-\infty}^{\infty} h(\tau) x(t - \tau) d\tau \\
+&= \int_{-\infty}^{\infty} h(\tau) A e^{j\omega (t - \tau)} d\tau \\
+&= A e^{j\omega t} \left[\int_{-\infty}^{\infty} h(\tau) e^{-j\omega \tau} d\tau\right]
+\end{align*}
+This is a very interesting result!
+
+\paragraph{Observation 1} The input appears exactly as it is in the output, except for a scaling factor that is within the square brackets. This means that when a complex exponential is input to an LTI system, the output is also a complex exponential signal.
+
+\textbf{A word of caution:} the output above is only valid if the integral converges. A sufficient condition for sinusoidal inputs is that the impulse response is absolutely integrable, that is,
+\[\int_{-\infty}^{\infty} |h(t)| dt < \infty\] for the integral to converge. Then, the system is said to be BIBO (bounded-input bounded-output) stable since a bounded input will produce a bounded output (this is true, in general for any LTI system with absolutely integrable impulse response).
+
+\paragraph{Observation 2} For a general complex exponential input, the above derivation still holds provided the corresponding integral converges:
+
+\[
+y(t) = A e^{st} \left[\int_{-\infty}^{\infty} h(\tau) e^{-s \tau} d\tau\right].
+\]
+
+In the equation above, you might recognize the term in the square brackets as the Laplace transform of the impulse response \(h(t)\) evaluated at \(s\)! So, the output of the system is the input scaled by the Laplace transform of the impulse response!
+
+
+\subsection{The meaning of the word ``eigen''}
+Recall the definition of eigenvalues and eigenvectors from linear algebra. For a square matrix \(A\), if there exists a non-zero vector \(v\) such that
+\[
+Av = \lambda v,
+\]
+where \(\lambda\) is a scalar, then \(v\) is called an eigenvector of \(A\) and \(\lambda\) is called the corresponding eigenvalue. The word ``eigen'' is a German word that means ``own'' or ``self'', or ``characteristic''. In the case of vectors, the eigenvectors are the special vectors that, when the matrix transformation $A$ is applied to them, the output remains in the same direction as $v$, just scaled by $\lambda$. So, they remain their ``own self'' even after the matrix transformation is applied to them. Now, since $v$ is a vector, it is called an eigenvector.
+
+For our discussion on signals and systems, we do not have vectors. Instead, we have signals $x(t), y(t)$, and so on which are functions of time. So, we define a new term called \textbf{an eigenfunction}.
+
+The meaning of eigenfunction is similar to that of eigenvectors. It is that special function that, when the system transformation is applied to it, the output remains the same function (up to a scaling factor). In our case, the complex exponential is that special function. When it is input to an LTI system, the output remains a complex exponential of the same frequency (up to a scaling factor). So, we say that complex exponentials are eigenfunctions of LTI systems.
+
+\section{Linear combinations of sinusoids}
+Since the system is linear, we can write the following for various combinations of inputs $a_i e^{s_i t}$:
+\begin{align*}
+  \text{if } x_1(t) &= a_1 e^{s_1 t}, \text{ then } y_1(t) = a_1 e^{s_1 t} H(s_1), \\
+  \text{if } x_2(t) &= a_2 e^{s_2 t}, \text{ then } y_2(t) = a_2 e^{s_2 t} H(s_2), \\
+  &\vdotswithin{=} \\
+  \text{if } x_n(t) &= a_n e^{s_n t}, \text{ then } y_n(t) = a_n e^{s_n t} H(s_n).
+\end{align*}
+By linearity, if the input is a linear combination of the above inputs, that is,
+\begin{equation}
+x(t) = \sum_{k=1}^{n} a_k e^{s_k t},
+\label{eq:lincomb}
+\end{equation}
+then the output is given by
+\[
+y(t) = \sum_{k=1}^{n} a_k e^{s_k t} H(s_k).
+\]
+This is a very powerful result! It means that if we can express any given signal as a linear combination of complex exponentials, then we can easily find the output of the system to that input.
+
+Now what remains is to write the equation~\eqref{eq:lincomb} for any given arbitrary signal. That is, can we represent any signal $x(t)$ as a linear combination of complex exponentials? This is where Fourier series comes in as it provides us a way to compute the coefficients \(a_k\) and the exponents \(s_k\) for periodic signals. We will see this in the next lecture.
+\section{Recommended Practice Problems}
+
+To practice the concepts learned in this lecture, here are the recommended examples and problems that you should practice:
+\begin{enumerate}
+  \item Example 3.1 in Oppenheim and Willsky Signals and Systems textbook (2nd edition): the problem with $x(t) = e^{j2t}$ and the system description given by $y(t) = x(t-3)$
+  \item Problems 3.17 and 3.18 in Oppenheim and Willsky Signals and Systems textbook (2nd edition).
+  \item A challenging (but similar to midterm 1) problem: Problem 3.13 in Oppenheim and Willsky Signals and Systems textbook (2nd edition) on computing the output of a periodic signal with period $T_0 = 8$ and frequency response $H(j\omega)$ given to you.
+\end{enumerate}
