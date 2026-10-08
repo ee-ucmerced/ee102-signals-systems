@@ -34,8 +34,16 @@ of the \textbf{periodic steady-state output} $y(t)$.
 x(t) = \sum_{n=-\infty}^{\infty} \delta(t - n)
 \]
 
-Hint: You can find the Fourier series representation of the input signal and then use the property of LTI systems that relates the Fourier series coefficients of the input and output signals.
-\problempart[20 points] A square wave of amplitude 1 sketched below in Figure~\ref{fig:square_wave}.
+
+\textbf{Hint:} Start by finding the Fourier series representation of the input signal, $x(t)$. So, write
+\[ x(t) = \sum_{k=-\infty}^{\infty} a_k e^{jk\omega_0 t}, \]
+where $\omega_0 = 2\pi/T$ is the fundamental frequency and $T$ is the period of the input signal. Find $a_k$ using the Fourier series analysis equation. Then, use the property of LTI systems to find the output coefficients $b_k$ (that is, the Fourier Series coefficients of the output signal) in terms of the input coefficients $a_k$.
+\[
+b_k = a_k H(jk\omega_0),
+\]
+where $H(j\omega)$ is the frequency response of the system. Refer to the lecture notes to find out the frequency response formula!
+
+\problempart[30 points] A square wave of amplitude 1 sketched below in Figure~\ref{fig:square_wave}.
 \begin{figure}[h]
   \centering
   \begin{tikzpicture}[x=1.2cm,y=1.2cm,line cap=round]
@@ -84,29 +92,35 @@ x(t)=
 \end{cases}
 \]
 
-\problempart[20 points] The input $x(t)$ in part (b) models a PWM signal
-with a fixed duty cycle. Double its switching frequency while keeping
-the amplitude and duty cycle unchanged:
-\[
-x_{\mathrm{new}}(t)=x(2t).
-\]
-Sketch this new input and state its fundamental period. Use the Fourier
-series coefficients from part (b), the time-scaling property, and the LTI
-system's response at the new harmonic frequencies to find the Fourier
-series representation of the new output.
+% \problempart[20 points] The input $x(t)$ in part (b) models a PWM signal
+% with a fixed duty cycle. Double its switching frequency while keeping
+% the amplitude and duty cycle unchanged:
+% \[
+% x_{\mathrm{new}}(t)=x(2t).
+% \]
+% Sketch this new input and state its fundamental period. Use the Fourier
+% series coefficients from part (b), the time-scaling property, and the LTI
+% system's response at the new harmonic frequencies to find the Fourier
+% series representation of the new output.
 
-Hint: Time scaling changes the harmonic frequencies while retaining the
-input coefficient sequence. Evaluate the system response at those new
-frequencies; the new output is not generally a time-scaled copy of the
-output in part (b). You do not need to recompute the input coefficients
-from scratch.
+% Hint: Time scaling changes the harmonic frequencies while retaining the
+% input coefficient sequence.You do not need to recompute the input coefficients
+% from scratch. Instead, start by writing:
 
-\problempart[10 points] Write Python/MATLAB code to implement the signals
-in (b) and (c). Compute the outputs and their Fourier series representations,
-and plot the magnitude spectra of the outputs. Validate your analytical
-results against simulations in periodic steady state, after startup
-transients have decayed. State your sampling interval and the number of
-harmonics used.
+
+\problempart[20 points] Write Python/MATLAB code to implement the input
+signals above. Compute the outputs and their Fourier series representations,
+and plot the magnitude of the outputs, $|y(t)|$, on a graph.
+
+Note that you will need to choose a finite number of harmonics to include in the Fourier series representation (computers cannot handle infinite sums!). Additionally, you will need to choose a sampling interval for your simulation.
+
+You may use AI tools to get help with the syntax and to get a set up going -- you must write your own Fourier series computation code though.
+
+
+% Validate your analytical
+% results against simulations in periodic steady state, after startup
+% transients have decayed. State your sampling interval and the number of
+% harmonics used.
 
 \problem{2}
 Compute the complex Fourier series representation of each signal below.

@@ -3,7 +3,7 @@
 \section{Introduction and Review}
 We start by reviewing concepts we have discussed in class before: (1) periodicity of signals, (2) properties of convolution, and (3) the eigenfunction property of complex exponentials for LTI systems. 
 \subsection{Periodicity of signals}
-Recall the periodicity of signals by solving the popquiz below.
+Recall the periodicity of signals by solving the popquiz below. Assume $\omega_0>0$ for all problems.
 \begin{popquiz}
   Prove that $x(t)=e^{j\omega t}$ is a periodic signal. Find its fundamental period.
   \popqsplit 
@@ -11,22 +11,22 @@ Recall the periodicity of signals by solving the popquiz below.
   \[
   x(t+T)=e^{j\omega (t+T)}=e^{j\omega t}e^{j\omega T}=x(t)e^{j\omega T}.
   \]
-  Therefore, we need to find a $T>0$ such that $e^{j\omega T}=1$. This is true if and only if $\omega T=2\pi k$ for some integer $k>0$.
-  Therefore, we can choose $T=2\pi k/\omega$. The fundamental period is the smallest positive $T$, which occurs when $k=1$, so the fundamental period is $T=2\pi/\omega$.
+  Therefore, we need to find a $T>0$ such that $e^{j\omega T}=1$. This is true if and only if $|\omega|T=2\pi k$ for some integer $k>0$.
+  Therefore, we can choose $T=2\pi k/|\omega|$. The fundamental period is the smallest positive $T$, which occurs when $k=1$, so the fundamental period is $T=2\pi/|\omega|$.
 \end{popquiz}
 As a follow-up, solve another popquiz! Once you're done, you can review the solutions at the end.
 \begin{popquiz}
 Prove that the following signals are period:
 \begin{enumerate}
-\item Scaled harmonic of the complex exponential: $x(t)=e^{jk\omega_0 t}$, where $k$ is an integer.
-\item Finite harmonic sum: $x(t)=\sum_{k=-K}^{K}a_k e^{jk\omega_0t}$, where $K$ is a positive integer.
+\item Scaled harmonic of the complex exponential: $x(t)=e^{jk\omega_0 t}$, where $k$ is a non-zero integer.
+\item Finite harmonic sum: $x(t)=\sum_{k=-K}^{K}a_k e^{jk\omega_0t}$, where $K$ is a positive integer and $k$ is a non-zero integer.
 \end{enumerate}
 \popqsplit
 For $x(t)=e^{jk\omega_0 t}$, we have
 \[
 x(t+T)=e^{jk\omega_0 (t+T)}=e^{jk\omega_0 t}e^{jk\omega_0 T}=x(t)e^{jk\omega_0 T}.
 \]
-Therefore, we need to find a $T>0$ such that $e^{jk\omega_0 T}=1$. This is true if and only if $k\omega_0 T=2\pi m$ for some integer $m>0$. Therefore, we can choose $T=2\pi m/(k\omega_0)$. The fundamental period is the smallest positive $T$, which occurs when $m=1$, so the fundamental period is $T=2\pi/(k\omega_0)$. The second signal (summed harmonics) is also periodic with the same fundamental period $T=2\pi/\omega_0$ since each term in the sum is periodic with that period, so the sum is also periodic with the same period.
+Therefore, we need to find a $T>0$ such that $e^{jk\omega_0 T}=1$. This is true if and only if $|k\omega_0|T=2\pi m$ for some integer $m>0$. Therefore, we can choose $T=2\pi m/|k\omega_0|$. The fundamental period is the smallest positive $T$, which occurs when $m=1$, so the fundamental period is $T=2\pi/|k\omega_0|$. The second signal (summed harmonics) is also periodic with period $T=2\pi/\omega_0$ since each term in the sum is periodic with that period, so the sum is also periodic with the same period.
 \end{popquiz}
 \subsection{Properties of convolution}
 We note two important properties of convolution that often come in handy: commutativity and associativity. For two signals $x(t)$ and $h(t)$, we have
