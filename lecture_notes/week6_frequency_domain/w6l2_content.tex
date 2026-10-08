@@ -1,0 +1,195 @@
+% Adapted from week6_lecture2.tex; inherited harmonic and periodicity errors corrected.
+
+\section{Introduction and Review}
+We start by reviewing concepts we have discussed in class before: (1) periodicity of signals, (2) properties of convolution, and (3) the eigenfunction property of complex exponentials for LTI systems. 
+\subsection{Periodicity of signals}
+Recall the periodicity of signals by solving the popquiz below.
+\begin{popquiz}
+  Prove that $x(t)=e^{j\omega t}$ is a periodic signal. Find its fundamental period.
+  \popqsplit 
+  Periodicity requires us to prove that there exists a $T>0$ such that $x(t+T)=x(t)$ for all $t$. We have
+  \[
+  x(t+T)=e^{j\omega (t+T)}=e^{j\omega t}e^{j\omega T}=x(t)e^{j\omega T}.
+  \]
+  Therefore, we need to find a $T>0$ such that $e^{j\omega T}=1$. This is true if and only if $\omega T=2\pi k$ for some integer $k>0$.
+  Therefore, we can choose $T=2\pi k/\omega$. The fundamental period is the smallest positive $T$, which occurs when $k=1$, so the fundamental period is $T=2\pi/\omega$.
+\end{popquiz}
+As a follow-up, solve another popquiz! Once you're done, you can review the solutions at the end.
+\begin{popquiz}
+Prove that the following signals are period:
+\begin{enumerate}
+\item Scaled harmonic of the complex exponential: $x(t)=e^{jk\omega_0 t}$, where $k$ is an integer.
+\item Finite harmonic sum: $x(t)=\sum_{k=-K}^{K}a_k e^{jk\omega_0t}$, where $K$ is a positive integer.
+\end{enumerate}
+\popqsplit
+For $x(t)=e^{jk\omega_0 t}$, we have
+\[
+x(t+T)=e^{jk\omega_0 (t+T)}=e^{jk\omega_0 t}e^{jk\omega_0 T}=x(t)e^{jk\omega_0 T}.
+\]
+Therefore, we need to find a $T>0$ such that $e^{jk\omega_0 T}=1$. This is true if and only if $k\omega_0 T=2\pi m$ for some integer $m>0$. Therefore, we can choose $T=2\pi m/(k\omega_0)$. The fundamental period is the smallest positive $T$, which occurs when $m=1$, so the fundamental period is $T=2\pi/(k\omega_0)$. The second signal (summed harmonics) is also periodic with the same fundamental period $T=2\pi/\omega_0$ since each term in the sum is periodic with that period, so the sum is also periodic with the same period.
+\end{popquiz}
+\subsection{Properties of convolution}
+We note two important properties of convolution that often come in handy: commutativity and associativity. For two signals $x(t)$ and $h(t)$, we have
+\[
+x(t)*h(t)=h(t)*x(t),
+\]
+How can we prove this? Hint: Use the change of variable (colloquially known as ``u-substitution'').
+
+To prove commutativity, we can start with the definition of convolution for the left-hand side:
+\[
+x(t)*h(t)=\int_{-\infty}^{\infty} x(\tau)h(t-\tau)\,d\tau.
+\]
+Now, substitute $u = t - \tau$. Then, $du = -d\tau$ because $t$ is a fixed value for the function inside the integral. The limits of integration become: $+\infty$ to $-\infty$ when $\tau$ goes from $-\infty$ to $+\infty$. Therefore, we have
+\[
+x(t)*h(t)=\int_{+\infty}^{-\infty} x(t-u)h(u)(-du)=\int_{-\infty}^{+\infty} h(u)x(t-u)\,du=h(t)*x(t).
+\]
+
+Associativity of convolution can be proved similarly. For three signals $x_1(t)$, $h(t)$, and $x_2(t)$, we have
+\[
+x_1(t)*(h(t)*x_2(t))=(x_1(t)*h(t))*x_2(t).
+\]
+To prove associativity, we can start with the left-hand side:
+\[
+x_1(t)*(h(t)*x_2(t))=\int_{-\infty}^{\infty} x_1(\tau)\left[\int_{-\infty}^{\infty} h(\lambda)x_2(t-\tau-\lambda)\,d\lambda\right]\,d\tau.
+\]
+Now, we can change the order of integration:
+\[
+x_1(t)*(h(t)*x_2(t))=\int_{-\infty}^{\infty} h(\lambda)\left[\int_{-\infty}^{\infty} x_1(\tau)x_2(t-\tau-\lambda)\,d\tau\right]\,d\lambda.
+\] 
+The inner integral is the convolution of $x_1(t)$ and $x_2(t)$ evaluated at $t-\lambda$. Therefore, we have
+\[
+x_1(t)*(h(t)*x_2(t))=\int_{-\infty}^{\infty} h(\lambda)(x_1*x_2)(t-\lambda)\,d\lambda=(x_1*x_2)*h(t).
+\]
+
+\subsection{Eigenfunctions of LTI systems}
+At the end of the previous lecture, we established that $e^{j\omega t}$ is an eigenfunction of LTI systems. That is, for an input $x(t)=e^{j\omega t}$, the output $y(t)$ is also a complex exponential at the same frequency $\omega$ but scaled by a complex number $H(j\omega)$:
+\[
+y(t)=H(j\omega)e^{j\omega t}.
+\]
+where
+\[
+H(j\omega)=\int_{-\infty}^{\infty} h(\tau)\,e^{-j\omega \tau}\,d\tau.
+\]
+As a result of this \emph{very important} result, we proposed that if we are able to write any signal $x(t)$ as a linear combination of complex exponentials, then we can find the output $y(t)$ of an LTI system by simply scaling each complex exponential by $H(j\omega)$ and adding them up!
+
+The previous line is a one-line summary of Fourier analysis and synthesis --- something that we will be spending a lot of time on in the next few weeks.
+
+We start this journey by positing the following problem:  Given a $T$-periodic signal $x(t)$, can we write it as a linear combination of complex exponentials? If so, how? More concretely, can we write
+\[
+x(t)=\sum_{k=-\infty}^{\infty} a_k\,e^{jk\omega_0 t},
+\qquad \omega_0=\tfrac{2\pi}{T},
+\]
+the complex Fourier series coefficients are $\{a_k\}$. Note that $a_k \in \mathbb{C}$ are complex numbers, in general. The big question is; how do we find $a_k$?
+
+\section{Goals}
+Represent a periodic signal $x(t)$ as a linear combination of harmonically related complex exponentials:
+\begin{equation}
+x(t)=\sum_{k=-\infty}^{\infty} a_k\,e^{jk\omega_0 t}.
+\label{eq:fourier-series}
+\end{equation}
+Find the coefficients $a_k$.
+\section{Introduction to Fourier Series}
+Since the first part of the goal is ``any periodic signal $x(t)$'' and we are claiming that $x(t)$ can be written as a linear combination of complex exponentials. So, it must be true that (and we should make sure of it) that $e^{jk\omega_0 t}$ is periodic for every integer $k$.
+% \begin{popquiz}
+% Let $\omega_0>0$ and $T=2\pi/\omega_0$.
+% \begin{enumerate}
+%   \item Find the fundamental period of $e^{j\omega_0t}$ and of
+%   $e^{jk\omega_0t}$ for an integer $k\ne0$. What happens when $k=0$?
+%   \item Show that a finite harmonic sum
+%   $\sum_{k=-K}^{K}a_k e^{jk\omega_0t}$ has $T$ as a period.
+%   Must $T$ be its fundamental period?
+% \end{enumerate}
+% \popqsplit
+% For $k\ne0$, periodicity requires $e^{jk\omega_0T_k}=1$, so the smallest
+% positive period is $T_k=2\pi/(|k|\omega_0)=T/|k|$.
+% For $k=0$, the signal is the constant $1$: every positive number is a
+% period, and there is no smallest positive fundamental period.
+
+% Each harmonic satisfies $e^{jk\omega_0(t+T)}=e^{jk\omega_0t}$ because
+% $e^{j2\pi k}=1$. Therefore every finite harmonic sum has $T$ as a common
+% period. Its fundamental period can be shorter: for example,
+% $\cos(2\omega_0t)$ has fundamental period $T/2$.
+% A common period should not automatically be called the fundamental period.
+% \end{popquiz}
+
+Let's start to answer the second part of the goal: how do we find $a_k$? We will start with a simple example.
+\subsection{Example: A mix-sinusoidal audio signal}
+Use an idealized combination of three tones to see how Fourier coefficients encode frequency, amplitude, and phase. Real musical notes usually contain several harmonics; the example below is a simple sum of sinusoids.
+
+Consider
+\[
+x(t)=\sin(6t)+\cos(2t)+\sin(12t),\qquad \omega_0=2.
+\]
+Write $x(t)$ as a linear combination of $e^{jk\omega_0 t}$:
+\[
+\sin(6t)=\frac{1}{2j}\!\left(e^{j6t}-e^{-j6t}\right)
+= \frac{1}{2j}\!\left(e^{j(3)\omega_0 t}-e^{-j(3)\omega_0 t}\right),
+\]
+\[
+\cos(2t)=\frac{1}{2}\!\left(e^{j2t}+e^{-j2t}\right)
+=\frac{1}{2}\!\left(e^{j(1)\omega_0 t}+e^{-j(1)\omega_0 t}\right),
+\]
+\[
+\sin(12t)=\frac{1}{2j}\!\left(e^{j12t}-e^{-j12t}\right)
+= \frac{1}{2j}\!\left(e^{j(6)\omega_0 t}-e^{-j(6)\omega_0 t}\right).
+\]
+Hence
+\[
+x(t)=\sum_{k=-6}^{6} a_k\,e^{jk\omega_0 t},\qquad \omega_0=2,
+\]
+with the nonzero Fourier series coefficients as
+\[
+\begin{aligned}
+a_{\pm 1}=\frac{1}{2},\qquad a_{\pm 3}=\pm \frac{1}{2j},a_{\pm 6}=\pm \frac{1}{2j},
+\end{aligned}
+\]
+where the ``$\pm$'' pairs obey $a_{-k}=a_k^\ast$ for this real $x(t)$.
+
+The cosine contributes equal real coefficients at $k=\pm1$. The sine terms contribute opposite, purely imaginary coefficients at $k=\pm3,\pm6$. All other $a_k$ are zero. The fundamental period of this signal is $T=\pi$.
+
+\section{The Fourier analysis equation}
+\label{sec:w6l2-analysis}
+To find $a_k$ generally, we have the Fourier series analysis equation (the equation that gives us values of $a_k$):
+\[
+\,a_n=\frac{1}{T}\int_{0}^{T} x(t)\,e^{-jn\omega_0 t}\,dt\,
+\qquad n\in\mathbb{Z},
+\]
+if you replace $n$ by $k$, you get the more familiar form:
+\[
+a_k=\frac{1}{T}\int_{0}^{T} x(t)\,e^{-jk\omega_0 t}\,dt,
+\qquad k\in\mathbb{Z},
+\]
+which is the formula for the Fourier series coefficients.
+Note that for $k=0$, we have
+\[
+a_0=\frac{1}{T}\int_{0}^{T} x(t)\,dt,
+\]
+which is the average value (or DC component) of $x(t)$ over one period.
+
+\section{Fourier series properties}
+\label{sec:w6l2-properties}
+There are many helpful properties that you should know about Fourier series coefficients. Here are a few of them (you can find the full list in the textbook):
+
+\subsection{Linearity}
+
+For two signals represented using the same period $T$ and harmonic frequencies, with Fourier series coefficients $a_k$ and $b_k$, if we construct another signal by linear superposition, $z(t)=A x(t)+B y(t)$, then the Fourier Series coefficients for $z(t)$ satisfy
+\[
+z(t)\;\Longleftrightarrow\; \{\,A a_k + B b_k\,\}_{k\in\mathbb{Z}}.
+\]
+
+We will talk about many more properties next week.
+
+\section{Practice Problems}
+\begin{enumerate}
+  \item Review continuous-time Fourier series analysis, synthesis, and
+  properties in Chapter 3 of Oppenheim and Willsky, \emph{Signals and Systems}
+  (2nd edition), especially Sections 3.2--3.5 and Table 3.1.
+  \item Practice finding Fourier coefficients by integrating over one
+  period of a rectangular waveform and a periodic ramp.
+  \item Use the LTI filtering rule to connect input and output Fourier
+  coefficients, as required in Pset 6.
+\end{enumerate}
+\textbf{Reminder:} Pset 6 is due October 14, 2026.
+
+For an additional reference on harmonic analysis and LTI filtering, see
+\href{https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/72c3d01402fa6b7c109b7b88d399115e_MIT6_003F11_lec15.pdf}{MIT 6.003 Lecture 15: Fourier Series}.
