@@ -1,0 +1,456 @@
+\section{Goals}
+By the end of this lecture, you should be able to:
+\begin{itemize}
+\item Appreciate the motivation behind signals and systems. 
+\item Understand how linear combinations of sinusoids can approximate arbitrary signals.
+\item Analyze the Fourier series representation of discrete-time periodic signals.
+\end{itemize}
+
+\section{Review of EE 102 So Far}
+\subsection{Review: Signals}
+We started this course by introducing signals (as mathematical functions that convey information). In continuous-time, we denote signals as $x(t)$, where $t$ is a continuous variable representing time and in discrete-time, we denote signals as $x[n]$, where $n$ is an integer representing the sample index. Then, we set up many properties and transformations that can be applied to signals. Here's a reminder of some of the most notable ones: time-shifting: $x(t - t_0)$ shifts the signal $x(t)$ to the right by $t_0$ units, time-scaling: $x(at)$ compresses the signal if $a > 1$ and stretches it if $0 < a < 1$, time-reversal: $x(-t)$ flips the signal around the vertical axis, periodicity: A signal $x(t)$ is periodic with period $T$ if $x(t + T) = x(t)$ for all $t$, Even and odd signals: A signal is even if $x(t) = x(-t)$ and odd if $x(t) = -x(-t)$.
+\subsection{Review: The trio of special signals}
+We spent quite a bit of time discussing three special signals that are fundamental to signal processing:
+
+\paragraph{The unit impulse signal:} The unit impulse signal, denoted as $\delta(t)$ in continuous-time and $\delta[n]$ in discrete-time, is defined as:
+In continuous time, the ideal unit impulse is defined through sifting:
+\[
+\int_{-\infty}^{\infty} f(t)\delta(t-t_0)\,dt=f(t_0).
+\]
+Its area is one. It is an idealized distribution rather than an ordinary
+function with a finite value at each time.
+In discrete-time, the unit impulse is defined as:
+\[
+\delta[n] = \begin{cases}
+1, & n = 0 \\
+0, & n \neq 0
+\end{cases}
+\]
+and it has the summation property:
+\[
+\sum_{n=-\infty}^{\infty} \delta[n] = 1
+\]
+
+\paragraph{The unit step signal:} The unit step signal, denoted as $u(t)$ in continuous-time and $u[n]$ in discrete-time, is defined as:
+\[
+u(t) = \begin{cases}
+1, & t \geq 0 \\
+0, & t < 0
+\end{cases}
+\]
+In discrete-time, the unit step is defined as:
+\[
+u[n] = \begin{cases}
+1, & n \geq 0 \\
+0, & n < 0
+\end{cases}
+\]
+
+We discussed how integration of the unit impulse gives the unit step:
+\[
+u(t) = \int_{-\infty}^{t} \delta(\tau) d\tau
+\]
+and summation of the unit impulse gives the unit step in discrete-time:
+\[
+u[n] = \sum_{k=-\infty}^{n} \delta[k]
+\]
+
+\paragraph{The complex exponential signal:} The complex exponential signal, in its general form, is given by:
+\[
+x(t) = Ae^{st}
+\]
+where $A$ and $s$ are complex numbers. For $s=j\omega$ and real $A$, the real and imaginary parts give cosine and sine signals:
+\[
+x(t) = Ae^{j\omega t} = A\cos(\omega t) + jA\sin(\omega t)
+\]
+
+\subsection{The overarching goal of signal processing}
+Although you can state the goal in many formal ways, let us try to simplify the goal down to something that we can make intuitive sense of. We define the trio of special signals above for a reason --- the central hypothesis of signal processing is that \textbf{signals can be represented or approximated using sums or integrals of these special signals, under appropriate conditions}. The choice of representation depends on the signal and on the analysis we want to perform. So, we set ourselves the following question:
+
+\begin{center}\fbox{\parbox{0.9\linewidth}{\centering How can we represent signals using these special signals?}}\end{center}
+
+\subsection{The sifting property to write signals using impulses}
+The sifting property of the impulse function allows us to express any continuous-time signal $x(t)$ as an integral of scaled and shifted impulses:
+\[
+x(t) = \int_{-\infty}^{\infty} x(\tau) \delta(t - \tau) d\tau
+\]
+In discrete-time, we can express any signal $x[n]$ as a sum of scaled and shifted impulses:
+\[
+x[n] = \sum_{k=-\infty}^{\infty} x[k] \delta[n - k]
+\]
+ You can imagine that breaking a signal down into impulses is not that hard --- you just need to sample the signal at literally every point in time and place an impulse at that point with the appropriate scaling. So, it is intuitive! Similarly, we can visualize easily how any arbitrary signal can be constructed using steps (imagine a staircase approximation of a signal). Mathematically, this follows from the fact that the step is the integral of the impulse. However, the last special signal, the complex exponential, is not as intuitive. How can we represent any arbitrary signal using only complex exponentials? We know that complex exponential, $e^{j \omega t}$ is an oscillatory signal. It is not that obvious how we can use oscillatory signals to represent arbitrary signals. We discuss this next.
+\subsection{Using complex exponentials to represent signals}
+The Fourier analysis is the answer to this question. We are currently engaged in building towards Fourier analysis that will let us express any arbitrary signal as a sum of complex exponentials. Since the idea is not that intuitive, the mathematical foundations are also not as straightforward as the sifting property. So, we simplify the task --- we first ask a simpler question for signals with nicer properties. We ask ``can we represent periodic signals using complex exponentials?'' The answer is yes, and this is the Fourier series representation of periodic signals. 
+
+\subsection{Reminder: Systems and their properties}
+To realize any application of signals and signal processing, we need to introduce the ``processing'' examples. This is what gets us to ``systems''. A system is an object that takes in an input signal, processes it, and produces an output signal. We denote systems using a block diagram as shown below:
+\[
+\begin{array}{c}
+\text{Input } x(t) \quad \longrightarrow \quad \boxed{\text{System}} \quad \longrightarrow \quad \text{Output } y(t)
+\end{array}
+\]
+
+We discussed many properties of systems. Here are some of the most important ones:
+\begin{itemize}
+\item Linearity: A system is linear if it satisfies the principles of superposition and scaling. That is, for any inputs $x_1(t)$ and $x_2(t)$, and any scalars $a$ and $b$, the system satisfies: 
+\[
+y(t) = T\{ax_1(t) + bx_2(t)\} = ay_1(t) + by_2(t)
+\]
+where $y_1(t) = T\{x_1(t)\}$ and $y_2(t) = T\{x_2(t)\}$.
+\item Time-invariance: A system is time-invariant if a time shift in the input signal results in an identical time shift in the output signal. That is, if $y(t) = T\{x(t)\}$, then for any time shift $t_0$, we have: 
+\[
+y(t - t_0) = T\{x(t - t_0)\}
+\]
+\end{itemize}
+
+For LTI systems, we can compute the output of the system to any arbitrary input using the convolution operation. 
+\subsection{Impulse response and convolution}
+We define the impulse response of an LTI system as the output of the system when the input is an impulse signal. That is, if the input to the system is $\delta(t)$, then the output is $h(t)$, which is the impulse response. In block diagram form:
+\[
+\begin{array}{c}
+\delta(t) \quad \longrightarrow \quad \boxed{\text{LTI System}} \quad \longrightarrow \quad h(t)
+\end{array}
+\]
+The impulse response characterizes the behavior of the LTI system completely. For any arbitrary input signal $x(t)$, the output $y(t)$ can be computed using the convolution operation:
+\[
+y(t) = x(t) * h(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau
+\]
+
+\begin{popquiz}
+In your own words, write the goals of signal processing. Then, describe what Fourier series is and write both the synthesis and analysis equations for Fourier series.
+\popqsplit
+The Fourier series synthesis equation lets us \emph{synthesize} a periodic signal $x(t)$ using a sum of complex exponentials:
+\[
+x(t) = \sum_{k=-\infty}^{\infty} a_k e^{j k \omega_0 t}
+\]
+where $a_k$ are the Fourier coefficients and $\omega_0 = \frac{2\pi}{T}$ is the fundamental frequency for a signal with period $T$.
+
+The Fourier series analysis equation lets us \emph{analyze} a periodic signal $x(t)$ to find its Fourier coefficients:
+\[
+a_k = \frac{1}{T} \int_{T} x(t) e^{-j k \omega_0 t} dt
+\]
+where the integration is over a period. 
+\end{popquiz}
+
+
+\section{Representing periodic signals using complex exponentials}
+Now, we move on to the next question that remains unanswered --- how can we represent signals using complex exponentials? and how can we use this to find out the output of LTI systems to arbitrary inputs? We will spend the next 2-3 weeks answering this question using Fourier analysis.
+
+For a $T$-periodic signal, the continuous-time Fourier Series (FS) synthesis equation is
+\begin{equation}
+x(t)=\sum_{k=-\infty}^{\infty}a_k e^{jk\omega_0t},
+\qquad \omega_0=\frac{2\pi}{T}.
+\label{eq:fourier-series}
+\end{equation}
+
+\begin{popquiz}
+  For a real signal $x(t)$, show that the Fourier coefficients satisfy $a_{-k}=a_k^\ast$.
+\popqsplit
+  For a real signal $x(t)$, we have $x(t) = x^\ast(t)$. Using the Fourier series synthesis equation, we can write:
+  \[
+  x(t) = \sum_{k=-\infty}^{\infty} a_k e^{jk\omega_0t} = \sum_{k=-\infty}^{\infty} a_k^\ast e^{-jk\omega_0t}
+  \]
+  By changing the index of summation in the second sum, we can write:
+  \[
+  x(t) = \sum_{k=-\infty}^{\infty} a_{-k}^\ast e^{jk\omega_0t}
+  \]
+  Comparing the two expressions for $x(t)$, we see that:
+  \[
+  a_k = a_{-k}^\ast
+  \]
+\end{popquiz}
+Before going any further, make sure to work on the pop quiz above as it is important to set up the trigonometric form of the Fourier series. 
+\section{The Trigonometric Form of Fourier Series}
+If the linear combination form in equation~\eqref{eq:fourier-series} is confusing and the fact that ``we are representing everything as a linear combination of sinusoids'' is not obvious to you, you can see how we can rewrite the Fourier series synthesis equation~\eqref{eq:fourier-series} in a more familiar trigonometric form. This formulation will convince you that we are indeed representing everything as a linear combination of sinusoids.
+\subsection{From exponentials to trigonometry}
+
+For real $x(t)$, $x^\ast(t)=x(t)$, and
+\[
+x(t)=\sum_{k=-\infty}^{\infty} a_k e^{jk\omega_0 t}
+=\sum_{k=1}^{\infty}\!\left( a_k e^{jk\omega_0 t}+a_{-k} e^{-jk\omega_0 t}\right)+a_0.
+\]
+Since $x(t)$ is real, we must have $a_{-k}=a_k^\ast$ (you can see that this is indeed the case in the example above with real signals). Therefore
+\[
+x(t)=a_0+\sum_{k=1}^{\infty}\!\left[a_k e^{jk\omega_0 t}+a_k^\ast e^{-jk\omega_0 t}\right]
+= a_0+ 2\sum_{k=1}^{\infty} \Re\!\big\{a_k e^{jk\omega_0 t}\big\},
+\]
+where we used the fact that for any complex number $z$, $z+z^\ast=2\Re\{z\}$.
+
+Writing $a_k=B_k+jC_k$ with $B_k,C_k\in\mathbb{R}$, we obtain the trigonometric form
+\begin{equation}
+\,x(t)=a_0+2\sum_{k=1}^{\infty}\!\big[\,B_k\cos(k\omega_0 t)-C_k\sin(k\omega_0 t)\,\big].\,
+\label{eq:trig-form}
+\end{equation}
+
+Equation~\eqref{eq:trig-form} shows that $x(t)$ is a linear combination of sinusoids at frequencies $k\omega_0$, $k=1,2,\ldots$ with real coefficients. The constant term $a_0$ is the DC component (average value) of $x(t)$ (as we will see again in the next section). It's also finally an equation without any complex numbers or the imaginary term $j$ in it! So, it's hopefully more intuitive now. Let's continue towards our main goal --- finding $a_k$.
+
+
+\section{The Fourier analysis equation}
+\label{sec:w6l2-analysis}
+To find $a_k$ generally, let's start by multiplying both sides of equation~\eqref{eq:fourier-series} by $e^{-jn\omega_0 t}$ for some integer $n \in \mathbb{Z}$, we get
+\[
+x(t)\,e^{-jn\omega_0 t}
+=\sum_{k=-\infty}^{\infty} a_k\,e^{jk\omega_0 t}\,e^{-jn\omega_0 t}
+=\sum_{k=-\infty}^{\infty} a_k\,e^{j(k-n)\omega_0 t}.
+\]
+Next, let us integrate this equation over $[0,T)$,
+\[
+\int_{0}^{T} x(t)\,e^{-jn\omega_0 t}\,dt
+=\sum_{k=-\infty}^{\infty} a_k \int_{0}^{T} e^{j(k-n)\omega_0 t}\,dt
+\]
+Now, we need to evaluate the integral on the right-hand side. We have two cases:
+\begin{itemize}
+\item If $k=n$, then
+\[ \int_{0}^{T} e^{j(k-n)\omega_0 t}\,dt=\int_{0}^{T} 1\,dt=T\] since $e^{j0}=1$.
+
+\item If $k\neq n$, then we have
+\[
+\int_{0}^{T} e^{j(k-n)\omega_0 t}\,dt
+\]
+Using orthogonality over one period $T$, this integral is 0 (since integrating a sinusoid over one period will lead to the positive and negative areas canceling out). You can verify this by direct integration too:
+\[
+\int_{0}^{T} e^{j(k-n)\omega_0 t}\,dt
+=\left[\frac{e^{j(k-n)\omega_0 t}}{j(k-n)\omega_0}\right]_{0}^{T}
+=\frac{e^{j(k-n)\omega_0 T}-1}{j(k-n)\omega_0}=0
+\]
+since $e^{j(k-n)\omega_0 T}=e^{j(k-n)2\pi}=1$ for every integer $k-n$ (from the pop-quiz above).
+\end{itemize}
+
+Hence, we have the Fourier series analysis equation (the equation that gives us values of $a_k$):
+\[
+\,a_n=\frac{1}{T}\int_{0}^{T} x(t)\,e^{-jn\omega_0 t}\,dt\,
+\qquad n\in\mathbb{Z},
+\]
+if you replace $n$ by $k$, you get the more familiar form:
+\[
+a_k=\frac{1}{T}\int_{0}^{T} x(t)\,e^{-jk\omega_0 t}\,dt,
+\qquad k\in\mathbb{Z},
+\]
+which is the formula for the Fourier series coefficients.
+Note that for $k=0$, we have
+\[
+a_0=\frac{1}{T}\int_{0}^{T} x(t)\,dt,
+\]
+which is the average value (or DC component) of $x(t)$ over one period.
+
+\section{Fourier series properties}
+\label{sec:w6l2-properties}
+There are many helpful properties that you should know about Fourier series coefficients. Here are a few of them (you can find the full list in the textbook):
+
+\subsection{Linearity}
+
+For two signals represented using the same period $T$ and harmonic frequencies, with Fourier series coefficients $a_k$ and $b_k$, if we construct another signal by linear superposition, $z(t)=A x(t)+B y(t)$, then the Fourier Series coefficients for $z(t)$ satisfy
+\[
+z(t)\;\Longleftrightarrow\; \{\,A a_k + B b_k\,\}_{k\in\mathbb{Z}}.
+\]
+\subsection{Filtering a periodic input through an LTI system}
+\label{sec:w6l2-filtering}
+Why do we even write the Fourier series representation of periodic signals? Well, you see one advantage with this property below. This property says that if you know the Fourier series coefficients of a periodic input, you can find the Fourier series coefficients of the output of an LTI system by simply multiplying the input coefficients with the frequency response of the system evaluated at the harmonic frequencies. This is a very powerful property that we will use in many applications.
+
+Let's work this out. Consider an LTI system with impulse response $h(t)$ and a $T$-periodic input
+with Fourier coefficients $a_k$. Write
+\begin{align*}
+y(t)&=\int_{-\infty}^{\infty}h(\tau)x(t-\tau)\,d\tau\\
+&=\sum_{k=-\infty}^{\infty}a_k e^{jk\omega_0t}
+  \int_{-\infty}^{\infty}h(\tau)e^{-jk\omega_0\tau}\,d\tau\\
+&=\sum_{k=-\infty}^{\infty}a_k H(jk\omega_0)e^{jk\omega_0t}.
+\end{align*}
+For the stable RC system, this is the periodic steady-state response.
+Its output coefficients are
+\[
+\boxed{c_k=a_kH(jk\omega_0).}
+\]
+We introduced this filtering rule 
+eigenfunctions in Week 5/6. The impulse response need not be periodic.
+The one-period operation in Section~\ref{sec:w6l2-periodic-convolution}
+is distinct from this ordinary LTI convolution.
+
+\subsection{Periodic convolution}
+\label{sec:w6l2-periodic-convolution}
+What happens when it is the reverse case --- convolution of Fourier series coefficients --- what does that look like in the time domain? Let's consider this case by first defining how convolution works for periodic signals. 
+
+Periodic convolution defines a one-period integral on two $T$-periodic
+signals. So, if you have $x_1(t)$ and $x_2(t)$, the periodic convolution is the same integral as the regular convolution, with the limits from $0$ to $T$ instead of $-\infty$ to $\infty$:
+\[
+(x_1 *_T x_2)(t)=\int_0^T x_1(\tau)x_2(t-\tau)\,d\tau.
+\]
+
+Our goal is to find out the Fourier series coefficients of a signal $y(t) = (x_1 *_T x_2)(t)$ in terms of the Fourier series coefficients of $x_1(t)$ and $x_2(t)$.
+
+Start by writing the Fourier Series coefficients as $a_k$ and $b_k$, respectively, and
+call the coefficients of $y(t)=(x_1 *_T x_2)(t)$ $c_k$. Then by applying the Fourier series analysis equation to $y(t)$, we have
+\[
+c_k=\frac1T\int_0^T y(t)e^{-jk\omega_0t}\,dt.
+\]
+We can find $c_k$ in terms of $a_k$ and $b_k$ using convolution: substitute the expression for $y(t)$ into the definition of $c_k$ above:
+\[
+c_k=\frac1T\int_{0}^{T} \left[\int_{0}^{T} x_1(\tau)\,x_2(t-\tau)\,d\tau\right]
+e^{-jk\omega_0 t}\,dt .
+\]
+
+Now, using the following equations for the Fourier Series expansions of $x_1(\tau)$ and $x_2(t-\tau)$ (this is also an in-place proof for the time-shift property of Fourier Series!):
+
+\[
+x_1(\tau)=\sum_{\ell} a_\ell e^{j\ell\omega_0 \tau}
+\]
+and
+\[
+x_2(t-\tau)=\sum_{m} b_m e^{jm\omega_0 (t-\tau)}
+= \sum_{m} b_m e^{jm\omega_0 t}\,e^{-jm\omega_0 \tau},
+\]
+we get
+\[
+\begin{aligned}
+c_k
+&=\frac1T\int_{0}^{T}\!\!\int_{0}^{T}
+\left(\sum_{\ell} a_\ell e^{j\ell\omega_0 \tau}\right)
+\left(\sum_{m} b_m e^{jm\omega_0 t}e^{-jm\omega_0 \tau}\right)
+e^{-jk\omega_0 t}\,d\tau\,dt .
+\end{aligned}
+\]
+
+Interchange sums and integrals and collect factors together to write,
+\[
+\begin{aligned}
+c_k
+&=\frac1T\sum_{\ell}\sum_{m} a_\ell b_m
+\int_{0}^{T}\!\!\int_{0}^{T}
+e^{j\ell\omega_0 \tau} \, e^{-jm\omega_0 \tau}\,
+e^{jm\omega_0 t}\,e^{-jk\omega_0 t}\, d\tau\,dt \\
+&=\frac1T\sum_{\ell}\sum_{m} a_\ell b_m
+\left[\int_{0}^{T} e^{j(m-k)\omega_0 t}\,dt\right]
+\left[\int_{0}^{T} e^{j(\ell-m)\omega_0 \tau}\,d\tau\right].
+\end{aligned}
+\]
+
+Finally, note that periodic integral over one period is 0 unless the integrand is constant. So, for any integers $p$,
+\(
+\int_{0}^{T} e^{jp\omega_0 t}\,dt
+=\begin{cases}
+T, & p=0,\\
+0, & p\neq 0.
+\end{cases}
+\)
+Hence the $t$-integral is zero unless $m=k$, and the $\tau$-integral is zero
+unless $\ell=m$:
+\[
+\int_{0}^{T} e^{j(m-k)\omega_0 t}\,dt = T\,\delta_{m,k},
+\qquad
+\int_{0}^{T} e^{j(\ell-m)\omega_0 \tau}\,d\tau = T\,\delta_{\ell,m}.
+\]
+
+So, only the terms with $\ell=m=k$ survive!
+\[
+c_k=\frac1T \sum_{\ell}\sum_{m} a_\ell b_m \,(T\delta_{m,k})\,(T\delta_{\ell,m})
+=\frac1T \,(T)(T)\, a_k b_k
+= T\,a_k b_k .
+\]
+
+\[
+c_k = T\,a_k\,b_k\,,\qquad k\in\mathbb{Z}.
+\]
+
+
+Thus the unnormalized one-period convolution defined above gives
+$c_k=T a_kb_k$. If a factor $1/T$ is included in the definition of periodic
+convolution, the corresponding coefficient rule is $c_k=a_kb_k$.
+
+
+\subsection{Time shifting}
+For a $T$-periodic signal with coefficients $a_k$, substituting $t-t_0$
+into the synthesis equation gives
+\[
+x(t-t_0)=\sum_k a_k e^{-jk\omega_0t_0}e^{jk\omega_0t}.
+\]
+Thus the shifted signal has coefficients
+\[
+c_k=a_k e^{-jk\omega_0t_0}.
+\]
+A time shift changes coefficient phases while preserving their magnitudes.
+Use the same reference period when applying linearity and time shifting.
+
+\subsection{Differentiation}
+For a smooth periodic signal, differentiation multiplies the $k$th
+coefficient by $jk\omega_0$. For a signal with jumps, its derivative includes
+impulses, and the same coefficient rule is interpreted in that sense.
+
+\begin{popquiz}
+Prove the differentiation property of the Fourier series. That is, if $x(t)$ has Fourier coefficients $a_k$, then show that the derivative $x'(t)$ has Fourier coefficients $c_k = j k \omega_0 a_k$.
+\popqsplit 
+We start with the Fourier series synthesis equation for $x(t)$:
+\[
+x(t) = \sum_{k=-\infty}^{\infty} a_k e^{j k \omega_0 t}
+\]
+Differentiating both sides with respect to $t$, we get:
+\[
+x'(t) = \sum_{k=-\infty}^{\infty} a_k \frac{d}{dt} e^{j k \omega_0 t} = \sum_{k=-\infty}^{\infty} a_k (j k \omega_0) e^{j k \omega_0 t}
+\]
+Thus, the Fourier coefficients of $x'(t)$ are:
+\[
+c_k = j k \omega_0 a_k
+\]
+You can also derive this from the analysis equation by integration by parts; periodicity makes the boundary term vanish.
+\end{popquiz}
+
+\subsection{Multiplication of periodic signals}
+\label{sec:w7l1-multiplication}
+Let $x(t)$ and $g(t)$ be periodic signals represented using the same
+reference period $T$ and $\omega_0=2\pi/T$, with coefficients $a_k$ and $d_k$.
+Multiplying their synthesis equations gives
+\begin{align*}
+x(t)g(t)
+&=\left(\sum_m a_m e^{jm\omega_0t}\right)
+  \left(\sum_\ell d_\ell e^{j\ell\omega_0t}\right)\\
+&=\sum_m\sum_\ell a_m d_\ell e^{j(m+\ell)\omega_0t}.
+\end{align*}
+Collect the terms with $m+\ell=k$. The coefficients of $z(t)=x(t)g(t)$ are
+\[
+\boxed{c_k=\sum_{m=-\infty}^{\infty}a_m d_{k-m}.}
+\]
+Thus multiplication in time corresponds to convolution of the Fourier
+coefficient sequences. This differs from periodic convolution in time,
+whose coefficient rule was $T a_k d_k$ under our unnormalized definition.
+For a finite harmonic expansion, the multiplication derivation is simply
+finite-sum algebra; the infinite-series rule requires the usual convergence
+conditions.
+
+As a short example, multiplying a $T$-periodic signal $g(t)$ by
+$\sin(\omega_0t)$, whose only nonzero coefficients are at $k=\pm1$, gives
+\[
+c_k=\frac{d_{k-1}-d_{k+1}}{2j}.
+\]
+A finite-support coefficient sequence makes the convolution sum especially simple.
+
+A common reference period can be longer than a signal's fundamental period.
+If a resulting waveform actually repeats every $T/2$, only even indices
+remain on the $\omega_0=2\pi/T$ grid. Writing its coefficients as $B_n$ on
+that grid and as $b_k$ using its own $2\omega_0$ grid gives $b_k=B_{2k}$.
+Use this reindexing when comparing calculations made with different periods.
+
+\section{Discrete-time Fourier Series}
+In discrete-time, the Fourier series synthesis and analysis follows pretty much the same form as continuous-time. The synthesis equation is given by:
+\[
+x[n] = \sum_{k=0}^{N-1} a_k e^{j k \omega_0 n}
+\]
+where $N$ is the period of the signal and $\omega_0 = \frac{2\pi}{N}$ is the fundamental frequency. The analysis equation is given by:
+\[
+a_k = \frac{1}{N} \sum_{n=0}^{N-1} x[n] e^{-j k \omega_0 n}
+\]
+Note that the integration is replaced by a summation in discrete-time. Also, the sum in the synthesis equation is from $0$ to $N-1$ because the Fourier coefficients are periodic with period $N$ in discrete-time. You may sum over any $N$ consecutive integers, for example $k=k_0,\ldots,k_0+N-1$. Summing over more than $N$ indices would count repeated harmonics more than once. 
+
+
+The coefficient sequence satisfies $a_{k+N}=a_k$ because
+$e^{j(k+N)2\pi n/N}=e^{jk2\pi n/N}$ for integer $n$.
+Unlike the continuous-time expansion, an $N$-periodic discrete-time signal
+needs only $N$ distinct harmonics for exact reconstruction.
+
+\section{Recommended Practice Problems}
+\begin{enumerate}
+  \item Use the carryover analysis and filtering equations to revisit Pset 6.
+  \item Practice time shifting and differentiation using Chapter 3 and
+  Table 3.1 of Oppenheim and Willsky, \emph{Signals and Systems} (2nd edition).
+  \item For an $N$-periodic discrete-time sequence, compute its $N$ Fourier
+  coefficients and reconstruct one period using the synthesis equation.
+\end{enumerate}
+Pset 7 will apply continuous-time Fourier analysis to rectification and
+periodic signals whose amplitudes vary within each period.
