@@ -38,7 +38,10 @@ The key idea is that FS gives us an approximation of the signal that minimizes t
 \section{Intuition for sums of sinusoids}
 We have noted many times that the FS gives us a way to write any periodic signal as a sum of sinusoids. But how would this be possible for signals with discontinuities? This is unintuitive because sinusoids are smooth, oscillating functions. So, how can they combine together to form a signal that has jumps, like a square wave, for example? 
 \begin{popquiz}
-For the signal shown below, viusalize your intuition using a graph (does not need to be mathematically exact) for how the signal can be approximated by a sum of sinusoids. You can use Desmos Graphing Calculator to help you visualize this.
+The signal shown below is one impulse of a periodic impulse train. Visualize
+your intuition using a graph (it does not need to be mathematically exact)
+for how the train can be approximated by a sum of sinusoids. You can use
+Desmos Graphing Calculator to help you visualize this.
 \begin{center}
 \begin{tikzpicture}
     \draw[->] (-0.5,0) -- (4,0) node[right] {$t$};
@@ -87,9 +90,9 @@ This is a sum of cosines with amplitudes \(2 |a_k|\) and phase shifts \(\phi_k\)
 
 \paragraph{Case 3: Complex $a_k$ (standard form)} For real signals, we can also express \(a_k\) in standard form as \(a_k = B_k + j C_k\), where \(B_k\) and \(C_k\) are real. Then, we can write:
 \[
-x(t) = a_0 + 2\sum_{k=1}^{\infty} B_k \cos(k \omega_0 t) - C_k \sin(k \omega_0 t)
+x(t) = a_0 + 2\sum_{k=1}^{\infty}\left[B_k \cos(k \omega_0 t) - C_k \sin(k \omega_0 t)\right]
 \]
-This is a sum of cosines and sines with amplitudes \(B_k\) and \(C_k\).
+The cosine coefficient is $2B_k$ and the sine coefficient is $-2C_k$.
     
 \begin{popquiz}
 On Desmos Graphing Calculator, explore how sums of cosines can approximate discontinuities. Create a visual graph that ``looks'' like a  train of impulses.
@@ -168,7 +171,8 @@ E_N=\int_{t_0}^{t_0+T}|x(t)|^2\,dt
    =T\sum_{|k|>N}|a_k|^2.
 \]
 The retained sum includes the DC coefficient and both positive and negative
-harmonics. The factor $T$ distinguishes one-period energy from average power.\begin{figure}[ht]
+harmonics. The factor $T$ distinguishes energy over one period from average
+energy over a period (power).\begin{figure}[ht]
     \centering
     \includegraphics[width=0.88\linewidth]{ti_signal_integrity_degradation_full.png}
     \caption{Texas Instruments example showing signal integrity degradation through a channel. 
