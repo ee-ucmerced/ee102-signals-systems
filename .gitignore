@@ -64,3 +64,6 @@ __pycache__/
 admin/*
 .env
 
+# Full pre-class lecture PDFs stay local.
+*_instructor_copy.pdf
+

@@ -1,0 +1,267 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+
+\documentclass{ee102_pset}
+\input{macros.tex}
+\input{preamble.tex}
+
+\author{\rule{3cm}{0.4pt}}
+\submitdate{\rule{3cm}{0.4pt}}
+\problemset{\shortstack{Problem Set \#8: Practice and Study Guide\\for Midterm Exam \#2}}
+\renewcommand{\psetnum}{8}
+\renewcommand{\releasedate}{October 19, 2026}
+\renewcommand{\duedate}{Oct 28, 2026 at 11:59 PM}
+\shorttitle{Problem Set \#8}
+\hypersetup{pdftitle={EE 102 Problem Set 8: Practice and Study Guide for Midterm Exam 2}}
+
+\begin{document}
+This problem set is intentionally longer than usual to provide practice for
+Midterm Exam \#2 on Wednesday, October 28, during class (1:40--2:55 PM).
+Work through it before the exam. The submission deadline is
+\textbf{Wednesday, October 28, at 11:59 PM}, after the exam, following our
+usual submission schedule. The exam will be shorter than this practice set.
+
+There are \textbf{100 points}. Show your derivations, label sketches, and
+state any assumptions. Use angular frequency $\omega$ in radians per second.
+Throughout this set, the Fourier transform convention is
+\[
+X(\omega)=\int_{-\infty}^{\infty}x(t)e^{-j\omega t}\,dt,
+\qquad
+x(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty}X(\omega)e^{j\omega t}\,d\omega.
+\]
+
+\problem{1} \textbf{Complex exponentials and signal representations [10 points]}
+
+\problempart[3 points] Write
+\[
+x(t)=6e^{-2t}\cos\left(4t+\frac{\pi}{3}\right)u(t)
+\]
+as $x(t)=\operatorname{Re}\{C e^{st}\}u(t)$. Find $C$ in rectangular and
+polar form and find $s$. Explain which part of $s$ controls decay and which
+part controls oscillation.
+
+\problempart[3 points] Consider $e^{j3t}$, $\cos(3t)$, and $e^{-2t}u(t)$.
+For each, determine whether it is periodic and whether its total energy is
+finite. Which signals have a Fourier \emph{series} representation? Which
+have a Fourier transform given by an ordinary convergent integral? Explain
+how frequency-domain impulses represent the periodic examples.
+
+\problempart[4 points] Use Euler's formula to express
+$A\cos(\omega_0t+\phi)$ as two complex exponentials, where
+$A>0$ and $\omega_0>0$. Give the coefficient of each exponential. Explain
+why this real signal has contributions at both $+\omega_0$ and
+$-\omega_0$, while $e^{j\omega_0t}$ has only one frequency component.
+
+\vspace*{\fill}
+\begin{center}[use additional pages if needed]\end{center}
+
+\problem{2} \textbf{Circuit impulse responses and convolution [15 points]}
+% Adapted from Fall 2025 HW8 Problem 1; input/output and initial conditions
+% are now explicit. Circuit analysis is prerequisite knowledge.
+Consider an ideal series RC circuit driven by an input voltage
+$v_{\mathrm{in}}(t)$, with $R>0$, $C>0$, and output measured
+\textbf{across the capacitor}. Let $\tau_C=RC$.
+Assume zero capacitor voltage before the input is applied and use the
+corresponding zero-state LTI model.
+
+\problempart[4 points] Write down the RC impulse response $h_C(t)$ from
+our earlier notes and briefly explain what an impulse response means.
+State why the factor multiplying the exponential is needed; check that
+the units of $h_C(t)$ make $(v_{\mathrm{in}}*h_C)(t)$ a voltage.
+
+\problempart[6 points] For $v_{\mathrm{in}}(t)=V_0u(t)$, use convolution
+with your impulse response to find the output voltage. Sketch it and
+compare its value just after switching and as $t\to\infty$.
+
+\problempart[5 points] Now let
+$v_{\mathrm{in}}(t)=V_0[u(t)-u(t-D)]$, with $D>0$. Use your step-response
+result and LTI properties to find the output voltage for all $t$.
+Describe what happens at the two switching times.
+
+\vspace*{\fill}
+\begin{center}[use additional pages if needed]\end{center}
+
+\problem{3} \textbf{Complex exponentials through LTI systems [10 points]}
+
+\problempart[3 points] Starting from the convolution integral, show that
+an LTI system with impulse response $h(t)$ responds to
+$x(t)=e^{j\omega t}$, present for all time, according to
+\[
+y(t)=H(j\omega)e^{j\omega t},\qquad
+H(j\omega)=\int_{-\infty}^{\infty}h(\tau)e^{-j\omega\tau}\,d\tau.
+\]
+Assume the integral exists, using sifting for any ideal impulse term.
+Why is $e^{j\omega t}$ called an eigenfunction of an LTI system?
+
+\problempart[3 points] Evaluate $H_C(j\omega)$ for
+the impulse response in Problem 2. Write the
+output to $A\cos(\omega t)$ in magnitude/phase form, assuming the input
+has been present for all time and the circuit is in sinusoidal steady state.
+Take $\omega>0$.
+
+\problempart[4 points] For the RC circuit, apply the convolution integral
+to the \emph{switched-on} input $x(t)=e^{j\omega t}u(t)$ and obtain its
+zero-state output. Identify the transient term and show how your result
+approaches the sinusoidal steady-state response. Explain why simply writing
+$H_C(j\omega)e^{j\omega t}u(t)$ misses part of the response.
+
+\vspace*{\fill}
+\begin{center}[use additional pages if needed]\end{center}
+
+\problem{4} \textbf{Fourier series and periodic filtering [10 points]}
+% The pulse train replaces the stale cross-reference to last year's HW6.
+Let $A>0$, $T>0$, and $\omega_0=2\pi/T$. Define the periodic pulse train
+$q(t+T)=q(t)$ by one period:
+\[
+q(t)=\begin{cases}
+A, & |t|<T/4,\\
+0, & T/4<|t|<T/2.
+\end{cases}
+\]
+Values at the isolated switching instants do not affect the coefficients.
+Let $a_k$ denote its complex Fourier series coefficients.
+
+\problempart[4 points] Sketch two periods and compute $a_0$ and $a_k$
+for $k\ne0$ using the analysis equation. Check your result using the
+symmetry of $q(t)$. Which harmonics vanish? State the value to which the
+series converges at a jump.
+
+\problempart[2 points] Find the Fourier coefficients of
+$q(t-T/8)$ using the time-shift property. Explain what changes in the
+coefficient magnitudes and phases.
+
+\problempart[4 points] Apply $q(t)$ to the RC circuit in Problem 2, with
+the periodic input present for all time. Write the Fourier series of the
+periodic steady-state output using $a_k$ and $H_C(jk\omega_0)$.
+Find the DC output. Explain how the circuit affects high-frequency harmonics.
+
+\vspace*{\fill}
+\begin{center}[use additional pages if needed]\end{center}
+
+\problem{5} \textbf{Parseval, average energy, and approximation [15 points]}
+% Adapted from Fall 2025 HW8 Problem 2.
+Assuming other things are same, compare..
+
+Consider the following three real, $T$-periodic signals:
+\[
+s(t)=A\cos(\omega_0t),\qquad b(t)=2q(t)-A,
+\]
+and the sawtooth defined over one period by
+\[
+r(t)=\frac{2A}{T}t,\qquad -T/2\le t<T/2,
+\qquad r(t+T)=r(t).
+\]
+Here $q(t)$ is the pulse train in Problem 4, so $b(t)$ takes values $+A$
+and $-A$ for equal durations.
+
+\problempart[4 points] Find the complex Fourier coefficients of $s(t)$,
+$b(t)$, and $r(t)$. Use Problem 4 for $b(t)$; for $r(t)$, show the
+coefficient integral (you may adapt your sawtooth calculation from Pset 6).
+Check the DC term and conjugate symmetry for each signal.
+
+\problempart[5 points] Use the Fourier series form of Parseval's theorem
+to compute the average energy over a period (power) of each signal:
+\[
+E_{\mathrm{avg},x}=\frac1T\int_{t_0}^{t_0+T}|x(t)|^2\,dt
+   =\sum_{k=-\infty}^{\infty}|c_k|^2.
+\]
+Rank the signals by this quantity. You may use
+\[
+\sum_{k=1}^{\infty}\frac1{k^2}=\frac{\pi^2}{6},\qquad
+\sum_{\substack{k\ge1\\k\ \mathrm{odd}}}\frac1{k^2}=\frac{\pi^2}{8}.
+\]
+
+\problempart[3 points] For each signal, find its energy over one period
+and state whether its total energy over $(-\infty,\infty)$ is finite.
+Relate the energy over one period to the average energy over a period.
+
+\problempart[3 points] Let $d_k$ be the coefficients of $b(t)$, and define
+$b_N(t)=\sum_{k=-N}^{N}d_k e^{jk\omega_0t}$. Use Parseval to compute
+\[
+E_N=\int_{-T/2}^{T/2}|b(t)-b_N(t)|^2\,dt
+\]
+for $N=1,2,3$, retaining both positive and negative harmonics. Explain any
+repeated value. Does $E_N\to0$ require the Gibbs overshoot to vanish?
+
+\vspace*{\fill}
+\begin{center}[use additional pages if needed]\end{center}
+
+\problem{6} \textbf{From Fourier series to the Fourier transform [20 points]}
+Let $A>0$, $\tau>0$, and define a single, aperiodic pulse
+\[
+p(t)=A[u(t+\tau)-u(t-\tau)].
+\]
+Use $\operatorname{sinc}(z)=\sin(z)/z$ for $z\ne0$ and
+$\operatorname{sinc}(0)=1$.
+
+\problempart[4 points] Starting from the transform integral, find
+$P(\omega)$. Evaluate $P(0)$ separately or by taking a limit, and relate
+it to the area of the time-domain pulse.
+
+\problempart[4 points] Sketch $P(\omega)$ and $|P(\omega)|$, labeling
+the DC value and the first positive and negative zeros. If the pulse width
+is doubled while its height stays fixed, how do the DC value and the first
+zero locations change?
+
+\problempart[4 points] Define $p_d(t)=p(t-t_d)$, where $t_d>0$.
+Compute its transform directly by changing variables in the integral.
+Compare its magnitude and phase with those of $P(\omega)$, at frequencies
+where $P(\omega)\ne0$.
+
+\problempart[4 points] Repeat $p(t)$ every $T$ seconds, with $T>2\tau$,
+to form $p_T(t)$. Let $a_k(T)$ be its Fourier coefficients and
+$\omega_k=2\pi k/T$. Derive the relation between $a_k(T)$ and
+$P(\omega_k)$, including the case $k=0$.
+
+\problempart[4 points] Substitute that relation into the Fourier series
+synthesis equation for $p_T(t)$. With $\Delta\omega=2\pi/T$, explain
+how the sum becomes the inverse Fourier transform as $T\to\infty$.
+Track the factor $1/(2\pi)$ carefully. Does $a_k(T)$ itself, or the scaled
+quantity $T a_k(T)$, sample the transform envelope?
+
+\vspace*{\fill}
+\begin{center}[use additional pages if needed]\end{center}
+
+\problem{7} \textbf{Fourier transform pairs and circuit spectra [20 points]}
+% Extends Fall 2025 HW8 Problem 3 with Week 8 transform-pair practice.
+Use the Week 8 transform convention. Show the sifting, integration,
+linearity, or inverse-transform steps that justify your answers.
+
+\problempart[4 points] Find the transform of $\delta(t-t_0)$.
+Then find the transform of the constant signal $x(t)=A$ by using the
+inverse transform and sifting. Explain why the constant's forward integral
+is not an ordinary convergent integral over all time.
+
+\problempart[4 points] Find the Fourier transform of
+$x(t)=e^{-at}u(t)$, with $a>0$, by evaluating the integral.
+Find its value at $\omega=0$ and sketch its magnitude as a function of
+$\omega$. Explain why $a>0$ is needed for this ordinary integral.
+
+\problempart[4 points] Find the transform of
+\[
+x(t)=2+3\cos(4t)-2\sin(6t).
+\]
+Sketch the frequency impulses and label their locations and complex
+weights. Use the inverse transform to check the coefficient of at least
+one sinusoid.
+
+\problempart[4 points] Find the inverse transform of
+\[
+X(\omega)=2\pi\delta(\omega)
+ +\pi e^{j\pi/3}\delta(\omega-2)
+ +\pi e^{-j\pi/3}\delta(\omega+2).
+\]
+Express the result as a real signal. Explain how the symmetry of these
+impulse weights lets you predict that the result is real.
+
+\problempart[4 points] Use your exponential transform pair
+to find the transform of $h_C(t)$ from Problem 2.
+Compare it with $H_C(j\omega)$ from Problem 3.
+Sketch its magnitude, labeling the value at zero frequency and the
+limit as $|\omega|\to\infty$. Does the decaying RC impulse response
+contain just one frequency? Explain using its spectrum.
+
+\vspace*{\fill}
+\begin{center}[use additional pages if needed]\end{center}
+\end{document}
