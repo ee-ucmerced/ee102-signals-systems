@@ -1,0 +1,271 @@
+\section{Midterm course feedback}
+Please fill out the survey called \textbf{Midterm course feedback} on
+CatCourses when it is launched. Share what is helping you learn and what
+could improve the second half of the course.
+
+\section{Announcements}
+\begin{itemize}
+    \item If you have not yet enrolled in the Wikipedia assignment dashboard,
+    use the registration link in Monday's notes and begin the training.
+    \item Pset 8 is practice and a study guide for Midterm Exam \#2.
+    It is due Wednesday, October 28, at 11:59 PM.
+    \item Midterm Exam \#2 is Wednesday, October 28, 2026, during class
+    (1:40--2:55 PM), with the same rules as Midterm Exam \#1.
+\end{itemize}
+
+\section{Goals}
+
+By the end of this lecture, you should be able to understand Fourier Transforms (FT) of standard signals and appreciate the value of the frequency domain in understanding signals.
+
+\section{Review: Fourier analysis of aperiodic signals}
+Recall that we started our ``Fourier journey'' by arguing that it would be very useful if we could represent any arbitrary signal using only basic building blocks of sine and cosine functions. So far, we have seen that this is indeed possible for periodic signals using Fourier Series (FS). We proposed that any periodic signal $x(t)$ with period $T$ can be represented as a linear combination of complex exponentials as follows:
+\begin{equation} 
+  \label{eq:fs_synthesis}
+  x(t) = \sum_{k=-\infty}^{\infty} a_k e^{jk\omega_0 t}
+\end{equation}
+where $\omega_0 = \frac{2\pi}{T}$ is the fundamental frequency and the Fourier coefficients $a_k$ are given by
+\begin{equation}
+  \label{eq:fs_analysis}
+  a_k = \frac{1}{T} \int_{T} x(t) e^{-jk\omega_0 t} dt
+\end{equation}
+where the integral is taken over any interval of length $T$.
+
+Equations \eqref{eq:fs_synthesis} and \eqref{eq:fs_analysis} are known as the synthesis and analysis equations of Fourier Series, respectively. 
+
+\subsection{From Fourier Series to Fourier Transform}
+To extend the Fourier Series representation to aperiodic signals, we consider the limit as the period $T$ approaches infinity. The intuition here is that as $T$ becomes very large, the periodic signal $x(t)$ will resemble an aperiodic signal over any finite interval.
+
+So, consider an aperiodic signal as shown in Figure~\ref{fig:aperiodic_signal}. 
+
+% generate figure tikz, label the width of the curve (add noise to make it random) at x-axis with "D", start at D1 and end at D2:
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[scale=1.0]
+        % Draw axes
+        \draw[->] (-0.5,0) -- (6,0) node[right] {$t$};
+        \draw[->] (0,-0.5) -- (0,3) node[above] {$x(t)$};
+        
+        % Draw the aperiodic signal
+        \draw[thick, blue, domain=2:5, samples=100] plot (\x, {2*exp(-0.5*(\x-2.5)^2) + \x-2.5 + 0.02*rand});
+        
+        % Mark the width of the curve at x-axis with D1 and D2 
+        % use a simple curve, add exp to sin to x^2 to make it random
+        \draw[dashed] (2,0) -- (2,2.5);
+        \draw[dashed] (5,0) -- (5,2.5);
+        \node at (2,-0.3) {$D_1$};
+        \node at (5,-0.3) {$D_2$};
+    \end{tikzpicture}
+    \caption{An aperiodic signal $x(t)$ defined over a finite interval.}
+    \label{fig:aperiodic_signal}
+\end{figure}
+
+Define a finite-duration signal equal to the given waveform on
+$[D_1,D_2]$ and zero outside that interval. Repeat it every $T$ seconds,
+choosing a period interval containing its support. As $T\to\infty$, the
+repetitions move apart and the periodic extension approaches the original
+aperiodic signal on every fixed finite interval. An aperiodic signal has
+no finite positive period. The original signal is
+\[
+x(t) = \begin{cases}
+    x(t), \: \text{(the given function)}, & D_1 \leq t \leq D_2 \\
+    0, & \text{otherwise}
+\end{cases}
+\]
+
+This trick manifests itself in many ways that change the FS synthesis and analysis equations~\eqref{eq:fs_synthesis} and~\eqref{eq:fs_analysis}. Let's work through these steps one by one.
+
+First, recall that 
+
+\[  
+T = \frac{2\pi}{\omega_0} \implies \omega_0 = \frac{2\pi}{T}
+\]
+
+Write $\Delta\omega=\omega_0=2\pi/T$. As $T\to\infty$, the spacing
+$\Delta\omega$ tends to zero. The harmonic frequencies are
+\[ 
+\omega_k=k\omega_0=k\Delta\omega,
+\]
+where, at any finite $T$, these are the discrete frequency samples
+$\omega_k=k\Delta\omega$. As $\Delta\omega\to0$, their spacing tends to
+zero. The sum over these increasingly fine frequency samples becomes a
+Riemann integral; a fixed nonzero spacing still gives a discrete grid.
+
+Let $x_T$ denote the periodic extension and $a_k(T)$ its coefficients.
+The original finite-duration $x$ is zero outside its support, so the
+coefficient integral can already be extended to all real time:
+\begin{equation*}
+    T a_k(T)=\int_{-\infty}^{\infty}x(t)e^{-j\omega_k t}\,dt
+    =X(\omega_k).
+\end{equation*}
+The key observation is that time has been integrated out: the right-hand
+side is a function of frequency. Define it for continuous $\omega$ as
+\begin{equation}
+  \label{eq:ft_analysis}
+    X(\omega) = \int_{-\infty}^{\infty} x(t) e^{-j\omega t} dt
+\end{equation}
+
+Equation~\eqref{eq:ft_analysis} is defined as the Fourier Transform (FT) of the signal $x(t)$. It is the frequency domain representation of the time domain signal $x(t)$. So far, we have defined how to transform the signal $x(t)$ into a function that characterizes the signal in the frequency domain (using a function of frequency). But we have not yet shown how $x(t)$, an aperiodic signal, can be broken down into its frequency components (or in other words, into sinusoidal signals). 
+
+To show how $x(t)$ can be synthesized from its frequency components, we start with the FS synthesis equation~\eqref{eq:fs_synthesis}:
+\[ 
+  x_T(t) = \sum_{k=-\infty}^{\infty} a_k(T)e^{jk\omega_0 t}.
+\]
+As $T \to \infty$, write $\omega_0=\Delta\omega$ and $\omega_k=k\Delta\omega$, with $\Delta\omega\to0$. Therefore, we can rewrite the synthesis equation as:
+\begin{equation*}
+  x_T(t) = \sum_{k=-\infty}^{\infty} \frac{X(\omega_k)}{T} e^{j\omega_k t}
+\end{equation*}
+where we used the definition of $X(\omega)$ from above and the definition of frequency $\omega$ as $k \Delta \omega$. Since $T = \frac{2\pi}{\Delta \omega}$, we have
+\[
+  x_T(t) = \frac{1}{2\pi}\sum_{k=-\infty}^{\infty}  X(\omega_k) e^{j\omega_k t} \Delta \omega.
+\]
+As $\Delta \omega \to 0$, the summation becomes an integral over all real values of $\omega$:
+\begin{equation}
+  \label{eq:ft_synthesis}
+  x(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} X(\omega) e^{j\omega t} d\omega
+\end{equation}
+Equation~\eqref{eq:ft_synthesis} is the synthesis equation for Fourier Transform. Under suitable convergence conditions, it shows how an aperiodic signal $x(t)$ can be synthesized from its frequency components represented by $X(\omega)$.
+\section{Fourier analysis of standard signals}
+We have set up many standard signals in this class so far:  impulse, step, complex exponential, sinusoid, square wave, and more. Now that we can apply Fourier analysis to many standard signals\footnote{In EE 102, we are not going to discuss the specific mathematical conditions needed for Fourier analysis to apply.} (whether it is periodic or aperiodic), we can get many insights about the utility of the Fourier analysis. 
+
+\begin{popquiz}
+  Without computing the Fourier Transform, predict the frequency domain representation of a pure impulse signal $\delta(t)$ and sketch it out in a graph (on the right):
+  % draw a graphic where left hand side is an upward arrow at t=0 labeled delta(t) and right hand side is an empty axes with Y-axis labeled X(omega) and X-axis labeled omega in bold
+  \begin{center}
+    \begin{tikzpicture}[>=stealth]
+    % Left: time-domain impulse at t=0 (bold)
+    \draw[->] (-2,0) -- (2.2,0) node[right] {$t$};
+    \draw[->, ultra thick] (0,0) -- (0,2);
+    \node[right] at (0,2) {$\delta(t)$};
+
+    % Right: empty frequency-domain axes
+    \begin{scope}[shift={(6,0)}]
+    \draw[->] (-2,0) -- (2.2,0) node[right] {$\boldsymbol{\omega}$};
+    \draw[->] (0,-0.2) -- (0,2.2) node[above] {$X(\omega)$};
+    \end{scope}
+    \end{tikzpicture}
+  \end{center}
+
+    Hint: On Desmos Graphing Calculator\footnote{\url{https://www.desmos.com/calculator}}, try graphing cosines added together. For example, start with $\cos(x)$, then try $\cos(x) + \cos(2x)$, then $\cos(x) + \cos(2x) + \cos(3x)$, and so on. What happens as you keep adding more cosine terms? How many frequencies would you need to add to approximate an impulse at $x=0$?
+\popqsplit 
+The impulse in time-domain contains all infinite frequencies. Therefore, the frequency domain representation $X(\omega)$ is a constant function equal to 1 for all $\omega$. This means that the impulse has a flat transform. Its inverse representation includes the normalization $1/(2\pi)$. Note that whenever we are looking for a frequency domain representation of a signal, we are looking for a function of frequency (X-axis is frequency).
+\end{popquiz}
+
+\textbf{About ideal impulses and sinusoids:} Their Fourier transforms are
+understood in the generalized (distributional) sense, using sifting.
+For example, an ideal sinusoid is not absolutely integrable over all time.
+We will use these transform pairs without developing distribution theory.
+
+\subsection{Fourier Transform of an impulse}
+For $x(t) = \delta(t)$, we have
+\begin{equation*}
+    X(\omega) = \int_{-\infty}^{\infty} \delta(t) e^{-j\omega t} dt
+\end{equation*}
+Using the sifting property of the impulse, we get
+\begin{equation*}
+    X(\omega) = e^{-j\omega \cdot 0} = 1
+\end{equation*}
+This confirms our intuition from the pop quiz above. The Fourier Transform of an impulse signal is a constant function equal to 1 for all frequencies $\omega$.
+
+\subsection{Inverse Fourier Transform of an impulse in frequency domain}
+\begin{popquiz}
+Without computing the inverse Fourier Transform, predict the time domain representation of a frequency domain impulse signal $X(\omega) = \delta(\omega)$ and sketch it out in a graph on the left:
+  \begin{center}
+    \begin{tikzpicture}[>=stealth]
+    % Left: empty time-domain axis
+    \draw[->] (-2,0) -- (2.2,0) node[right] {$t$};
+    \draw[->] (0,-0.2) -- (0,2.2) node[above] {$x(t)$};
+
+    % Right: frequency-domain axis with bold impulse at ω=0
+    \begin{scope}[shift={(6,0)}]
+    \draw[->] (-2,0) -- (2.2,0) node[right] {$\boldsymbol{\omega}$};
+    \draw[->] (0,-0.2) -- (0,2.2) node[above] {$X(\omega)$};
+    \draw[->, ultra thick] (0,0) -- (0,1.8);
+    \node[right] at (0,1.8) {$\delta(\omega)$};
+    \end{scope}
+    \end{tikzpicture}
+  \end{center}
+  \popqsplit 
+  One impulse at 0 frequency is a DC signal (constant signal) in time domain. Therefore, the time domain representation $x(t)$ is a constant function for all $t$.
+\end{popquiz}
+
+For $X(\omega) = \delta(\omega)$, we have
+\begin{equation*}
+    x(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} \delta(\omega) e^{j\omega t} d\omega
+\end{equation*}
+Using the sifting property of the impulse, we get
+\begin{equation*}
+    x(t) = \frac{1}{2\pi} e^{j0 \cdot t} = \frac{1}{2\pi}
+\end{equation*}
+This confirms our intuition from the pop quiz above. The inverse Fourier Transform of an impulse in frequency domain is a constant function equal to $\frac{1}{2\pi}$ for all time $t$. By solving it out, we can now see that the magnitude of the constant function is $\frac{1}{2\pi}$. This is a DC voltage signal (if we were talking about voltages). You can relate this with concepts from your circuits class. Whenever you talk about DC signals, you say that it is a signal with 0 frequency. Here, we see that a signal with only 0 frequency component (an impulse at 0 frequency) is indeed a DC signal in time-domain.
+
+So, an impulse $2\pi \delta(\omega)$ in frequency domain would correspond to a unit DC signal in time-domain.
+
+\subsection{Shifted impulse in frequency domain}
+For $X(\omega) = \delta(\omega - \omega_0)$, we have
+\begin{equation*}
+    x(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} \delta(\omega - \omega_0) e^{j\omega t} d\omega
+\end{equation*}
+Using the sifting property of the impulse, we get
+\begin{equation*}
+    x(t) = \frac{1}{2\pi} e^{j\omega_0 t}
+\end{equation*}
+This shows that a shifted impulse in frequency domain corresponds to a complex exponential signal (consisting of both a sine and a cosine term) in time domain. The frequency of the complex exponential is determined by the location of the impulse in frequency domain. 
+
+This also relates to your circuits class. Whenever we say that a signal has ONE frequency, we mean that we have a pure sinusoid at that frequency (either a cosine or a sine). Taking the real or imaginary part of the complex exponential above gives us a cosine or sine signal, respectively, both with frequency $\omega_0$. A real sinusoid has two frequency impulses, at
+$\pm\omega_0$, whereas a complex exponential has one. By linearity,
+\[
+\begin{aligned}
+e^{j\omega_0t}&\longleftrightarrow 2\pi\delta(\omega-\omega_0),\\
+\cos(\omega_0t)&\longleftrightarrow
+ \pi[\delta(\omega-\omega_0)+\delta(\omega+\omega_0)],\\
+\sin(\omega_0t)&\longleftrightarrow
+ \frac{\pi}{j}[\delta(\omega-\omega_0)-\delta(\omega+\omega_0)].
+\end{aligned}
+\]
+
+\section{Worked example: A decaying exponential}
+\label{sec:w8l2-exponential-ft}
+Consider the aperiodic signal
+\[
+x(t)=e^{-at}u(t),\qquad a>0.
+\]
+The unit step restricts the transform integral to $t\ge0$:
+\begin{align*}
+X(\omega)
+&=\int_0^{\infty}e^{-at}e^{-j\omega t}\,dt
+ =\int_0^{\infty}e^{-(a+j\omega)t}\,dt\\
+&=\left[-\frac{e^{-(a+j\omega)t}}{a+j\omega}\right]_0^{\infty}
+ =\frac{1}{a+j\omega}.
+\end{align*}
+The upper-limit term vanishes because $a>0$. Thus
+\[
+|X(\omega)|=\frac{1}{\sqrt{a^2+\omega^2}},\qquad
+\angle X(\omega)=-\tan^{-1}(\omega/a).
+\]
+At zero frequency, $X(0)=1/a=\int x(t)\,dt$. As $|\omega|\to\infty$,
+the magnitude tends to zero. The signal has a continuous spectrum; the
+decay rate $a$ is not the location of a single frequency impulse.
+
+\subsection{Connection to the RC frequency response}
+The known capacitor-voltage impulse response is
+\[
+h_C(t)=\frac1{\tau_C}e^{-t/\tau_C}u(t),\qquad \tau_C=RC>0.
+\]
+Using the exponential pair with $a=1/\tau_C$ and amplitude $1/\tau_C$,
+\[
+\mathcal F\{h_C\}(\omega)=\frac{1/\tau_C}{1/\tau_C+j\omega}
+=\frac1{1+j\omega\tau_C}=H_C(j\omega).
+\]
+This is the same $H_C(j\omega)$ that scales $e^{j\omega t}$ in our
+earlier LTI eigenfunction calculation. The frequency response is the
+Fourier transform of the impulse response; $H(j\omega)$ is the notation
+we have already used for that function.
+Its magnitude is one at DC and decreases to zero at high frequencies,
+which explains the smoothing of a periodic input's high harmonics.
+
+\section{Recommended reading and practice problems}
+\begin{itemize}
+    \item Solved Example 4.2 in Lathi (Fourier Transform of a rectangular pulse)
+    \item Solved Example 4.10 in Lathi (Fourier Transform of a sign function)
+    \item Solve the problem 4.3-15 in Lathi (Fourier transform of the differentiation operation)
+\end{itemize}
