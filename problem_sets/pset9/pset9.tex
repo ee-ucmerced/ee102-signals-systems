@@ -8,64 +8,43 @@
 
 \author{\rule{3cm}{0.4pt}}
 \submitdate{\rule{3cm}{0.4pt}}
-\problemset{\shortstack{Problem Set \#9: Fourier Transform Properties\\and RC Applications}}
+\problemset{\shortstack{Problem Set \#9: Fourier Transform Properties}}
 \renewcommand{\psetnum}{9}
 \renewcommand{\releasedate}{October 26, 2026}
 \renewcommand{\duedate}{Nov 4, 2026 at 11:59 PM}
 \shorttitle{Problem Set \#9}
-\hypersetup{pdftitle={EE 102 Problem Set 9: Fourier Transform Properties and RC Applications}}
+\hypersetup{pdftitle={EE 102 Problem Set 9: Fourier Transform Properties}}
 
 \setlength{\parskip}{8pt plus 1pt minus 1pt}
 \setlength{\abovedisplayskip}{6pt plus 2pt minus 2pt}
 \setlength{\belowdisplayskip}{6pt plus 2pt minus 2pt}
 
 \begin{document}
-Released October 26, 2026. Due \textbf{Wednesday, November 4, at 11:59 PM}
-(Pacific time). This shorter exam-week assignment has two written problems
-and is worth \textbf{100 points}. No programming is required.
+% \problem{1} 
+% % Adapted from Fall 2025 HW8 Problem 3, with the earlier LTI eigenfunction application.
+% A series RC circuit has $R=1\,\mathrm{k}\Omega$ and
+% $C=1000\,\mu\mathrm{F}$. The input $x(t)$ is the voltage across the series
+% combination and the output $y(t)$ is the capacitor voltage. The impulse response of the circuit is
+% \[
+% h_C(t)=\frac{1}{\tau_C}e^{-t/\tau_C}u(t),\qquad \tau_C=RC.
+% \]
 
-Use the continuous-time Fourier transform convention
-\[
-X(\omega)=\int_{-\infty}^{\infty}x(t)e^{-j\omega t}\,dt,
-\qquad
-x(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty}X(\omega)e^{j\omega t}\,d\omega.
-\]
-Frequencies $\omega$ are in rad/s. Show your reasoning; exact expressions
-are sufficient.
+% \problempart[15 points] Calculate $\tau_C$. Derive $H_C(\omega)$ using Fourier transform and find $H_C(0)$, the DC component.
 
-\problem{1} The RC circuit in the frequency domain. \hfill [50 points]
-% Adapted from Fall 2025 HW8 Problem 3, with the earlier LTI eigenfunction application.
+% \problempart[15 points] Find the magnitude and phase of $H_C(\omega)$ at
+% $\omega=1$ and $\omega=3$ rad/s. What happens to the magnitude as
+% $|\omega|\to\infty$?
 
-A series RC circuit has $R=1\,\mathrm{k}\Omega$ and
-$C=1000\,\mu\mathrm{F}$. The input $x(t)$ is the voltage across the series
-combination; the output $y(t)$ is the capacitor voltage. With zero initial
-stored energy, its impulse response is
-\[
-h_C(t)=\frac{1}{\tau_C}e^{-t/\tau_C}u(t),\qquad \tau_C=RC.
-\]
+% \problempart[20 points] For an input
+% \[
+% x(t)=2\cos(t)+2\cos(3t),
+% \], find the output voltage. Which input component is reduced more? How does that relate to the name
+% ``low-pass filter''?
 
-\problempart[15 points] Calculate $\tau_C$. Derive $H_C(\omega)$ directly
-from the Fourier transform integral, and find $H_C(0)$.
+% Hint: Use the LTI complex exponential eigenfunction property, that is, a signal $A\cos(\omega t)$ produces
+% $A|H_C(\omega)|\cos(\omega t+\angle H_C(\omega))$ at steady state.
 
-\problempart[15 points] Find the magnitude and phase of $H_C(\omega)$ at
-$\omega=1$ and $\omega=3$ rad/s. What happens to the magnitude as
-$|\omega|\to\infty$?
-
-\problempart[20 points] The input is
-\[
-x(t)=2\cos(t)+2\cos(3t)\quad\text{volts},
-\]
-present for all time. Find the bounded steady-state output voltage. Which
-input component is reduced more, and how does that relate to the name
-``low-pass filter''?
-
-Hint: Use the LTI complex-exponential eigenfunction property from Weeks 6--7.
-A component $A\cos(\omega t)$ produces
-$A|H_C(\omega)|\cos(\omega t+\angle H_C(\omega))$ in steady state.
-
-\problem{2} Symmetry and time shifting of a pulse. \hfill [50 points]
-
-Define the aperiodic pulse
+\problem{1} Pulsating signals are all around us! The frequency domain representation of a pulse signal is quite useful. So, in this problem, consider an aperiodic pulse given below and answer the questions that follow
 \[
 p(t)=
 \begin{cases}
@@ -74,29 +53,20 @@ p(t)=
 \end{cases}
 \]
 
-\problempart[15 points] Sketch $p(t)$. Before calculating its transform,
+\problempart[30 points] Sketch $p(t)$. Before calculating its transform,
 use its symmetry to predict whether $P(\omega)$ is real and whether it is
 even. Then derive $P(\omega)$ and give its value at $\omega=0$.
 
-Hint: For a real, even signal,
-$P(\omega)=2\int_0^{\infty}p(t)\cos(\omega t)\,dt$.
-At zero frequency, use the signed area of the pulse.
 
-\problempart[20 points] Let $q(t)=p(t-2)$. Sketch $q(t)$ and obtain
-$Q(\omega)$ using the time-shifting property. Explain why
+\problempart[40 points] Let $q(t)=p(t-2)$. Sketch $q(t)$ and obtain
+$Q(\omega)$ using the time-shifting property (see week 9 lecture 1). Explain why
 $|Q(\omega)|=|P(\omega)|$ even though $q(t)$ is not even about $t=0$.
-Find the magnitude and phase of $Q(\pi/4)$.
 
-Hint: $x(t-t_0)\longleftrightarrow e^{-j\omega t_0}X(\omega)$,
-$\sin(\pi/4)=\sqrt{2}/2$, and $e^{-j\pi/2}=-j$.
 
-\problempart[15 points] Now let $r(t)=p(t-2)+p(t+2)$. Without performing
+\problempart[30 points] Now let $r(t)=p(t-2)+p(t+2)$. Without performing
 another transform integral, find $R(\omega)$ and write it as a real,
 even expression. Evaluate $R(0)$ and $R(\pi/4)$. Explain how the two
 shifted pulses can cancel at one frequency even though both pulses
 are positive in time.
-
-Hint: Apply linearity and time shifting, then use
-$e^{j\theta}+e^{-j\theta}=2\cos\theta$.
 
 \end{document}
