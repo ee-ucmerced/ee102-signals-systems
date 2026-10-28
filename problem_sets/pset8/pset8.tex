@@ -208,61 +208,33 @@ $e^{j\omega t}/(2\pi)$ at the impulse's frequency. Combine the two
 nonzero-frequency terms using Euler's formula.
 
 
-\problem{6} RC spectra and frequency content
+\problem{6} Frequency content of an RC circuit
 
 % Extends the RC-transform practice in Fall 2025 HW8 Problem 3.
-A voltage-measurement circuit uses a series RC network with output across
+A voltage measurement circuit uses a series RC network with output across
 the capacitor. Here $R=1\,\mathrm{k}\Omega$, $C=250\,\mu\mathrm F$,
 and the initially relaxed circuit has impulse response
 \[
 h(t)=4e^{-4t}u(t).
 \]
-This circuit's numerical values are independent of Problem 2.
 
-\problempart[6 points] Derive $H(\omega)$ by applying the Fourier
+\problempart[8 points] Derive $H(\omega)$ by applying the Fourier
 transform to $h(t)$. Find $H(0)$ and the magnitude and phase at
 $\omega=4$. Describe what happens to the magnitude as $|\omega|$ grows.
 
-Hints: Integrate $4e^{-(4+j\omega)t}$ over $0\le t<\infty$.
-For $a>0$, $|a+j\omega|=\sqrt{a^2+\omega^2}$ and
-$\arg(a+j\omega)=\tan^{-1}(\omega/a)$.
 
-\problempart[6 points] The test input consists of two impulses:
+\problempart[8 points] Now, consider two impulses applied to the circuit. So, we have
 \[
 x(t)=\delta(t)+\delta(t-\tfrac12).
 \]
 Find the output $y(t)$ using LTI properties. Then obtain $Y(\omega)$
 from the output signal using linearity and a change of variables in the
-delayed term. Show why the delay contributes a complex exponential.
+delayed term. 
 
-Hints: Use $y(t)=h(t)+h(t-\tfrac12)$.
-For this and the remaining parts, you may use
-$H(\omega)=4/(4+j\omega)$ independently of part (a).
-In the delayed transform integral, set $\lambda=t-\tfrac12$.
-
-\problempart[4 points] A spectrum display for the two-impulse test is
-described by
-\[
-Y(\omega)=\frac{4}{4+j\omega}\left(1+e^{-j\omega/2}\right).
-\]
-Using this supplied expression independently of your earlier answers,
-find $Y(0)$ and $Y(2\pi)$.
-The circuit has $H(2\pi)\ne0$. Explain why the output nevertheless
-has a zero at $2\pi$ rad/s. What cancels at this frequency?
-
-Hint: Evaluate the factor in parentheses using $e^{-j\pi}=-1$.
-
-\problempart[4 points] A second version of the circuit uses the same
-$R=1\,\mathrm{k}\Omega$ but doubles the capacitor to $500\,\mu\mathrm F$.
-For each version, calculate $RC$, the DC gain, and the magnitude of the
-frequency response at $\omega=4$. Which version reduces a component at
+\problempart[4 points] If the circuit has double the capacitance, that is,  $C = 500\,\mu\mathrm F$.
+Then, find the the DC gain and the magnitude of the
+frequency response at $\omega=4$. Which circuit reduces a component at
 4 rad/s more? Explain what happens to the charging timescale when
 the capacitance doubles.
-
-Hints: For a capacitor-voltage RC circuit,
-\[
-H(\omega)=\frac{1}{1+j\omega RC},\qquad \tau_C=RC.
-\]
-You may use $1/\sqrt2\approx0.707$ and $1/\sqrt5\approx0.447$.
 
 \end{document}
