@@ -1,0 +1,55 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+
+\documentclass{ee102_pset}
+\input{macros.tex}
+\input{preamble.tex}
+
+\author{\rule{3cm}{0.4pt}}
+\submitdate{\rule{3cm}{0.4pt}}
+\problemset{\shortstack{Problem Set \#10: Audio Passwords\\and Applications of Fourier Transform}}
+\renewcommand{\psetnum}{10}
+\renewcommand{\releasedate}{November 4, 2026}
+\renewcommand{\duedate}{Nov 11, 2026 at 11:59 PM}
+\shorttitle{Problem Set \#10}
+\hypersetup{pdftitle={EE 102 Problem Set 10: Audio Passwords and Applications of Fourier Transform}}
+
+\setlength{\parskip}{8pt plus 1pt minus 1pt}
+\setlength{\abovedisplayskip}{6pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{6pt plus 2pt minus 2pt}
+
+\begin{document}
+
+% Adapted from Fall 2025 homework/week9/hw9.tex.
+\problem{1}
+
+Record yourself! For this problem set, create a short audio recording (less than 5 seconds) where you name a key concept you learned in this course so far. You can choose any topic name that interests you, such as Fourier series, Fourier transforms, convolution, or any other topic covered in class (fit your speech in 5 seconds!).
+
+Important: Make sure to vary your pitch, tone, and excitement level to get a rich audio signal. Save/convert this audio file as a mono .wav file sampled at 8000 Hz so that you can read and manipulate it in Python/MATLAB. 
+
+\problempart [10 points]
+Load your audio file in Python/MATLAB and plot the time-domain signal. Describe any interesting features you observe in the waveform (just by visually looking at it).
+
+\problempart [30 points]
+Compute the discrete Fourier transform (DFT) of your audio signal. Plot the magnitude spectrum of the DFT and identify the dominant frequency components present in your recording. This is the frequency-domain signature of your audio.
+
+Important: For parts (a)--(d), you are not allowed to use built-in FFT functions. You must implement the DFT computation manually using the DFT formula.
+
+\problempart [30 points]
+Design your personal audio-based password: Choose a specific sequence of frequencies (at least 3 distinct frequencies) that will serve as your audio password. Using your DFT results, modify your original audio signal to enhance these chosen frequencies while suppressing others. You can achieve this by applying a frequency-domain filter (recall the kinds of filter designs we discussed in class).
+
+Next, reconstruct the modified audio signal back to the time domain using the inverse DFT (again, implement this manually without built-in functions).
+
+Finally, save and listen to your modified audio signal.
+
+\newpage
+\problempart [15 points]
+Ask a friend for their recorded audio file (.wav) and show that your password works by applying the same frequency-domain filter to their audio signal and showing that your friend's audio does not match up with your password frequencies.
+
+Visualize the frequency domain representation (filtered) for both your audio and your friend's audio to demonstrate the difference.
+
+\problempart [15 points]
+Now repeat the same task using built-in FFT and inverse FFT functions, with the same audio samples and filter. Compare the results and computation times with your manual implementation. Reflect on what you learned about the computational cost of the DFT and the advantage of using FFT.
+
+\end{document}
