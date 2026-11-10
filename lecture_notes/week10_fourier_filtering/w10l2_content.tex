@@ -1,0 +1,211 @@
+\section{Announcements}
+\begin{itemize}
+    \item Pset \#9 is due Wednesday, November 4, at 11:59 PM 
+    \item Pset \#10 will be released Wednesday, November 4, and is due Wednesday,
+    November 11, at 11:59 PM 
+\end{itemize}
+\section{Goals}
+By the end of this lecture, you will be able to understand the Fourier Transform of discrete-time signals.
+
+\section{Review: Fourier Transform in Continuous-Time}
+The Fourier Transform (FT) of a continuous-time signal \( x(t) \) is defined as:
+\[
+X(\omega) = \int_{-\infty}^{\infty} x(t) e^{-j \omega t} dt
+\]
+where \( \omega \) is the angular frequency in radians per second. The Fourier transform provides a frequency-domain representation of the signal, allowing us to analyze its frequency components. That is, the signal, originally visualized with time as the X-axis, is now possible to be visualized with frequency ($\omega$) as the X-axis.
+
+On the other hand, if you know how the signal behaves in the frequency domain, you can recover the time-domain signal using the Inverse Fourier Transform (IFT):
+\[
+x(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} X(\omega) e^{j \omega t} d\omega
+\]
+\section{Fourier Transform of Discrete-Time Signals}
+For discrete-time signals, the Fourier Transform is defined similarly. What will you change in the two equations above? First, the variable \( t \) is replaced by \( n \), which represents discrete time indices (integers). That is, $n \in \mathbb{Z}$ while $t \in \mathbb{R}$ (all real numbers). Second, the integral will be replaced by a summation since we are dealing with discrete values (integration works for continuous values). Therefore, the Fourier Transform of a discrete-time signal \( x[n] \) is given by:
+\begin{equation}
+    \label{eq:dtft_intermediate}
+    X(\dots) = \sum_{n=-\infty}^{\infty} x[n] e^{-j \omega n}
+\end{equation}
+Why the ``$\dots$'' in the equation above? 
+\begin{popquiz}
+    Is the Fourier Transform of a discrete-time signal a function of continuous frequency $\omega$ or discrete frequency $k$?
+    \popqsplit 
+    It is a continuous function of frequency $\omega$ (in radians) because $n$ gets summed over and $e^{-j \omega n}$ is defined for all real values of $\omega$.
+\end{popquiz}
+Notice that in the equation~\eqref{eq:dtft_intermediate}, we still have $\omega$ in the equation ($\omega \in \mathbb{R}$). So, the Fourier Transform of a discrete-time signal is a continuous function of frequency $\omega$ (in radians). This transform is called the Discrete-Time Fourier Transform (DTFT). Additionally, there are two reasons for \textbf{not} denoting it as $X(\omega)$. First, not a significant issue, but not denoting it as $X(\omega)$ helps to avoid confusion with the Fourier Transform of continuous-time signals (which is denoted as $X(\omega)$). 
+The second issue is more important. Work on the following pop-quiz to understand it.
+\begin{popquiz}
+    Prove the following:
+    \begin{itemize}
+        \item The continuous-time complex exponential signal $x(t) = e^{j \omega t}$ is periodic \emph{in time} with period $T = \frac{2\pi}{\omega}$.
+        \item The discrete-time complex exponential signal $x[n] = e^{j \omega n}$ is \textbf{periodic \emph{in frequency}} with period $2\pi$.
+    \end{itemize}
+    \popqsplit 
+    For the continuous-time complex exponential signal, we apply the continuous time periodicity condition that must hold true for all periodic signals:
+    \[
+    x(t) = x(t + T)
+    \]
+    Substituting \( x(t) = e^{j \omega t} \) into the periodicity condition, we have:
+    \[
+    e^{j \omega t} = e^{j \omega (t + T)}
+    \]
+    Simplifying the right-hand side, we get:
+    \[
+    e^{j \omega t} = e^{j \omega t} e^{j \omega T}
+    \]
+    The term $e^{j \omega T}$ must equal 1 for the equality to hold for all \( t \). This leads to the condition:
+    \[
+    e^{j \omega T} = 1
+    \]
+    This occurs when $T = \frac{2\pi k}{\omega}$ for any integer \( k \). The fundamental period corresponds to \( k = 1 \), giving us:
+    \[
+    T = \frac{2\pi}{\omega}
+    \]
+    For the discrete-time complex exponential signal, we need to check periodicity in frequency. So, the condition that we need to check is:
+    \[
+      e^{j \omega n} = e^{j (\omega + \Omega) n}
+    \]
+    for some period \( \Omega \). We must find out what \( \Omega \) is. Simplifying the right-hand side, we have:
+    \[
+      e^{j \omega n} = e^{j \omega n} e^{j \Omega n}
+    \]
+    The term $e^{j \Omega n}$ must equal 1 for the equality to hold. This leads to the condition that $\Omega = 2 \pi k$ for any integer \( k \). The fundamental period corresponds to \( k = 1 \), giving us:
+    \[
+      \Omega = 2\pi
+    \]
+\end{popquiz}
+
+The discrete-time complex exponential signal \( x[n] = e^{j \omega n} \) is periodic in frequency with period \( 2\pi \). This may be counter-intuitive -- why don't we have such a property in continuous-time? The key change from continuous-time to discrete-time is that time is now discrete (i.e., $n$ takes only integer values, rather than taking all values in $\mathbb{R}$). So, after every $2\pi$ increase in frequency, the discrete time complex exponential signal repeats itself because $n$ is an integer and any integer multiple of $2\pi$ in the exponent results in a full rotation around the unit circle. To see this more concretely, you can use Euler's identity to express the discrete-time complex exponential signal as:
+\[
+x[n] = e^{j \omega n} = \cos(\omega n) + j \sin(\omega n)
+\]
+After a $2\pi$ increase in frequency, we have:
+\[
+x[n] = e^{j (\omega + 2\pi) n} = e^{j \omega n} e^{j 2\pi n} = e^{j \omega n} (\cos(2\pi n) + j \sin(2\pi n)) = e^{j \omega n} (1 + j \cdot 0) = e^{j \omega n}
+\]
+So, you see the periodicity! If we follow through the same analysis in continuous-time, we will see that the periodicity does not hold for frequency. Given $x(t) = e^{j \omega t}$, after a $2\pi$ increase in frequency, we have:
+\[
+x(t) = e^{j (\omega + 2\pi) t} = e^{j \omega t} e^{j 2\pi t} = e^{j \omega t} (\cos(2\pi t) + j \sin(2\pi t))
+\]
+The term $\cos(2\pi t) + j \sin(2\pi t)$ does not equal 1 for all real values of \( t \), so the periodicity does not hold in continuous-time.
+
+FINALLY, we can replace the ``$\dots$'' in equation~\eqref{eq:dtft_intermediate}. We have established two properties of the DTFT: it is a continuous function of frequency and it is periodic with period \( 2\pi \). Due to these two properties, we dentoe the DTFT as \( X(e^{j \omega}) \) to emphasize that it is a function of continuous frequency \( \omega \) and is periodic with period \( 2\pi \). Therefore, the final expression for the Discrete-Time Fourier Transform (DTFT) of a discrete-time signal \( x[n] \) is:
+\begin{equation}
+    \label{eq:dtft_final}
+    X(e^{j \omega}) = \sum_{n=-\infty}^{\infty} x[n] e^{-j \omega n}
+\end{equation}
+Since the DTFT is a continuous function of frequency, the inverse DTFT will not involve summation over frequency (continuous variables are integrated). Therefore, the Inverse Discrete-Time Fourier Transform (IDTFT) is given by:
+\begin{equation}
+    \label{eq:idtft}
+    x[n] = \frac{1}{2\pi} \int_{2\pi} X(e^{j \omega}) e^{j \omega n} d\omega
+\end{equation}
+The integration limit indicates that the integration is performed over one period of the DTFT, which is from \( 0 \) to \( 2\pi \) (or any other interval of length \( 2\pi \)) since the DTFT is periodic with period \( 2\pi \).
+
+\section{Properties of DTFT}
+\subsection{Periodicity}
+We have discussed how the discrete-time complex exponential signal is periodic in frequency with period \( 2\pi \). Using that, we can show that the DTFT is also periodic with period \( 2\pi \). To see this, consider the DTFT expression in equation~\eqref{eq:dtft_final}:
+\[
+X(e^{j (\omega + 2\pi)}) = \sum_{n=-\infty}^{\infty} x[n] e^{-j (\omega + 2\pi) n} = \sum_{n=-\infty}^{\infty} x[n] e^{-j \omega n} e^{-j 2\pi n} = X(e^{j \omega})
+\] 
+Thus, the DTFT is periodic with period \( 2\pi \).
+\subsection{Linearity}
+Just like the continuous-time Fourier Transform, the DTFT is also linear. That is, if you have two discrete-time signals \( x_1[n] \) and \( x_2[n] \) with DTFTs \( X_1(e^{j \omega}) \) and \( X_2(e^{j \omega}) \) respectively, then for any constants \( a \) and \( b \), the DTFT of the linear combination \( y[n] = a x_1[n] + b x_2[n] \) is given by:
+\[Y(e^{j \omega}) = a X_1(e^{j \omega}) + b X_2(e^{j \omega})\]
+\subsection{Time Shifting}
+If a discrete-time signal \( x[n] \) has a DTFT \( X(e^{j \omega}) \), then the DTFT of the time-shifted signal \( x[n - n_0] \) is given by:
+\[X_{\text{shifted}}(e^{j \omega}) = X(e^{j \omega}) e^{-j \omega n_0}\]
+This property indicates that a shift in the time domain corresponds to a multiplication by a complex exponential in the frequency domain.
+\subsection{Frequency Shifting}
+If a discrete-time signal \( x[n] \) has a DTFT \( X(e^{j \omega}) \), then the DTFT of the frequency-shifted signal, with shifted frequency: $\omega_{\text{shifted}} = \omega - \omega_0$, is given by $X(e^{j (\omega - \omega_0)})$. The transform pair is
+\[ x[n]e^{j\omega_0 n} \quad \longleftrightarrow \quad X(e^{j(\omega-\omega_0)}) \]
+\subsection{Convolution}
+The convolution property, as discussed in the previous lecture, is among the most important property for signal processing applications. For a system with impulse response \( h[n] \) and input signal \( x[n] \), the output signal \( y[n] \) is given by the convolution of \( x[n] \) and \( h[n] \):
+\[y[n] = x[n] * h[n] = \sum_{k=-\infty}^{\infty} x[k] h[n - k]\]
+The DTFT of the output signal \( y[n] \) is given by the product of the DTFTs of the input signal and the impulse response:
+\[Y(e^{j \omega}) = X(e^{j \omega}) H(e^{j \omega})\]
+This is useful because now you get full control over the design of the system by designing the frequency response \( H(e^{j \omega}) \) to achieve the desired output characteristics.
+
+\section{Examples: Filtering}
+\subsection{Discrete-time example: filtering}
+Now let's consider a discrete-time example. Although it might seem that the story will proceed similarly, there are some important differences due to the periodicity of the DTFT! We have a discrete-time signal where three frequency tones are mixed together:
+\[
+x[n] = \cos(n) + \cos(5n) + \cos(100n)
+\]
+Let's assume that we want an ideal filter that removes the component at $100$ rad/sample (after wrapping into $(-\pi,\pi]$) while keeping the components from $\cos(n)$ and $\cos(5n)$.
+
+Write the DTFT
+\[
+\mathcal{F}\{\cos(\omega_0 n)\} \;=\; \pi\big[\delta(\omega-\omega_0)+\delta(\omega+\omega_0)\big],
+\]
+
+The tone at $\omega=1$ already lies in $(-\pi,\pi]$. The tones at $5$ and $100$ must be wrapped into $(-\pi,\pi]$:
+\[
+5-2\pi\approx-1.283\ \text{rad/sample},\qquad 100-32\pi\approx-0.531\ \text{rad/sample}.
+\]
+Hence, over one principal period $(-\pi,\pi]$, the three tones appear at
+\[
+\omega=\pm 1,\qquad \omega=\pm(2\pi-5),\qquad \omega=\pm(32\pi-100).
+\]
+Therefore,
+\[
+X(e^{j\omega})
+=\pi\sum_{\omega_0\in\{1,\,2\pi-5,\,32\pi-100\}}
+\big[\delta(\omega-\omega_0)+\delta(\omega+\omega_0)\big]
+\]
+We want to keep $\omega=\pm 1,\pm(2\pi-5)$ and reject $\omega=\pm(32\pi-100)$. Even though the frequency we wanted to remove was 100 rad/sample, after wrapping into $(-\pi,\pi]$, it became about $-0.531$ rad/sample --- so, if you thought that you could design a low-pass filter to remove high frequencies, you would be mistaken! In this case, we instead need a high-pass filter! 
+
+So, let's design a high-pass filter with cutoff between $32\pi-100\approx0.531$ and $1$; for instance,
+\[
+\omega_c=0.75
+\]
+Define
+\[
+H(e^{j\omega}) \;=\;
+\begin{cases}
+0, & |\omega|<\omega_c,\\[4pt]
+1, & \omega_c\le |\omega|\le \pi,
+\end{cases}
+\qquad\text{extended $2\pi$-periodically.}
+\]
+
+Now, using the convolution property, the output DTFT is
+\[
+Y(e^{j\omega}) \;=\; H(e^{j\omega})\,X(e^{j\omega}).
+\]
+The impulses at $\omega=\pm(32\pi-100)$ lie in $(-\omega_c,\omega_c)$. So, these go away! While the impulses at $\omega=\pm 1,\pm(2\pi-5)$ are passed through. We have,
+\[
+Y(e^{j\omega})
+=\pi\big[\delta(\omega-1)+\delta(\omega+1)+\delta(\omega-(2\pi-5))+\delta(\omega+(2\pi-5))\big].
+\]
+Taking the inverse DTFT by inspection,
+\[
+y[n] \;=\; \cos(n) \;+\; \cos(5n).
+\]
+
+Finally, we can derive the impulse response using the inverse Fourier transform (if needed).
+
+\section{Computational implementation of the DTFT}
+Although the previous example worked fine, there are some practical issues with implementing the DTFT on a computer. First, the DTFT integral in equation~\eqref{eq:dtft_final} is defined over an infinite range (from $-\infty$ to $\infty$). Computers only have finite computations! Second, the DTFT is a continuous function of frequency, but in practice, we can only compute it at discrete frequency points (everything in computers is finite). To address these issues, we sample the Discrete-Time Fourier Transform at specific frequencies. This leads to a new Fourier transform called the Discrete Fourier Transform (DFT). The DFT is defined for a finite-length discrete-time signal \( x[n] \) of length \( N \) as:
+\begin{equation}
+    \label{eq:dft}
+X[k] = \sum_{n=0}^{N-1} x[n] e^{-j \frac{2\pi}{N} k n}, \quad k = 0, 1, 2, \ldots, N-1
+\end{equation}
+where \( k \) represents the discrete frequency index. The DFT provides a frequency-domain representation of the finite-length discrete-time signal, allowing us to analyze its frequency components at specific discrete frequencies.
+
+\textbf{What changed?}
+\begin{itemize}
+    \item You have a time-domain signal of finite length \( N \) (from \( n = 0 \) to \( n = N-1 \)). This is your computational array that stores the signal. 
+    \item You compute the Fourier Transform at discrete frequency points \( k = 0, 1, 2, \ldots, N-1 \), not in radians but in terms of indices. Notice how the total number of frequency points is also \( N \).
+    \item The frequency resolution is determined by the length of the signal \( N \). Due to this, we are able to write $\omega$ as $\omega = \frac{2\pi}{N} k$ in the DFT equation, that is integer multiples of the fundamental frequency spacing \( \frac{2\pi}{N} \).
+    \item The frequency spacing between adjacent DFT bins is given by \( \Delta f = \frac{1}{N} \) (in cycles per sample) or \( \Delta \omega = \frac{2\pi}{N} \) (in radians per sample).
+\end{itemize}
+
+From the DFT, you can recover the time-domain signal using the Inverse Discrete Fourier Transform (IDFT):
+\begin{equation}
+    \label{eq:idft}
+x[n] = \frac{1}{N} \sum_{k=0}^{N-1} X[k] e^{j \frac{2\pi}{N} k n}, \quad n = 0, 1, 2, \ldots, N-1
+\end{equation}
+The IDFT allows you to reconstruct the original finite-length discrete-time signal from its DFT representation.
+
+Equations~\eqref{eq:dft} and~\eqref{eq:idft} form the basis for many signal processing applications and these are the two computationally feasible equations you are expected to apply in Pset \#10.
+
+\section{Recommended Reading}
+Read the Wikipedia page on Discrete Fourier Transform (DFT) -- it can be confusing! But as a student in EE 102, you might now be one of those few people in the world who are able to \emph{understand} this difficult topic!

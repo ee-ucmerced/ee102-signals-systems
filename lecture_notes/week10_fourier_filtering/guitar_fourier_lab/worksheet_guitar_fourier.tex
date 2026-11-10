@@ -1,0 +1,134 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[letterpaper,left=0.65in,right=0.65in,top=0.55in,bottom=0.65in,footskip=0.31in]{geometry}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage{fancyhdr}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[L]{\footnotesize EE 102}
+\fancyfoot[R]{\footnotesize\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.3pt}
+\newcommand{\problem}[2]{\par\noindent{\bfseries#1.\enspace #2}\par\smallskip}
+\newcommand{\blank}[1]{\rule{#1}{0.4pt}}
+
+% The same axes and dimensions are used in all nine boxes.
+% A panel's third argument contains its trace. An empty argument leaves blank axes.
+\tikzset{
+  trace/.style={draw=black,line width=1.15pt,line cap=round,line join=round},
+  axis/.style={draw=black,line width=0.45pt,-{Stealth[length=3.7pt]}},
+  ticklabel/.style={font=\scriptsize,inner sep=0.7pt}
+}
+\newcommand{\panel}[3]{%
+  \begin{tikzpicture}[x=0.51cm,y=1.00cm,baseline=(current bounding box.north)]
+    \path[use as bounding box] (-5.9,-0.58) rectangle (5.6,3.52);
+    \draw[black] (-5.9,-0.58) rectangle (5.6,3.52);
+    \node[anchor=west,inner sep=0pt,font=\normalsize] at (-5.45,3.08) {$#1$};
+    \node[anchor=east,inner sep=0pt,font=\scriptsize] at (5.15,3.08) {#2};
+    \draw[axis] (-4.85,0) -- (5.08,0);
+    \draw[axis] (-4.85,0) -- (-4.85,2.57);
+    \foreach \w in {-4,-2,0,2,4}{
+      \draw[black,line width=0.4pt] (\w,-0.05) -- (\w,0.05);
+      \node[ticklabel,anchor=north] at (\w,-0.075) {$\w$};
+    }
+    \foreach \a in {1,2}{
+      \draw[black,line width=0.4pt] (-4.94,\a) -- (-4.76,\a);
+      \node[ticklabel,anchor=east] at (-4.99,\a) {$\a$};
+    }
+    \node[ticklabel,anchor=north] at (5.15,-0.075) {$\omega$};
+    #3
+  \end{tikzpicture}%
+}
+\newcommand{\sketchrow}[3]{\par\smallskip\noindent\hbox to \linewidth{#1\hfil#2\hfil#3}\par}
+\newcommand{\workbox}[1]{\par\noindent\fbox{\parbox[c][#1][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{\strut}}\par}
+
+\begin{document}
+{EE 102}\hfill Name \blank{2.45in}\par
+\vspace{0.09in}
+Audio Processing Using Fourier Transforms\par
+\vspace{0.10in}
+Let $t$ denote time in seconds and $\omega$ angular frequency in rad/s.
+The continuous-time Fourier transform and its inverse are
+\[
+  X(\omega)=\int_{-\infty}^{\infty}x(t)e^{-j\omega t}\,dt,
+  \qquad
+  x(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty}X(\omega)e^{j\omega t}\,d\omega .
+\]
+For an LTI system, let $x(t)$ be the input, $h(t)$ its impulse response, and $y(t)$ the output.
+Write $H(\omega)$ and $Y(\omega)$ for the transforms of $h(t)$ and $y(t)$. Then
+\[
+  y(t)=(h*x)(t)=\int_{-\infty}^{\infty}x(\tau)h(t-\tau)\,d\tau
+  \quad\overset{\mathcal F}{\longleftrightarrow}\quad
+  Y(\omega)=H(\omega)X(\omega) .
+\]
+
+\problem{1}{Sketch the filter}
+Sketch $H(\omega)$ for the input and output shown.
+\sketchrow
+  {\panel{X(\omega)}{Given}{\draw[trace] (-4.75,0)--(-4,0)--(0,2)--(4,0)--(4.75,0);}}
+  {\panel{H(\omega)}{Your sketch}{}}
+  {\panel{Y(\omega)}{Given}{\draw[trace] (-4.75,0)--(-2,0)--(-2,1)--(0,2)--(2,1)--(2,0)--(4.75,0);}}
+
+\vfill
+\problem{2}{Sketch the output}
+Sketch $Y(\omega)$ for the input and filter shown.
+\sketchrow
+  {\panel{X(\omega)}{Given}{\draw[trace] (-4.75,0)--(-4,0)--(-2,2)--(2,2)--(4,0)--(4.75,0);}}
+  {\panel{H(\omega)}{Given}{\draw[trace] (-4.75,1)--(-2,1)--(-2,0)--(2,0)--(2,1)--(4.75,1);}}
+  {\panel{Y(\omega)}{Your sketch}{}}
+
+\vfill
+\problem{3}{Recover the input}
+Sketch $X(\omega)$ for the filter and output shown.
+\sketchrow
+  {\panel{X(\omega)}{Your sketch}{}}
+  {\panel{H(\omega)}{Given}{\draw[trace] (-4.75,1)--(-2,1)--(-2,2)--(2,2)--(2,1)--(4.75,1);}}
+  {\panel{Y(\omega)}{Given}{\draw[trace] (-4.75,0)--(-4,0)--(-4,2)--(4,2)--(4,0)--(4.75,0);}}
+
+\vspace*{0.08in}
+\newpage
+{\bfseries EE 102}\hfill{Audio Processing Using Fourier Transforms}\par
+\vspace{0.20in}
+\problem{4}{Find the output in the frequency domain}
+Let $a>0$. The frequency-domain representations of the input and filter are
+\[
+  X(\omega)=\frac{1}{a+j\omega},
+  \qquad
+  H(\omega)=
+  \begin{cases}
+    1, & |\omega|<10\ \mathrm{rad/s},\\[2pt]
+    0, & |\omega|\ge 10\ \mathrm{rad/s}.
+  \end{cases}
+\]
+Write $Y(\omega)$ as a piecewise function for all $\omega$.\par\smallskip
+\workbox{1.30in}
+
+\vspace{0.28in}
+\textbf{Hands-on Activity: Guitar Fourier Lab}\par\smallskip
+Use the guitar recording in the app. The filter editor uses frequency $f$ in Hz, with $\omega=2\pi f$.\par
+\vspace{0.16in}
+\problem{5}{Separate the low and high parts of the clipped guitar}
+Choose a clipping threshold and a cutoff frequency. Design one filter to hear the sound below the cutoff and another to hear the sound above it.\par
+\vspace{0.16in}
+Clipping threshold \blank{0.65in}\,\% \hfill Cutoff frequency \blank{1.0in}\,Hz\hspace{0.25in}\par
+\vspace{0.18in}
+What do you hear below the cutoff?\par\vspace{0.17in}\blank{\linewidth}\par
+\vspace{0.16in}
+What do you hear above the cutoff?\par\vspace{0.17in}\blank{\linewidth}\par
+
+\vspace{0.26in}
+\problem{6}{Single out one note}
+Set the clipping threshold to $100\%$ and isolate one note (your favorite note in this guitar song file) with a narrow filter (design that filter!).\par
+\vspace{0.18in}
+Fundamental frequency \blank{0.65in}\,Hz \hfill
+Passband \blank{0.55in} to \blank{0.55in}\,Hz\hspace{0.25in}\par
+\vspace{0.17in}
+When do you hear the note in the filtered recording?\par\vspace{0.18in}\blank{\linewidth}\par
+
+\end{document}
