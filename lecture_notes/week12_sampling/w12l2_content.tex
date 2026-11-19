@@ -1,0 +1,99 @@
+\section{Announcements}
+\begin{itemize}
+    \item Pset \#11 is due on Wednesday November 18.
+    \item Pset \#12: Sampling will be released on Wednesday November 18 and is due on Wednesday December 2.
+    \item Midterm exam \#3 will be on Wednesday December 2.
+    \item Nothing is due on November 25 (Thanksgiving week).
+    \item \textbf{Wikipedia assignment:} ``Start drafting your contributions'' is due
+    \textbf{\mbox{Sunday November 22}}. Complete the ``Drafting as a group'' and
+    ``Plagiarism'' training modules by the same date; see the
+    \href{https://dashboard.wikiedu.org/courses/UC_Merced/Signal_Processing_and_Linear_Systems_(Fall_2026)/timeline}{Wiki Education timeline}.
+\end{itemize}
+
+\section{Filtering to remove distortions}
+
+The original continuous-time cosine only had two impulses 
+at $\omega = \pm\omega_0$. After sampling, $X_s(\omega)$ contains infinitely
+many impulses, at
+\[
+\omega = \pm\omega_0, \quad
+\pm\omega_0 \pm \omega_s, \quad
+\pm\omega_0 \pm 2\omega_s, \quad \dots
+\]
+
+If $\omega_s$ is large enough, these copies are separated in frequency and do not overlap.
+But if $\omega_s$ is too small, the shifted impulses can collide or cross into each other.
+In other words, impulses from different ``copies'' of $X(\omega)$ may end up in the same
+frequency location. This leads to distortion in the reconstructed signal called aliasing.
+
+\textbf{What is aliasing?} When the sampling frequency is too low,
+different frequency components in the original signal produce overlapping or indistinguishable
+contributions in the sampled spectrum. In the reconstructed signal, these contributions
+appear as \emph{fake} or \emph{misplaced} frequencies. This phenomenon is called \textbf{aliasing}:
+different original frequencies become indistinguishable after sampling.
+
+For a single cosine, aliasing means that a high-frequency cosine can ``look like'' a lower-frequency cosine once sampled, because their impulses line up after shifts
+by $\omega_s$.
+
+
+As we said above, to reconstruct the original continuous-time signal $x(t)$ from its samples, we may design a low-pass filter to remove the extra copies in $X_s(\omega)$. This will work only if the copies do not overlap with the original spectrum. An ideal low-pass filter has a cutoff frequency $\omega_c$ that passes only the frequency band containing the original $X(\omega)$ (from $-\omega_c$ to $+\omega_c$) and removes all higher frequencies will work well.
+
+For a single cosine at $\omega_0$, we can choose the cutoff frequency $\omega_c$ such that
+\[
+\omega_0 < \omega_c < \omega_s - \omega_0.
+\]
+This is possible \emph{only if} the original impulse at $+\omega_0$ is strictly
+separated from the nearest shifted impulse at $\omega_s - \omega_0$. That gives the
+inequality
+\[
+\omega_0 < \omega_s - \omega_0
+\quad \Longleftrightarrow \quad
+\omega_s > 2\omega_0.
+\]
+
+Under this condition, an ideal low-pass filter with passband
+$|\omega| < \omega_c$ will keep the original impulses at $\pm\omega_0$ and completely remove all impulses from the shifted copies.
+In the time domain, this low-pass filter reconstructs the original continuous-time cosine
+$x(t) = \cos(\omega_0 t)$ from the samples (our overall goal!). The condition that we just obtained is called the \textbf{Nyquist sampling condition}.
+
+We have shown that to avoid overlap between the original impulses at $\pm\omega_0$
+and the nearest replicated impulses (at $\pm\omega_0 \pm \omega_s$), we must have
+\[
+\omega_s > 2\omega_0.
+\]
+
+We can obtain an equivalent relation in Hz. Recall $\omega_s = \dfrac{2\pi}{T_s}$ and $\omega_0 = 2\pi f_0$ where $f_0$ is the
+ordinary frequency in Hz. In terms of the sampling frequency $F_s = 1/T_s$:
+\[
+\omega_s > 2\omega_0
+\quad\Longleftrightarrow\quad
+2\pi F_s > 2(2\pi f_0)
+\quad\Longleftrightarrow\quad
+F_s > 2f_0.
+\]
+
+So, the Nyquist rate for a single cosine:
+\[
+F_s > 2f_0, \qquad f_0 = \frac{\omega_0}{2\pi}.
+\]
+If we sample \emph{above} this Nyquist rate, we can in principle use an ideal
+low-pass filter to remove the extra copies in $X_s(\omega)$ and reconstruct the
+original cosine exactly from its samples. This is the key result of this week's theoretical topics.
+
+\section{Nyquist Sampling Theorem}
+We end with the formal statement of the Nyquist Sampling Theorem for general bandlimited signals (not just a single cosine).
+\begin{theorem}[Nyquist Sampling Theorem]
+If a continuous-time signal $x(t)$ contains no frequencies higher than
+$B$ Hz, that is, if its Fourier transform $X(\omega)$ is zero for
+$|\omega| > 2\pi B$, then $x(t)$ is completely determined by its samples
+taken at a sampling frequency $F_s$ greater than $2B$ Hz. In this case,
+$x(t)$ can be reconstructed from its samples using an ideal low-pass filter. 
+\end{theorem}
+
+\section{Recommended Reading}
+From the week 12 folder, try the sampling app shown in class by running \texttt{streamlit run sampling\_app/sampling\_app.py}. This will let you play with different sampling frequencies and low-pass cut off frequencies to see its effects. Also, run \href{https://github.com/ee-ucmerced/ee102-signals-systems/blob/main/lecture_notes/week12_sampling/VM_aliasing.ipynb}{\texttt{VM\_aliasing.ipynb}} notebook that is available on course GitHub to apply these concepts to the guitar tune example. Try to achieve the following using the code:
+\begin{itemize}
+    \item Visualize aliasing with $x(t) = \sin(2\pi f_0 t)$ for different values of $f_0$ and different sampling frequencies $F_s$.
+    \item Observe how increasing the number of samples improves the reconstruction of the original signal for the sine wave.
+    \item Apply the sampling theorem to adequately sample and reconstruct your recorded voice from Problem Set \#10.
+\end{itemize}
