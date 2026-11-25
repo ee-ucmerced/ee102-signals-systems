@@ -1,0 +1,89 @@
+\makeatletter
+\def\input@path{{../styles/}{../../styles/}{../../../styles/}{../}{../../}{../../../}}
+\makeatother
+
+\documentclass{ee102_pset}
+\input{macros.tex}
+\input{preamble.tex}
+
+\author{\rule{3cm}{0.4pt}}
+\submitdate{\rule{3cm}{0.4pt}}
+\problemset{\shortstack{Problem Set \#13: Practice and Study Guide\\for Midterm Exam \#3}}
+\renewcommand{\psetnum}{13}
+\renewcommand{\releasedate}{November 25, 2026}
+\renewcommand{\duedate}{No submission required}
+\shorttitle{Problem Set \#13}
+\hypersetup{pdftitle={EE 102 Problem Set 13: Practice and Study Guide for Midterm Exam 3}}
+
+\setlength{\parskip}{8pt plus 1pt minus 1pt}
+\setlength{\abovedisplayskip}{6pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{6pt plus 2pt minus 2pt}
+\setlength{\abovedisplayshortskip}{3pt plus 1pt}
+\setlength{\belowdisplayshortskip}{6pt plus 1pt minus 1pt}
+
+\begin{document}
+\textbf{Optional practice for Midterm Exam \#3. No submission required.}
+
+\problem{1}
+
+Consider the signal
+\[
+x(t)=\cos(2\pi\,10t)+10\sin(2\pi t)+3\cos(2\pi\,100t),
+\qquad F_s=500\ \mathrm{Hz}.
+\]
+
+\problempart[5 points] Write $x_s(t)$, then write the signal as a sequence $x[n]$.
+
+\problempart[10 points] Write $X(e^{j\omega})$ using the DTFT formula from class.
+
+\problempart[10 points] Choose which frequencies you want to keep. Design a discrete-time
+filter $H(e^{j\omega})$. Choose your cut-off frequencies, gain, and sketch the
+filter frequency response.
+
+\problempart[10 points] Find the output in the frequency domain:
+\[
+Y(e^{j\omega})=X(e^{j\omega})H(e^{j\omega}).
+\]
+
+\problem{2}
+
+Consider the same signal and sampling frequency as in Problem 1.
+
+\problempart[5 points] Find $X(\omega)$.
+
+\problempart[10 points] Write $x_s(t)$ and find $X_s(\omega)$.
+
+\problempart[10 points] Design a continuous-time filter $H(\omega)$ to keep the same
+frequencies you chose in Problem 1 and remove the other components and
+the extra copies in $X_s(\omega)$. Choose your cut-off frequencies, gain,
+and sketch the filter frequency response.
+
+\problempart[10 points] Find the output in the frequency domain:
+\[
+Y(\omega)=H(\omega)X_s(\omega).
+\]
+
+% Adapted from Fall 2025 homework/week12/hw11.tex, Problem 1.
+\problem{3}
+
+You know the following properties of a continuous-time signal $x(t)$:
+\begin{itemize}
+    \item It is dominated by five main frequency components: 100 Hz, 300 Hz,
+    600 Hz, 900 Hz, and 1200 Hz, with other frequencies between 100 Hz and
+    1500 Hz having negligible amplitudes. There are no frequency components
+    above 1500 Hz.
+    \item The maximum amplitude of the signal in time-domain is 2.
+    \item It is known that the signal can be uniquely reconstructed from its
+    samples with a sampling frequency of 10,000 Hz.
+\end{itemize}
+
+\problempart[5 points] Sketch $|X(\omega)|$ using the information provided.
+
+\problempart[10 points] Suggest a sampling frequency $f_s<10{,}000$ Hz for this signal
+so that it can be perfectly reconstructed from its samples. Justify your answer.
+
+\problempart[15 points] Choose a lower sampling frequency that causes aliasing between
+two of the listed frequency components. Describe which components overlap
+in the sampled spectrum and why they become indistinguishable after sampling.
+
+\end{document}
